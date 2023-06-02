@@ -15,7 +15,7 @@ logging.basicConfig(
 )
 
 
-def get_price(start_date, end_date, symbol=None, input_type="stock"):
+def get_price(start_date, end_date, symbol=None, input_type="stock", series="EQ"):
     """
     Create threads for different requests, parses data, combines them and returns dataframe
     Args:
@@ -51,7 +51,7 @@ def get_price(start_date, end_date, symbol=None, input_type="stock"):
                 "from": st,
                 "to": et,
                 "dataType": "priceVolumeDeliverable",
-                "series": "EQ",
+                "series": series,
             }
             url = base_url + price_api + urllib.parse.urlencode(params)
             url_list.append(url)
