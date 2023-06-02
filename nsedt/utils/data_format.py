@@ -16,6 +16,7 @@ def price(result):
         "VWAP",
         "COP_DELIV_QTY",
         "COP_DELIV_PERC",
+        "CH_SERIES",
     ]
     try:
         result = result[columns_required]
@@ -36,6 +37,7 @@ def price(result):
             "VWAP",
             "Deliverable Volume",
             "Deliverable Percent",
+            "Series",
         ],
         axis=1,
     )
