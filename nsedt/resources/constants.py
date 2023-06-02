@@ -1,5 +1,5 @@
-window_size = 180
-max_workers = 5
+window_size = 50
+max_workers = 10
 log_format = """{
     "time": "%(asctime)s",
     "lineno": "%(lineno)d",
