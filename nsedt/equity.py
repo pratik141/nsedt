@@ -82,7 +82,7 @@ def get_corpinfo(start_date, end_date, symbol=None):
     Args:
         start_date (datetime.datetime): start date
         end_date (datetime.datetime): end date
-        symbol (str, optional): stock symbol. Defaults to None. TODO: implement for index`
+        symbol (str, optional): stock symbol. Defaults to None.
     Returns:
         Pandas DataFrame: df containing data for symbol of provided date range
     """
@@ -96,4 +96,28 @@ def get_corpinfo(start_date, end_date, symbol=None):
     base_url = cns.base_url
     price_api = cns.equity_corpinfo
     url = base_url + price_api + urllib.parse.urlencode(params)
+    return utils.fetch_url(url, cookies)
+
+
+def get_event(start_date=None, end_date=None, index="equities"):
+    """
+    Args:
+        start_date (datetime.datetime,optional): start date
+        end_date (datetime.datetime,optional): end date
+    Returns:
+        Pandas DataFrame: df containing event of provided date range
+
+    """
+    params = {}
+    cookies = utils.get_cookies()
+    base_url = cns.base_url
+    event_api = cns.equity_event
+
+    params["index"] = index
+    if start_date is not None:
+        params["from_date"] = start_date
+    if end_date is not None:
+        params["to_date"] = end_date
+
+    url = base_url + event_api + urllib.parse.urlencode(params)
     return utils.fetch_url(url, cookies)
