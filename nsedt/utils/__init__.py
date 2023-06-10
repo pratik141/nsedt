@@ -26,12 +26,12 @@ def get_cookies():
     return response.cookies.get_dict()
 
 
-def fetch_url(url, cookies):
+def fetch_url(url, cookies, key="data"):
     response = requests.get(url, timeout=30, headers=get_headers(), cookies=cookies)
     if response.status_code == requests.codes.ok:
         json_response = json.loads(response.content)
         try:
-            return pd.DataFrame.from_dict(json_response["data"])
+            return pd.DataFrame.from_dict(json_response[key])
         except:
             return pd.DataFrame.from_dict(json_response)
     else:
