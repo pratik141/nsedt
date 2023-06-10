@@ -15,7 +15,69 @@ logging.basicConfig(
 )
 
 
-def get_price(start_date, end_date, symbol=None, input_type="stock", series="EQ"):
+def get_companyinfo(
+    symbol,
+    response_type="panda_df",
+):
+    """
+    Args:
+        symbol (str): stock symbol.
+        response_type (str, Optional): define the response type panda_df | json. Default panda_df
+
+    Returns:
+        Pandas DataFrame: df containing company info
+      or
+        Json: json containing company info
+
+    """
+    params = {}
+    cookies = utils.get_cookies()
+    base_url = cns.base_url
+    event_api = cns.equity_info
+
+    params["symbol"] = symbol
+
+    url = base_url + event_api + urllib.parse.urlencode(params)
+    data = utils.fetch_url(url, cookies, key="info")
+
+    if response_type == "json":
+        return data.to_json()
+    else:
+        return data
+
+
+def get_marketstatus(
+    response_type="panda_df",
+):
+    """
+    Args:
+        response_type (str, Optional): define the response type panda_df | json. Default panda_df
+    Returns:
+        Pandas DataFrame: df containing market status
+        Json : Json containing market status
+
+    """
+
+    cookies = utils.get_cookies()
+    base_url = cns.base_url
+    event_api = cns.marketStatus
+
+    url = base_url + event_api
+    data = utils.fetch_url(url, cookies, key="marketState")
+
+    if response_type == "json":
+        return data.to_json()
+    else:
+        return data
+
+
+def get_price(
+    start_date,
+    end_date,
+    symbol=None,
+    input_type="stock",
+    series="EQ",
+):
     """
     Create threads for different requests, parses data, combines them and returns dataframe
     Args:
@@ -76,7 +138,12 @@ def get_price(start_date, end_date, symbol=None, input_type="stock", series="EQ"
     return data_format.price(result)
 
 
-def get_corpinfo(start_date, end_date, symbol=None):
+def get_corpinfo(
+    start_date,
+    end_date,
+    symbol=None,
+    response_type="panda_df",
+):
     """
     Create threads for different requests, parses data, combines them and returns dataframe
     Args:
@@ -96,10 +163,21 @@ def get_corpinfo(start_date, end_date, symbol=None):
     base_url = cns.base_url
     price_api = cns.equity_corpinfo
     url = base_url + price_api + urllib.parse.urlencode(params)
-    return utils.fetch_url(url, cookies)
+
+    data = utils.fetch_url(url, cookies)
+
+    if response_type == "json":
+        return data.to_json()
+    else:
+        return data
+    return
 
 
-def get_event(start_date=None, end_date=None, index="equities"):
+def get_event(
+    start_date=None,
+    end_date=None,
+    index="equities",
+):
     """
     Args:
         start_date (datetime.datetime,optional): start date
@@ -121,3 +199,30 @@ def get_event(start_date=None, end_date=None, index="equities"):
 
     url = base_url + event_api + urllib.parse.urlencode(params)
     return utils.fetch_url(url, cookies)
+
+
+def get_chartdata(
+    symbol,
+    preopen="true",
+):
+    """
+    Args:
+        symbol (str): stock symbol.
+    Returns:
+        Pandas DataFrame: df containing chart data of provided date
+
+    """
+    params = {}
+    cookies = utils.get_cookies()
+    base_url = cns.base_url
+    event_api = cns.equity_chart
+    try:
+        identifier = get_companyinfo(symbol)["info"]["identifier"]
+    except KeyError:
+        return f"Invalid symbol name: {symbol}"
+
+    params["index"] = identifier
+    params["preopen"] = preopen
+
+    url = base_url + event_api + urllib.parse.urlencode(params)
+    return utils.fetch_url(url, cookies, key="grapthData")

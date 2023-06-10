@@ -1,5 +1,8 @@
 # nse data
 
+Introducton
+Thank you for using nsedt. I hope you find this library useful, please feel free to send pull requests, comments, suggestions and contact me for any additional help you may require!!!
+
 ---
 ## Run 
 ```py
@@ -14,6 +17,11 @@ end_date = "03-05-2023"
 print(eq.get_corpinfo(start_date, end_date, symbol="TCS"))
 print(eq.get_event(start_date, end_date))
 print(eq.get_event())
+print(eq.get_marketstatus())
+print(eq.get_marketstatus(response_type="json"))
+print(eq.get_companyinfo(symbol="TCS"))
+print(eq.get_companyinfo(symbol="TCS", response_type="json"))
+print(eq.get_chartdata(symbol="TCS"))
 
 ```
 ---
@@ -34,4 +42,26 @@ symbol series ind faceVal                                            subject  ..
         symbol                                   company  ...                                            bm_desc         date
 0       5PAISA                    5Paisa Capital Limited  ...  To consider and approve the financial results ...  01-May-2023
 56  ANTGRAPHIC                        Antarctica Limited  ...  Antarctica Limited has informed the Exchange t...  03-May-2023
+
+#get_companyinfo
+                                               info                           metadata securityInfo  ... priceInfo   industryInfo preOpenMarket
+symbol                                           TCS                                TCS          NaN  ...       NaN            NaN           NaN
+atoSellQty                                       NaN                                NaN          NaN  ...       NaN            NaN           491
+
+#get_companyinfo json format
+{"info":{"symbol":"TCS","companyName":"Tata Consultancy Services Limited","industry":"COMPUTERS - SOFTWARE","activeSeries":["EQ"],"debtSeries":[],"tempSuspendedSeries":[],"isFNOSec":true,"isCASec":false,"isSLBSec":true,"isDebtSec":false,"isSuspended":false,"isETFSec":false,"isDelisted":false," ......}
+
+#get_marketstatus
+
+           market marketStatus     tradeDate     index     last  ... percentChange marketStatusMessage   expiryDate underlying tradeDateFormatted
+0  Capital Market        Close   09-Jun-2023  NIFTY 50  18563.4  ...         -0.38    Market is Closed          NaN        NaN                NaN
+4  currencyfuture        Close  Invalid date            82.4975  ...                  Market is Closed  16-Jun-2023     USDINR        09-Jun-2023
+
+
+#get_chartdata
+                 0        1
+0    1686301201000  3300.00
+404  1686301620000  3250.00
+
+
 ```
