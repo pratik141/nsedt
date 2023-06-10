@@ -1,7 +1,8 @@
 # nse data
 
-Introducton
-Thank you for using nsedt. I hope you find this library useful, please feel free to send pull requests, comments, suggestions and contact me for any additional help you may require!!!
+Introduction
+
+Thank you for using Nsedt. Please feel free to send pull requests, comments, and suggestions, as well as get in touch with me if you require any additional help. I sincerely hope you will find this library useful.
 
 ---
 ## Run 
