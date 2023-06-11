@@ -1,16 +1,21 @@
-import datetime
+""" 
+get data for Equity
+"""
 import concurrent
-from concurrent.futures import ALL_COMPLETED
-import pandas as pd
-from nsedt import utils
-from nsedt.utils import data_format
-import urllib
-from nsedt.resources import constants as cns
+import datetime
 import logging
+import urllib
+from concurrent.futures import ALL_COMPLETED
+
+import pandas as pd
+
+from nsedt import utils
+from nsedt.resources import constants as cns
+from nsedt.utils import data_format
 
 logging.basicConfig(
     level=logging.INFO,
-    format=cns.log_format,
+    format=cns.LOG_FORMAT,
     datefmt="%m/%d/%Y %I:%M:%S %p",
 )
 
@@ -32,18 +37,18 @@ def get_companyinfo(
     """
     params = {}
     cookies = utils.get_cookies()
-    base_url = cns.base_url
-    event_api = cns.equity_info
+    base_url = cns.BASE_URL
+    event_api = cns.EQUITY_INFO
 
     params["symbol"] = symbol
 
     url = base_url + event_api + urllib.parse.urlencode(params)
     data = utils.fetch_url(url, cookies, key="info")
 
-    if response_type == "json":
-        return data.to_json()
-    else:
+    if response_type == "panda_df":
         return data
+
+    return data.to_json()
 
 
 def get_marketstatus(
@@ -59,16 +64,16 @@ def get_marketstatus(
     """
 
     cookies = utils.get_cookies()
-    base_url = cns.base_url
-    event_api = cns.marketStatus
+    base_url = cns.BASE_URL
+    event_api = cns.MARKETSTATUS
 
     url = base_url + event_api
     data = utils.fetch_url(url, cookies, key="marketState")
 
-    if response_type == "json":
-        return data.to_json()
-    else:
+    if response_type == "panda_df":
         return data
+
+    return data.to_json()
 
 
 def get_price(
@@ -89,12 +94,12 @@ def get_price(
         Pandas DataFrame: df containing data for symbol of provided date range
     """
     cookies = utils.get_cookies()
-    base_url = cns.base_url
-    price_api = cns.equity_price_histroy
+    base_url = cns.BASE_URL
+    price_api = cns.EQUITY_PRICE_HISTROY
     url_list = []
 
     # set the window size to one year
-    window_size = datetime.timedelta(days=cns.window_size)
+    window_size = datetime.timedelta(days=cns.WINDOW_SIZE)
 
     current_window_start = start_date
     while current_window_start < end_date:
@@ -104,14 +109,11 @@ def get_price(
         if current_window_end > end_date:
             current_window_end = end_date
 
-        st = current_window_start.strftime("%d-%m-%Y")
-        et = current_window_end.strftime("%d-%m-%Y")
-
         if input_type == "stock":
             params = {
                 "symbol": symbol,
-                "from": st,
-                "to": et,
+                "from": current_window_start.strftime("%d-%m-%Y"),
+                "to": current_window_end.strftime("%d-%m-%Y"),
                 "dataType": "priceVolumeDeliverable",
                 "series": series,
             }
@@ -122,7 +124,7 @@ def get_price(
         current_window_start = current_window_end + datetime.timedelta(days=1)
 
     result = pd.DataFrame()
-    with concurrent.futures.ThreadPoolExecutor(max_workers=cns.max_workers) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=cns.MAX_WORKERS) as executor:
         future_to_url = {
             executor.submit(utils.fetch_url, url, cookies): url for url in url_list
         }
@@ -130,8 +132,8 @@ def get_price(
         for future in concurrent.futures.as_completed(future_to_url):
             url = future_to_url[future]
             try:
-                df = future.result()
-                result = pd.concat([result, df])
+                dataframe = future.result()
+                result = pd.concat([result, dataframe])
             except Exception as exc:
                 logging.error(f"{url} got exception: {exc}. Please try again later.")
                 raise exc
@@ -152,6 +154,8 @@ def get_corpinfo(
         symbol (str, optional): stock symbol. Defaults to None.
     Returns:
         Pandas DataFrame: df containing data for symbol of provided date range
+      or
+        Json: json containing data for symbol of provided date range
     """
     cookies = utils.get_cookies()
     params = {
@@ -160,17 +164,16 @@ def get_corpinfo(
         "to_date": end_date,
         "index": "equities",
     }
-    base_url = cns.base_url
-    price_api = cns.equity_corpinfo
+    base_url = cns.BASE_URL
+    price_api = cns.EQUITY_CORPINFO
     url = base_url + price_api + urllib.parse.urlencode(params)
 
     data = utils.fetch_url(url, cookies)
 
-    if response_type == "json":
-        return data.to_json()
-    else:
+    if response_type == "panda_df":
         return data
-    return
+
+    return data.to_json()
 
 
 def get_event(
@@ -188,8 +191,8 @@ def get_event(
     """
     params = {}
     cookies = utils.get_cookies()
-    base_url = cns.base_url
-    event_api = cns.equity_event
+    base_url = cns.BASE_URL
+    event_api = cns.EQUITY_EVENT
 
     params["index"] = index
     if start_date is not None:
@@ -214,8 +217,8 @@ def get_chartdata(
     """
     params = {}
     cookies = utils.get_cookies()
-    base_url = cns.base_url
-    event_api = cns.equity_chart
+    base_url = cns.BASE_URL
+    event_api = cns.EQUITY_CHART
     try:
         identifier = get_companyinfo(symbol)["info"]["identifier"]
     except KeyError:
