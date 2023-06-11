@@ -50,7 +50,7 @@ symbol                                           TCS                            
 atoSellQty                                       NaN                                NaN          NaN  ...       NaN            NaN           491
 
 #get_companyinfo json format
-{"info":{"symbol":"TCS","companyName":"Tata Consultancy Services Limited","industry":"COMPUTERS - SOFTWARE","activeSeries":["EQ"],"debtSeries":[],"tempSuspendedSeries":[],"isFNOSec":true,"isCASec":false,"isSLBSec":true,"isDebtSec":false,"isSuspended":false,"isETFSec":false,"isDelisted":false," ......}
+{"info":{"symbol":"TCS","companyName":"Tata Consultancy Services Limited","industry":"COMPUTERS - SOFTWARE","activeSeries":["EQ"],"debtSeries":[],"tempSuspendedSeries":[],"isFNOSec":true,"isCASec":false,"isSLBSec":true,"isDebtSec":false,"isSuspended":false,"isETFSec":false,"isDelisted":false, ......}
 
 #get_marketstatus
 
@@ -66,3 +66,33 @@ atoSellQty                                       NaN                            
 
 
 ```
+---
+
+# API Documentation
+
+## Functions
+
+### get_companyinfo
+
+Function description goes here.
+
+### get_marketstatus
+
+Function description goes here.
+
+### get_price
+
+Function description goes here.
+
+### get_corpinfo
+
+Function description goes here.
+
+### get_event
+
+Function description goes here.
+
+### get_chartdata
+
+Function description goes here.
+

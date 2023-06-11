@@ -44,7 +44,7 @@ def get_cookies():
     return response.cookies.get_dict()
 
 
-def fetch_url(url, cookies, key="data"):
+def fetch_url(url, cookies, key=None):
     """
     Args:
        url (str): URL to fetch
@@ -58,9 +58,9 @@ def fetch_url(url, cookies, key="data"):
     response = requests.get(url, timeout=30, headers=get_headers(), cookies=cookies)
     if response.status_code == 200:
         json_response = json.loads(response.content)
-        try:
-            return pd.DataFrame.from_dict(json_response[key])
-        except:
+        if key is None:
             return pd.DataFrame.from_dict(json_response)
-    else:
-        raise ValueError("Please try again in a minute.")
+
+        return pd.DataFrame.from_dict(json_response[key])
+
+    raise ValueError("Please try again in a minute.")

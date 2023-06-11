@@ -31,7 +31,7 @@ def price(result):
     ]
     try:
         result = result[columns_required]
-    except:
+    except:  # pylint: disable=W0702
         return result
     result = result.set_axis(
         [

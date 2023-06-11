@@ -43,7 +43,7 @@ def get_companyinfo(
     params["symbol"] = symbol
 
     url = base_url + event_api + urllib.parse.urlencode(params)
-    data = utils.fetch_url(url, cookies, key="info")
+    data = utils.fetch_url(url, cookies)
 
     if response_type == "panda_df":
         return data
@@ -106,8 +106,7 @@ def get_price(
         current_window_end = current_window_start + window_size
 
         # check if the current window extends beyond the end_date
-        if current_window_end > end_date:
-            current_window_end = end_date
+        current_window_end = min(current_window_end, end_date)
 
         if input_type == "stock":
             params = {
@@ -126,7 +125,8 @@ def get_price(
     result = pd.DataFrame()
     with concurrent.futures.ThreadPoolExecutor(max_workers=cns.MAX_WORKERS) as executor:
         future_to_url = {
-            executor.submit(utils.fetch_url, url, cookies): url for url in url_list
+            executor.submit(utils.fetch_url, url, cookies, "data"): url
+            for url in url_list
         }
         concurrent.futures.wait(future_to_url, return_when=ALL_COMPLETED)
         for future in concurrent.futures.as_completed(future_to_url):
@@ -135,7 +135,7 @@ def get_price(
                 dataframe = future.result()
                 result = pd.concat([result, dataframe])
             except Exception as exc:
-                logging.error(f"{url} got exception: {exc}. Please try again later.")
+                logging.error("%s got exception: %s. Please try again later.", url, exc)
                 raise exc
     return data_format.price(result)
 
