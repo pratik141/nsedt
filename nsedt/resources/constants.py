@@ -1,6 +1,10 @@
-window_size = 50
-max_workers = 10
-log_format = """{
+"""
+Constants
+"""
+
+WINDOW_SIZE = 50
+MAX_WORKERS = 10
+LOG_FORMAT = """{
     "time": "%(asctime)s",
     "lineno": "%(lineno)d",
     "name": "[%(name)s]",
@@ -11,10 +15,10 @@ log_format = """{
     "logmessage": "%(message)s",
 }"""
 
-base_url = "https://www.nseindia.com/"
-equity_price_histroy = "api/historical/securityArchives?"
-equity_corpinfo = "api/corporates-corporateActions?"
-marketStatus = "api/marketStatus"
-equity_event = "api/event-calendar?"
-equity_chart = "api/chart-databyindex?"
-equity_info = "api/quote-equity?"
+BASE_URL = "https://www.nseindia.com/"
+EQUITY_PRICE_HISTROY = "api/historical/securityArchives?"
+EQUITY_CORPINFO = "api/corporates-corporateActions?"
+MARKETSTATUS = "api/marketStatus"
+EQUITY_EVENT = "api/event-calendar?"
+EQUITY_CHART = "api/chart-databyindex?"
+EQUITY_INFO = "api/quote-equity?"

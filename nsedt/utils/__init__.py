@@ -1,12 +1,23 @@
+"""
+utils for nsedt
+"""
+
 import json
+
 import pandas as pd
 import requests
-from nsedt.resources import constants as cns
 
-base_url = cns.base_url
+from nsedt.resources import constants as cns
 
 
 def get_headers():
+    """
+    Args:
+       ---
+    Returns:
+        Json: json containing nse header
+    """
+
     return {
         "Host": "www.nseindia.com",
         "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:85.0) Gecko/20100101 Firefox/85.0",
@@ -20,19 +31,36 @@ def get_headers():
 
 
 def get_cookies():
-    response = requests.get(base_url, timeout=30, headers=get_headers())
-    if response.status_code != requests.codes.ok:
+    """
+    Args:
+       ---
+    Returns:
+        Json: json containing nse cookies
+    """
+
+    response = requests.get(cns.BASE_URL, timeout=30, headers=get_headers())
+    if response.status_code != 200:
         raise ValueError("Retry again in a minute.")
     return response.cookies.get_dict()
 
 
-def fetch_url(url, cookies, key="data"):
+def fetch_url(url, cookies, key=None):
+    """
+    Args:
+       url (str): URL to fetch
+       cookies (str): NSE cokies
+       key (str, Optional):
+    Returns:
+        Pandas DataFrame: df containing url data
+
+    """
+
     response = requests.get(url, timeout=30, headers=get_headers(), cookies=cookies)
-    if response.status_code == requests.codes.ok:
+    if response.status_code == 200:
         json_response = json.loads(response.content)
-        try:
-            return pd.DataFrame.from_dict(json_response[key])
-        except:
+        if key is None:
             return pd.DataFrame.from_dict(json_response)
-    else:
-        raise ValueError("Please try again in a minute.")
+
+        return pd.DataFrame.from_dict(json_response[key])
+
+    raise ValueError("Please try again in a minute.")

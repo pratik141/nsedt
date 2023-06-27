@@ -1,0 +1,12 @@
+[DESIGN]
+
+# Maximum number of locals for function / method body
+max-locals=25
+
+# Maximum number of arguments for function / method
+max-args=10
+
+[FORMAT]
+
+# Regexp for a line that is allowed to be longer than the limit.
+ignore-long-lines=^\s*(# )?<?https?://\S+>?$|^\s*(\w*\s*=\s*)?(\"|\').*(\"|\'),?\s*$

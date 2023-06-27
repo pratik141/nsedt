@@ -1,7 +1,18 @@
+"""
+return data in specific format
+"""
+
 import pandas as pd
 
 
 def price(result):
+    """
+    Args:
+        result (Pandas DataFrame): result
+    Returns:
+        Pandas DataFrame: df containing data in specific format
+    """
+
     columns_required = [
         "CH_TIMESTAMP",
         "CH_OPENING_PRICE",
@@ -20,7 +31,7 @@ def price(result):
     ]
     try:
         result = result[columns_required]
-    except:
+    except:  # pylint: disable=W0702
         return result
     result = result.set_axis(
         [

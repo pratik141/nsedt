@@ -1,7 +1,5 @@
-beautifulsoup4
 requests
 numpy
 pandas
 six
-click
 lxml
