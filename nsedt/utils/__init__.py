@@ -6,7 +6,6 @@ import json
 
 import pandas as pd
 import requests
-
 from nsedt.resources import constants as cns
 
 
@@ -44,7 +43,7 @@ def get_cookies():
     return response.cookies.get_dict()
 
 
-def fetch_url(url, cookies, key=None):
+def fetch_url(url, cookies, key=None, response_type="panda_df"):
     """
     Args:
        url (str): URL to fetch
@@ -55,9 +54,18 @@ def fetch_url(url, cookies, key=None):
 
     """
 
-    response = requests.get(url, timeout=30, headers=get_headers(), cookies=cookies)
+    response = requests.get(
+        url=url,
+        timeout=30,
+        headers=get_headers(),
+        cookies=cookies,
+    )
+
     if response.status_code == 200:
         json_response = json.loads(response.content)
+
+        if response_type != "panda_df":
+            return json_response
         if key is None:
             return pd.DataFrame.from_dict(json_response)
 
