@@ -16,9 +16,17 @@ LOG_FORMAT = """{
 }"""
 
 BASE_URL = "https://www.nseindia.com/"
-EQUITY_PRICE_HISTROY = "api/historical/securityArchives?"
+
+### EQUITY
+EQUITY_PRICE_HISTORY = "api/historical/securityArchives?"
 EQUITY_CORPINFO = "api/corporates-corporateActions?"
 MARKETSTATUS = "api/marketStatus"
 EQUITY_EVENT = "api/event-calendar?"
 EQUITY_CHART = "api/chart-databyindex?"
 EQUITY_INFO = "api/quote-equity?"
+
+### Index
+INDEX_PRICE_HISTORY = "api/historical/indicesHistory?"
+
+### DERIVATIVES
+DERIVATIVES_PRICE = "api/option-chain-equities?"

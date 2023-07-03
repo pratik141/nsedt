@@ -13,11 +13,7 @@ from nsedt import utils
 from nsedt.resources import constants as cns
 from nsedt.utils import data_format
 
-logging.basicConfig(
-    level=logging.INFO,
-    format=cns.LOG_FORMAT,
-    datefmt="%m/%d/%Y %I:%M:%S %p",
-)
+logger = logging.getLogger(__name__)
 
 
 def get_companyinfo(
@@ -95,7 +91,7 @@ def get_price(
     """
     cookies = utils.get_cookies()
     base_url = cns.BASE_URL
-    price_api = cns.EQUITY_PRICE_HISTROY
+    price_api = cns.EQUITY_PRICE_HISTORY
     url_list = []
 
     # set the window size to one year
