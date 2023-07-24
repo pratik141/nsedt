@@ -24,6 +24,7 @@ MARKETSTATUS = "api/marketStatus"
 EQUITY_EVENT = "api/event-calendar?"
 EQUITY_CHART = "api/chart-databyindex?"
 EQUITY_INFO = "api/quote-equity?"
+EQUITY_LIST = "api/market-data-pre-open?key=ALL"
 
 ### Index
 INDEX_PRICE_HISTORY = "api/historical/indicesHistory?"

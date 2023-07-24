@@ -39,6 +39,7 @@ def get_companyinfo(
     params["symbol"] = symbol
 
     url = base_url + event_api + urllib.parse.urlencode(params)
+    print(url)
     data = utils.fetch_url(url, cookies)
 
     if response_type == "panda_df":
@@ -163,7 +164,7 @@ def get_corpinfo(
     base_url = cns.BASE_URL
     price_api = cns.EQUITY_CORPINFO
     url = base_url + price_api + urllib.parse.urlencode(params)
-
+    #print(f"{url}")
     data = utils.fetch_url(url, cookies)
 
     if response_type == "panda_df":
@@ -225,3 +226,28 @@ def get_chartdata(
 
     url = base_url + event_api + urllib.parse.urlencode(params)
     return utils.fetch_url(url, cookies, key="grapthData")
+
+def get_symbols_list(
+):
+    """
+    Args:
+        No arguments needed
+
+    Returns:
+        List of stock or equity symbols
+
+    """
+    cookies = utils.get_cookies()
+    base_url = cns.BASE_URL
+    event_api  = cns.EQUITY_LIST
+    
+
+
+    url = base_url + event_api 
+    data = utils.fetch_url(url, cookies)
+    f_dict = data.to_dict()
+    list =[]
+    for i in range(len(f_dict["data"])):
+        list.append(f_dict["data"][i]["metadata"]["symbol"])
+        
+    return list
