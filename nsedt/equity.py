@@ -39,7 +39,6 @@ def get_companyinfo(
     params["symbol"] = symbol
 
     url = base_url + event_api + urllib.parse.urlencode(params)
-    print(url)
     data = utils.fetch_url(url, cookies)
 
     if response_type == "panda_df":
@@ -164,7 +163,6 @@ def get_corpinfo(
     base_url = cns.BASE_URL
     price_api = cns.EQUITY_CORPINFO
     url = base_url + price_api + urllib.parse.urlencode(params)
-    #print(f"{url}")
     data = utils.fetch_url(url, cookies)
 
     if response_type == "panda_df":
