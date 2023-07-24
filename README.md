@@ -23,6 +23,7 @@ print(eq.get_marketstatus(response_type="json"))
 print(eq.get_companyinfo(symbol="TCS"))
 print(eq.get_companyinfo(symbol="TCS", response_type="json"))
 print(eq.get_chartdata(symbol="TCS"))
+print(eq.get_symbols_list()) #print the list of symbols used by NSE for equities
 
 ```
 ---
@@ -74,7 +75,7 @@ atoSellQty                                       NaN                            
 
 ### get_companyinfo
 
-Function description goes here.
+Function defines the market status of the company
 
 ### get_marketstatus
 
@@ -82,7 +83,7 @@ Function description goes here.
 
 ### get_price
 
-Function description goes here.
+Function to get the price of the stock or index from a starting date to end date
 
 ### get_corpinfo
 
@@ -95,4 +96,8 @@ Function description goes here.
 ### get_chartdata
 
 Function description goes here.
+
+### get_symbols_list
+
+Function to get the list of symbols used by NSE for equity companies like "SBIN" for State Bank of India
 
