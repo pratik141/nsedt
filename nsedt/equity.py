@@ -275,8 +275,8 @@ def get_symbols_list():
     url = base_url + event_api
     data = utils.fetch_url(url, cookies)
     f_dict = data.to_dict()
-    list = []
+    eq_list = []
     for i in range(len(f_dict["data"])):
-        list.append(f_dict["data"][i]["metadata"]["symbol"])
+        eq_list.append(f_dict["data"][i]["metadata"]["symbol"])
 
-    return list
+    return eq_list
