@@ -1,8 +1,13 @@
-# nse data
+# NSE (national stock exchange) data
 
-Introduction
+Introduction:
+This library serves as an api to fetch data from the NSE about stocks and indices using python
 
 Thank you for using Nsedt. Please feel free to send pull requests, comments, and suggestions, as well as get in touch with me if you require any additional help. I sincerely hope you will find this library useful.
+
+## How to start
+`git clone https://github.com/pratik141/nsedt`
+`pip install -r requirements.txt`
 
 ---
 ## Run 
