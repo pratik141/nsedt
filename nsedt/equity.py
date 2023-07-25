@@ -39,12 +39,14 @@ def get_companyinfo(
     params["symbol"] = symbol
 
     url = base_url + event_api + urllib.parse.urlencode(params)
-    data = utils.fetch_url(url, cookies)
+    data = utils.fetch_url(
+        url,
+        cookies,
+        key=None,
+        response_type=response_type,
+    )
 
-    if response_type == "panda_df":
-        return data
-
-    return data.to_json()
+    return data
 
 
 def get_marketstatus(
@@ -64,12 +66,14 @@ def get_marketstatus(
     event_api = cns.MARKETSTATUS
 
     url = base_url + event_api
-    data = utils.fetch_url(url, cookies, key="marketState")
+    data = utils.fetch_url(
+        url,
+        cookies,
+        key="marketState",
+        response_type=response_type,
+    )
 
-    if response_type == "panda_df":
-        return data
-
-    return data.to_json()
+    return data
 
 
 def get_price(
@@ -163,12 +167,15 @@ def get_corpinfo(
     base_url = cns.BASE_URL
     price_api = cns.EQUITY_CORPINFO
     url = base_url + price_api + urllib.parse.urlencode(params)
-    data = utils.fetch_url(url, cookies)
 
-    if response_type == "panda_df":
-        return data
+    data = utils.fetch_url(
+        url,
+        cookies,
+        key=None,
+        response_type=response_type,
+    )
 
-    return data.to_json()
+    return data
 
 
 def get_event(
@@ -201,7 +208,8 @@ def get_event(
 
 def get_chartdata(
     symbol,
-    preopen="true",
+    preopen=False,
+    response_type="panda_df",
 ):
     """
     Args:
@@ -215,18 +223,43 @@ def get_chartdata(
     base_url = cns.BASE_URL
     event_api = cns.EQUITY_CHART
     try:
-        identifier = get_companyinfo(symbol)["info"]["identifier"]
+        identifier = get_companyinfo(
+            symbol,
+            response_type="json",
+        )[
+            "info"
+        ]["identifier"]
+
     except KeyError:
         return f"Invalid symbol name: {symbol}"
 
     params["index"] = identifier
-    params["preopen"] = preopen
+    if preopen:
+        params["preopen"] = "true"
 
     url = base_url + event_api + urllib.parse.urlencode(params)
-    return utils.fetch_url(url, cookies, key="grapthData")
 
-def get_symbols_list(
-):
+    data = utils.fetch_url(
+        url,
+        cookies,
+        key="grapthData",
+        response_type=response_type,
+    )
+    if response_type == "panda_df":
+        data_frame = data.rename(
+            columns={
+                0: "timestamp_milliseconds",
+                1: "price",
+            }
+        )
+        data_frame["datetime"] = pd.to_datetime(
+            data_frame["timestamp_milliseconds"], unit="ms"
+        )
+        return data_frame
+    return data
+
+
+def get_symbols_list():
     """
     Args:
         No arguments needed
@@ -237,15 +270,13 @@ def get_symbols_list(
     """
     cookies = utils.get_cookies()
     base_url = cns.BASE_URL
-    event_api  = cns.EQUITY_LIST
-    
+    event_api = cns.EQUITY_LIST
 
-
-    url = base_url + event_api 
+    url = base_url + event_api
     data = utils.fetch_url(url, cookies)
     f_dict = data.to_dict()
-    list =[]
+    list = []
     for i in range(len(f_dict["data"])):
         list.append(f_dict["data"][i]["metadata"]["symbol"])
-        
+
     return list
