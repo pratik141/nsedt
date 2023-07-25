@@ -6,7 +6,9 @@ This library serves as an api to fetch data from the NSE about stocks and indice
 Thank you for using Nsedt. Please feel free to send pull requests, comments, and suggestions, as well as get in touch with me if you require any additional help. I sincerely hope you will find this library useful.
 
 ## How to start
+### clone the repository
 `git clone https://github.com/pratik141/nsedt`
+### Install the requirements file after changing to cloned folder above
 `pip install -r requirements.txt`
 
 ---
