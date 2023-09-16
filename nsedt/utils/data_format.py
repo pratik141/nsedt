@@ -68,14 +68,14 @@ def indices(data_json):
     """
     data_close_df = (
         pd.DataFrame(data_json["data"]["indexCloseOnlineRecords"])
-        .drop(columns=["_id", "EOD_INDEX_NAME", "EOD_TIMESTAMP"])
+        .drop(columns=["_id", "EOD_INDEX_NAME", "TIMESTAMP"])
         .rename(
             columns={
                 "EOD_OPEN_INDEX_VAL": "Open Price",
                 "EOD_HIGH_INDEX_VAL": "High Price",
                 "EOD_CLOSE_INDEX_VAL": "Close Price",
                 "EOD_LOW_INDEX_VAL": "Low Price",
-                "TIMESTAMP": "Date",
+                "EOD_TIMESTAMP": "Date",
             }
         )
     )
