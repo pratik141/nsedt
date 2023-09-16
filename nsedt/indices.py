@@ -64,7 +64,7 @@ def get_price(
     result = pd.DataFrame()
     with concurrent.futures.ThreadPoolExecutor(max_workers=cns.MAX_WORKERS) as executor:
         future_to_url = {
-            executor.submit(utils.fetch_url, url, cookies, response_type="json"): url
+            executor.submit(utils.fetch_url, url, cookies, response_type="panda"): url
             for url in url_list
         }
         concurrent.futures.wait(future_to_url, return_when=ALL_COMPLETED)
