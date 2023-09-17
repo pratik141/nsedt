@@ -30,7 +30,8 @@ EQUITY_LIST = "api/market-data-pre-open?key=ALL"
 INDEX_PRICE_HISTORY = "api/historical/indicesHistory?"
 
 ### DERIVATIVES
-DERIVATIVES_PRICE_EQUITIES = "api/option-chain-equities?"
-DERIVATIVES_PRICE_INDICES = "api/option-chain-indices?"
+OPTIONS_PRICE_EQUITIES = "api/option-chain-equities?"
+OPTIONS_PRICE_INDICES = "api/option-chain-indices?"
 INDICES = ["NIFTY", "FINNIFTY", "BANKNIFTY"]
 VIX_HISTORY = "api/historical/vixhistory?"
+FUTURES_PRICE = "api/historical/foCPV?"

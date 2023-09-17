@@ -20,7 +20,6 @@ setup(
         "requests",
         "numpy",
         "pandas",
-        "six",
     ],
     classifiers=[
         "Development Status :: 3 - Alpha",

@@ -67,15 +67,19 @@ print(in.get_price(start_date, end_date, symbol="NIFTY 50")))
 ### Details
 |  Name | Module name | Description | Argument | Response|
 | ----- | ----------- | ----------- | -------- | ------- |
-| vix | get_vix | price | start_date, end_date |  panda df |
-| option chain | get_option_chain | get option chain price | symbol,strikePrice,expiryDate |  panda df |
+| vix | get_vix | price | start_date, end_date,columns_drop_list |  panda df |
+| option chain | get_option_chain | get option  price | symbol,strikePrice,expiryDate |  panda df |
 | option chain expiry date | get_option_chain_expdate | option chain expiry date | symbol |  json  |
+| future price | get_future_price | get future price | symbol,strikePrice,expiryDate,columns_drop_list |  panda df |
+| future expiry date | get_future_expdate | future expiry date | symbol |  json  |
+
 ### step to run  
 ```py
 from nsedt import derivatives as de
-start_date = "01-05-2023"
-end_date = "03-05-2023"
+start_date = "01-09-2023"
+end_date = "03-09-2023"
 print(de.get_vix(start_date, end_date))
 print(de.get_option_chain(symbol="TCS", strikePrice=3300, expiryDate="expiryDate")) # expiryDate format "%d-%m-%Y"
 print(de.get_option_chain_expdate(symbol="TCS"))
-
+print(de.get_future_price(symbol="TCS", start_date, end_date)) # date format "%d-%m-%Y"
+print(de.get_future_expdate(symbol="TCS"))

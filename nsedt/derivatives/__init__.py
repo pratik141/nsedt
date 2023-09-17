@@ -12,6 +12,7 @@ from nsedt import utils
 from nsedt.resources import constants as cns
 from nsedt.utils import data_format
 from nsedt.derivatives.options import get_option_chain, get_option_chain_expdate
+from nsedt.derivatives.futures import get_future_price, get_future_expdate
 
 log = logging.getLogger("root")
 
@@ -20,6 +21,7 @@ def get_vix(
     start_date: str,
     end_date: str,
     response_type: str = "panda_df",
+    columns_drop_list: list = None,
 ):
     """Get Vix data
 
@@ -27,6 +29,7 @@ def get_vix(
         start_date (str): start date in "%d-%m-%Y" format
         end_date (str): end_date in "%d-%m-%Y" format
         response_type (str, optional): response_type. Defaults to "panda_df".
+        columns_drop_list (list, optional): _description_. Defaults to None.
 
     Raises:
         exc: genral Exception
@@ -78,7 +81,11 @@ def get_vix(
         for future in concurrent.futures.as_completed(future_to_url):
             url = future_to_url[future]
             try:
-                dataframe = data_format.get_vix(future.result())
+                dataframe = data_format.get_vix(
+                    future.result(),
+                    response_type=response_type,
+                    columns_drop_list=columns_drop_list,
+                )
                 result = pd.concat([result, dataframe])
             except Exception as exc:
                 log.error("%s got exception: %s. Please try again later.", url, exc)

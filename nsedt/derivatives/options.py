@@ -36,9 +36,9 @@ def get_option_chain(
     base_url = cns.BASE_URL
 
     if symbol in cns.INDICES:
-        event_api = cns.DERIVATIVES_PRICE_INDICES
+        event_api = cns.OPTIONS_PRICE_EQUITIES
     else:
-        event_api = cns.DERIVATIVES_PRICE_EQUITIES
+        event_api = cns.OPTIONS_PRICE_EQUITIES
 
     params["symbol"] = symbol
 
@@ -92,9 +92,9 @@ def get_option_chain_expdate(symbol: str) -> list:
     base_url = cns.BASE_URL
 
     if symbol in cns.INDICES:
-        event_api = cns.DERIVATIVES_PRICE_INDICES
+        event_api = cns.OPTIONS_PRICE_EQUITIES
     else:
-        event_api = cns.DERIVATIVES_PRICE_EQUITIES
+        event_api = cns.OPTIONS_PRICE_EQUITIES
 
     params["symbol"] = symbol
 
