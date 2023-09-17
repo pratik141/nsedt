@@ -1,53 +1,58 @@
 """ 
-get data for indices
+get data for Equity
 """
 import concurrent
-import datetime
 import logging
 import urllib
 from concurrent.futures import ALL_COMPLETED
+from datetime import datetime, timedelta
 
 import pandas as pd
-
 from nsedt import utils
 from nsedt.resources import constants as cns
 from nsedt.utils import data_format
+from nsedt.derivatives.options import get_option_chain, get_option_chain_expdate
+from nsedt.derivatives.futures import get_future_price, get_future_expdate
 
 log = logging.getLogger("root")
 
 
-def get_price(
-    start_date,
-    end_date,
-    symbol,
-    response_type="panda_df",
+def get_vix(
+    start_date: str,
+    end_date: str,
+    response_type: str = "panda_df",
+    columns_drop_list: list = None,
 ):
-    """_summary_
+    """Get Vix data
 
     Args:
-        start_date (_type_): _description_
-        end_date (_type_): _description_
-        symbol (_type_): _description_
-        response_type (str, optional): _description_. Defaults to "panda_df".
+        start_date (str): start date in "%d-%m-%Y" format
+        end_date (str): end_date in "%d-%m-%Y" format
+        response_type (str, optional): response_type. Defaults to "panda_df".
+        columns_drop_list (list, optional): _description_. Defaults to None.
 
     Raises:
-        exc: _description_
+        exc: genral Exception
 
     Returns:
-        Pandas DataFrame: df containing company info
+        Pandas DataFrame: df containing option data
       or
-        Json: json containing company info
+        Json: json containing option data
 
     """
-    params = {}
     cookies = utils.get_cookies()
+    params = {
+        "from": start_date,
+        "to": end_date,
+    }
     base_url = cns.BASE_URL
-    event_api = cns.INDEX_PRICE_HISTORY
-
+    event_api = cns.VIX_HISTORY
     url_list = []
+    start_date = datetime.strptime(start_date, "%d-%m-%Y")
+    end_date = datetime.strptime(end_date, "%d-%m-%Y")
 
     # set the window size to one year
-    window_size = datetime.timedelta(days=cns.WINDOW_SIZE)
+    window_size = timedelta(days=cns.WINDOW_SIZE)
 
     current_window_start = start_date
     while current_window_start < end_date:
@@ -57,7 +62,6 @@ def get_price(
         current_window_end = min(current_window_end, end_date)
 
         params = {
-            "indexType": symbol,
             "from": current_window_start.strftime("%d-%m-%Y"),
             "to": current_window_end.strftime("%d-%m-%Y"),
         }
@@ -65,7 +69,7 @@ def get_price(
         url_list.append(url)
 
         # move the window start to the next day after the current window end
-        current_window_start = current_window_end + datetime.timedelta(days=1)
+        current_window_start = current_window_end + timedelta(days=1)
 
     result = pd.DataFrame()
     with concurrent.futures.ThreadPoolExecutor(max_workers=cns.MAX_WORKERS) as executor:
@@ -77,7 +81,11 @@ def get_price(
         for future in concurrent.futures.as_completed(future_to_url):
             url = future_to_url[future]
             try:
-                dataframe = data_format.indices(future.result())
+                dataframe = data_format.get_vix(
+                    future.result(),
+                    response_type=response_type,
+                    columns_drop_list=columns_drop_list,
+                )
                 result = pd.concat([result, dataframe])
             except Exception as exc:
                 log.error("%s got exception: %s. Please try again later.", url, exc)
