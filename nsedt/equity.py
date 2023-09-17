@@ -13,7 +13,7 @@ from nsedt import utils
 from nsedt.resources import constants as cns
 from nsedt.utils import data_format
 
-logger = logging.getLogger(__name__)
+log = logging.getLogger("root")
 
 
 def get_companyinfo(

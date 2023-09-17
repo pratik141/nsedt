@@ -94,3 +94,89 @@ def indices(data_json):
     # )
     return data_close_df
     # return pd.merge(data_close_df, data_turnover_df, on="Date", how="inner")
+
+
+def option_chain(
+    data_json: str,
+    response_type: str,
+):
+    if response_type == "json":
+        data_json_ret = []
+        for record in data_json:
+            if "PE" in record:
+                record["PE"].pop("strikePrice", None)
+                record["PE"].pop("expiryDate", None)
+                record["PE"].pop("underlying", None)
+                record["PE"].pop("identifier", None)
+            if "CE" in record:
+                record["CE"].pop("strikePrice", None)
+                record["CE"].pop("expiryDate", None)
+                record["CE"].pop("underlying", None)
+                record["CE"].pop("identifier", None)
+            data_json_ret.append(record)
+        return data_json_ret
+
+    return (
+        pd.json_normalize(data_json)
+        .sort_values(by=["expiryDate", "strikePrice"], ascending=True)
+        .drop(
+            columns=[
+                "PE.strikePrice",
+                "PE.expiryDate",
+                "PE.identifier",
+                "CE.strikePrice",
+                "CE.expiryDate",
+                "CE.identifier",
+            ]
+        )
+    )
+
+
+def get_vix(
+    data_json: str,
+    response_type: str = "panda_df",
+):
+    data_json = data_json["data"]
+    if response_type == "json":
+        data_json_ret = []
+        for record in data_json:
+            if "PE" in record:
+                record.pop("_id", None)
+                record.pop("TIMESTAMP", None)
+                record.pop("createdAt", None)
+                record.pop("updatedAt", None)
+                record.pop("__v", None)
+                record.pop("ALTERNATE_INDEX_NAME", None)
+                record.pop("EOD_INDEX_NAME", None)
+                record.pop("EOD_PREV_CLOSE", None)
+                record.pop("VIX_PTS_CHG", None)
+                record.pop("VIX_PERC_CHG", None)
+            data_json_ret.append(record)
+        return data_json_ret
+
+    return (
+        pd.json_normalize(data_json)
+        .drop(
+            columns=[
+                "_id",
+                "TIMESTAMP",
+                "createdAt",
+                "updatedAt",
+                "__v",
+                "ALTERNATE_INDEX_NAME",
+                "EOD_INDEX_NAME",
+                "EOD_PREV_CLOSE",
+                "VIX_PTS_CHG",
+                "VIX_PERC_CHG",
+            ]
+        )
+        .rename(
+            columns={
+                "EOD_OPEN_INDEX_VAL": "Open Price",
+                "EOD_HIGH_INDEX_VAL": "High Price",
+                "EOD_CLOSE_INDEX_VAL": "Close Price",
+                "EOD_LOW_INDEX_VAL": "Low Price",
+                "EOD_TIMESTAMP": "Date",
+            }
+        )
+    )
