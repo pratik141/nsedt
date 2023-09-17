@@ -17,20 +17,21 @@ log = logging.getLogger("root")
 
 
 def get_companyinfo(
-    symbol,
-    response_type="panda_df",
+    symbol: str,
+    response_type: str = "panda_df",
 ):
-    """
+    """_summary_
+
     Args:
-        symbol (str): stock symbol.
+        symbol (str): stock name
         response_type (str, Optional): define the response type panda_df | json. Default panda_df
 
     Returns:
         Pandas DataFrame: df containing company info
       or
         Json: json containing company info
-
     """
+
     params = {}
     cookies = utils.get_cookies()
     base_url = cns.BASE_URL
@@ -50,7 +51,7 @@ def get_companyinfo(
 
 
 def get_marketstatus(
-    response_type="panda_df",
+    response_type: str = "panda_df",
 ):
     """
     Args:

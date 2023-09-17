@@ -9,7 +9,7 @@ with open("README.md", "r", encoding="utf-8") as file:
 
 setup(
     name="nsedt",
-    version="0.0.9",
+    version="0.0.10",
     author="Pratik Anand",
     long_description=long_description,
     long_description_content_type="text/markdown",

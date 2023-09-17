@@ -100,6 +100,15 @@ def option_chain(
     data_json: str,
     response_type: str,
 ):
+    """_summary_
+
+    Args:
+        data_json (str): _description_
+        response_type (str): _description_
+
+    Returns:
+        _type_: _description_
+    """
     if response_type == "json":
         data_json_ret = []
         for record in data_json:
@@ -136,6 +145,15 @@ def get_vix(
     data_json: str,
     response_type: str = "panda_df",
 ):
+    """_summary_
+
+    Args:
+        data_json (str): _description_
+        response_type (str, optional): _description_. Defaults to "panda_df".
+
+    Returns:
+        _type_: _description_
+    """
     data_json = data_json["data"]
     if response_type == "json":
         data_json_ret = []

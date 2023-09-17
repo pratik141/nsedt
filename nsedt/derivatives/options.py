@@ -4,6 +4,7 @@ get data for Options
 import logging
 import urllib
 
+from datetime import datetime
 from nsedt import utils
 from nsedt.resources import constants as cns
 from nsedt.utils import data_format
@@ -13,11 +14,11 @@ log = logging.getLogger("root")
 
 def get_option_chain(
     symbol: str,
-    strikePrice: str = None,
-    expiryDate: str = None,
+    strike_price: str = None,
+    expiry_date: str = None,
     response_type="panda_df",
 ):
-    """_summary_
+    """Get option data of stock and indices
 
     Args:
         symbol (str): _description_
@@ -45,25 +46,28 @@ def get_option_chain(
     data = utils.fetch_url(url, cookies, response_type="json")
 
     # filtering data
-    if strikePrice and expiryDate:
+
+    if strike_price and expiry_date:
         filtered_data = [
             record
             for record in data["records"]["data"]
-            if record["strikePrice"] == strikePrice
-            and record["expiryDate"] == expiryDate
+            if record["strikePrice"] == strike_price
+            and record["expiryDate"]
+            == datetime.strptime(expiry_date, "%d-%m-%Y").strftime("%d-%b-%Y")
         ]
 
-    elif strikePrice:
+    elif strike_price:
         filtered_data = [
             record
             for record in data["records"]["data"]
-            if record["strikePrice"] == strikePrice
+            if record["strikePrice"] == strike_price
         ]
-    elif expiryDate:
+    elif expiry_date:
         filtered_data = [
             record
             for record in data["records"]["data"]
-            if record["expiryDate"] == expiryDate
+            if record["expiryDate"]
+            == datetime.strptime(expiry_date, "%d-%m-%Y").strftime("%d-%b-%Y")
         ]
     else:
         filtered_data = data["records"]["data"]
@@ -75,13 +79,13 @@ def get_option_chain(
 
 
 def get_option_chain_expdate(symbol: str) -> list:
-    """_summary_
+    """get option  expiry date for stock and indices
 
     Args:
-        symbol (str): _description_
+        symbol (str): symbol name
 
     Returns:
-        list: _description_
+        list: expiry date in list(in "%d-%m-%Y" format)
     """
     params = {}
     cookies = utils.get_cookies()
@@ -96,4 +100,7 @@ def get_option_chain_expdate(symbol: str) -> list:
 
     url = base_url + event_api + urllib.parse.urlencode(params)
     data = utils.fetch_url(url, cookies, response_type="json")
-    return data["records"]["expiryDates"]
+    ret = []
+    for expiry_date in data["records"]["expiryDates"]:
+        ret.append(datetime.strptime(expiry_date, "%d-%b-%Y").strftime("%d-%m-%Y"))
+    return ret

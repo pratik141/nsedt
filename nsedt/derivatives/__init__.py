@@ -1,19 +1,17 @@
-from .options import *
-
 """ 
 get data for Equity
 """
 import concurrent
-from datetime import datetime, timedelta
 import logging
 import urllib
 from concurrent.futures import ALL_COMPLETED
+from datetime import datetime, timedelta
 
 import pandas as pd
-
 from nsedt import utils
 from nsedt.resources import constants as cns
 from nsedt.utils import data_format
+from nsedt.derivatives.options import get_option_chain, get_option_chain_expdate
 
 log = logging.getLogger("root")
 
@@ -23,7 +21,7 @@ def get_vix(
     end_date: str,
     response_type: str = "panda_df",
 ):
-    """_summary_
+    """Get Vix data
 
     Args:
         start_date (str): start date in "%d-%m-%Y" format
@@ -69,7 +67,6 @@ def get_vix(
 
         # move the window start to the next day after the current window end
         current_window_start = current_window_end + timedelta(days=1)
-    print(url_list)
 
     result = pd.DataFrame()
     with concurrent.futures.ThreadPoolExecutor(max_workers=cns.MAX_WORKERS) as executor:

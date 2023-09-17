@@ -15,7 +15,7 @@ ignore-long-lines=^\s*(# )?<?https?://\S+>?$|^\s*(\w*\s*=\s*)?(\"|\').*(\"|\'),?
 [SIMILARITIES]
 
 # Minimum lines number of a similarity.
-min-similarity-lines=10
+min-similarity-lines=20
 
 # Ignore comments when computing similarities.
 ignore-comments=yes
@@ -25,3 +25,4 @@ ignore-docstrings=yes
 
 # Ignore imports when computing similarities.
 ignore-imports=no
+
