@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Python: module indices</title>
+    <title>Python: module __init__</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 
@@ -11,17 +11,17 @@
     <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
         <tr bgcolor="#7799ee">
             <td valign=bottom>&nbsp;<br>
-                <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>indices</strong></big></big>
+                <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>__init__</strong></big></big>
                 </font>
             </td>
             <td align=right valign=bottom>
                 <font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a
-                        href="https://github.com/pratik141/nsedt/blob/main/nsedt/indices.py">https://github.com/pratik141/nsedt/blob/main/nsedt/indices.py</a>
+                        href="https://github.com/pratik141/nsedt/blob/main/nsedt/derivatives/__init__.py">https://github.com/pratik141/nsedt/blob/main/nsedt/derivatives/__init__.py</a>
                 </font>
             </td>
         </tr>
     </table>
-    <p><tt>get&nbsp;data&nbsp;for&nbsp;indices</tt></p>
+    <p><tt>get&nbsp;data&nbsp;for&nbsp;Equity</tt></p>
     <p>
     <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
         <tr bgcolor="#aa55cc">
@@ -42,13 +42,12 @@
                         </td>
                         <td width="25%" valign=top><a
                                 href="nsedt.utils.data_format.html">nsedt.utils.data_format</a><br>
-                            <a href="datetime.html">datetime</a><br>
+                            <a href="logging.html">logging</a><br>
                         </td>
-                        <td width="25%" valign=top><a href="logging.html">logging</a><br>
-                            <a href="pandas.html">pandas</a><br>
+                        <td width="25%" valign=top><a href="pandas.html">pandas</a><br>
+                            <a href="urllib.html">urllib</a><br>
                         </td>
-                        <td width="25%" valign=top><a href="urllib.html">urllib</a><br>
-                            <a href="nsedt.utils.html">nsedt.utils</a><br>
+                        <td width="25%" valign=top><a href="nsedt.utils.html">nsedt.utils</a><br>
                         </td>
                     </tr>
                 </table>
@@ -68,23 +67,23 @@
             <td>&nbsp;</td>
             <td width="100%">
                 <dl>
-                    <dt><a name="-get_price"><strong>get_price</strong></a>(start_date, end_date, symbol,
-                        response_type='panda_df')</dt>
-                    <dd><tt>_summary_<br>
+                    <dt><a name="-get_vix"><strong>get_vix</strong></a>(start_date: str, end_date: str, response_type:
+                        str = 'panda_df', columns_drop_list: list = None)</dt>
+                    <dd><tt>Get&nbsp;Vix&nbsp;data<br>
                             &nbsp;<br>
                             Args:<br>
-                            &nbsp;&nbsp;&nbsp;&nbsp;start_date&nbsp;(_type_):&nbsp;_description_<br>
-                            &nbsp;&nbsp;&nbsp;&nbsp;end_date&nbsp;(_type_):&nbsp;_description_<br>
-                            &nbsp;&nbsp;&nbsp;&nbsp;symbol&nbsp;(_type_):&nbsp;_description_<br>
-                            &nbsp;&nbsp;&nbsp;&nbsp;response_type&nbsp;(str,&nbsp;optional):&nbsp;_description_.&nbsp;Defaults&nbsp;to&nbsp;"panda_df".<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;start_date&nbsp;(str):&nbsp;start&nbsp;date&nbsp;in&nbsp;"%d-%m-%Y"&nbsp;format<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;end_date&nbsp;(str):&nbsp;end_date&nbsp;in&nbsp;"%d-%m-%Y"&nbsp;format<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;response_type&nbsp;(str,&nbsp;optional):&nbsp;response_type.&nbsp;Defaults&nbsp;to&nbsp;"panda_df".<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;columns_drop_list&nbsp;(list,&nbsp;optional):&nbsp;_description_.&nbsp;Defaults&nbsp;to&nbsp;None.<br>
                             &nbsp;<br>
                             Raises:<br>
-                            &nbsp;&nbsp;&nbsp;&nbsp;exc:&nbsp;_description_<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;exc:&nbsp;genral&nbsp;Exception<br>
                             &nbsp;<br>
                             Returns:<br>
-                            &nbsp;&nbsp;&nbsp;&nbsp;Pandas&nbsp;DataFrame:&nbsp;df&nbsp;containing&nbsp;company&nbsp;info<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;Pandas&nbsp;DataFrame:&nbsp;df&nbsp;containing&nbsp;option&nbsp;data<br>
                             &nbsp;&nbsp;or<br>
-                            &nbsp;&nbsp;&nbsp;&nbsp;Json:&nbsp;json&nbsp;containing&nbsp;company&nbsp;info</tt></dd>
+                            &nbsp;&nbsp;&nbsp;&nbsp;Json:&nbsp;json&nbsp;containing&nbsp;option&nbsp;data</tt></dd>
                 </dl>
             </td>
         </tr>

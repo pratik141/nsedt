@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Python: module nsedt.utils.data_format</title>
+    <title>Python: module data_format</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 
@@ -11,11 +11,8 @@
     <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
         <tr bgcolor="#7799ee">
             <td valign=bottom>&nbsp;<br>
-                <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="nsedt.html">
-                                    <font color="#ffffff">nsedt</font>
-                                </a>.<a href="nsedt.utils.html">
-                                    <font color="#ffffff">utils</font>
-                                </a>.data_format</strong></big></big></font>
+                <font color="#ffffff" face="helvetica, arial">
+                    &nbsp;<br><big><big><strong>data_format</strong></big></big></font>
             </td>
             <td align=right valign=bottom>
                 <font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a
@@ -62,12 +59,51 @@
             <td>&nbsp;</td>
             <td width="100%">
                 <dl>
+                    <dt><a name="-derivatives_futures"><strong>derivatives_futures</strong></a>(data_json: str,
+                        response_type: str = 'panda_df', columns_drop_list=None)</dt>
+                    <dd><tt>&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;futures&nbsp;data<br>
+                            &nbsp;<br>
+                            Args:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;data_json&nbsp;(object):&nbsp;data&nbsp;in&nbsp;json&nbsp;format.<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;response_type&nbsp;(str,&nbsp;optional):&nbsp;response_type.&nbsp;Defaults&nbsp;to&nbsp;"panda_df".<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;columns_drop_list&nbsp;(list,&nbsp;optional):&nbsp;custom&nbsp;columns&nbsp;drop&nbsp;list.&nbsp;Defaults&nbsp;to&nbsp;None.<br>
+                            &nbsp;<br>
+                            Returns:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;json:&nbsp;formate&nbsp;data&nbsp;in&nbsp;json<br>
+                            &nbsp;&nbsp;or<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;dataframe:&nbsp;formate&nbsp;data&nbsp;in&nbsp;panda&nbsp;df</tt>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt><a name="-get_vix"><strong>get_vix</strong></a>(data_json: object, response_type: str =
+                        'panda_df', columns_drop_list: list = None)</dt>
+                    <dd><tt>&nbsp;&nbsp;&nbsp;&nbsp;Format&nbsp;Vix&nbsp;data<br>
+                            Args:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;data_json&nbsp;(object):&nbsp;data&nbsp;in&nbsp;json&nbsp;format.<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;response_type&nbsp;(str,&nbsp;optional):&nbsp;response_type.&nbsp;Defaults&nbsp;to&nbsp;"panda_df".<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;columns_drop_list&nbsp;(list,&nbsp;optional):&nbsp;custom&nbsp;columns&nbsp;drop&nbsp;list.&nbsp;Defaults&nbsp;to&nbsp;None.<br>
+                            Returns:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;_type_:&nbsp;_description_</tt></dd>
+                </dl>
+                <dl>
                     <dt><a name="-indices"><strong>indices</strong></a>(data_json)</dt>
                     <dd><tt>Args:<br>
                             &nbsp;&nbsp;&nbsp;&nbsp;data_json&nbsp;(json):&nbsp;&nbsp;data&nbsp;in&nbsp;json&nbsp;format<br>
                             Returns:<br>
                             &nbsp;&nbsp;&nbsp;&nbsp;Pandas&nbsp;DataFrame:&nbsp;df&nbsp;with&nbsp;indexCloseOnlineRecords&nbsp;and&nbsp;indexTurnoverRecords</tt>
                     </dd>
+                </dl>
+                <dl>
+                    <dt><a name="-option_chain"><strong>option_chain</strong></a>(data_json: str, response_type: str)
+                    </dt>
+                    <dd><tt>_summary_<br>
+                            &nbsp;<br>
+                            Args:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;data_json&nbsp;(str):&nbsp;_description_<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;response_type&nbsp;(str):&nbsp;_description_<br>
+                            &nbsp;<br>
+                            Returns:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;_type_:&nbsp;_description_</tt></dd>
                 </dl>
                 <dl>
                     <dt><a name="-price"><strong>price</strong></a>(result)</dt>
