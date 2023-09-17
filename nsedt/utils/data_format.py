@@ -80,16 +80,17 @@ def indices(data_json):
         )
     )
 
-    data_turnover_df = (
-        pd.DataFrame(data_json["data"]["indexTurnoverRecords"])
-        .drop(columns=["_id", "HIT_INDEX_NAME_UPPER", "HIT_TIMESTAMP"])
-        .rename(
-            columns={
-                "HIT_TRADED_QTY": "Total Traded Quantity",
-                "HIT_TURN_OVER": "Total Traded Value",
-                "TIMESTAMP": "Date",
-            }
-        )
-    )
-
-    return pd.merge(data_close_df, data_turnover_df, on="Date", how="inner")
+    ## Mismatch values
+    # data_turnover_df = (
+    #     pd.DataFrame(d["data"]["indexTurnoverRecords"])
+    #     .drop(columns=["_id", "HIT_INDEX_NAME_UPPER", "HIT_TIMESTAMP"])
+    #     .rename(
+    #         columns={
+    #             "HIT_TRADED_QTY": "Total Traded Quantity",
+    #             "HIT_TURN_OVER": "Total Traded Value",
+    #             "TIMESTAMP": "Date",
+    #         }
+    #     )
+    # )
+    return data_close_df
+    # return pd.merge(data_close_df, data_turnover_df, on="Date", how="inner")
