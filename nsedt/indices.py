@@ -34,15 +34,16 @@ def get_price(
         exc: _description_
 
     Returns:
-        Pandas DataFrame: df containing company info
-      or
-        Json: json containing company info
+            Pandas DataFrame: df containing company info
+        or
+            Json: json containing company info
 
     """
     params = {}
     cookies = utils.get_cookies()
     base_url = cns.BASE_URL
     event_api = cns.INDEX_PRICE_HISTORY
+    symbol = utils.get_symbol(symbol=symbol, get_key="indices")
 
     url_list = []
 

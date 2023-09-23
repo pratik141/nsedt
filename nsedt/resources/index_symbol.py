@@ -1,4 +1,7 @@
-SYMBOL_MAP = [
+"""
+    NSE indices symbol map
+"""
+symbol_map = [
     {
         "keys": ["NIFTY 50", "NIFTY50", "NIFTY"],
         "indices": "NIFTY 50",

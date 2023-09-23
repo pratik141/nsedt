@@ -1,10 +1,11 @@
 """
 Constants
 """
-from .index_symbol import SYMBOL_MAP
+from .index_symbol import symbol_map
 
 WINDOW_SIZE = 50
 MAX_WORKERS = 10
+SYMBOL_MAP = symbol_map
 LOG_FORMAT = """{
     "time": "%(asctime)s",
     "lineno": "%(lineno)d",

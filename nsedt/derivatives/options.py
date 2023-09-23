@@ -22,8 +22,8 @@ def get_option_chain(
 
     Args:
         symbol (str): symbol name
-        strike_price (str, optional): provide strike price to apply filter on price. Defaults to None.
-        expiry_date (str, optional): provide expiry date to apply filter on date. Defaults to None.
+        strike_price (str, optional): strike price to apply filter on price. Defaults to None.
+        expiry_date (str, optional): expiry date to apply filter on date. Defaults to None.
         response_type (str, optional): response_type panda_df or json . Defaults to "panda_df".
 
     Returns:
@@ -46,7 +46,6 @@ def get_option_chain(
 
     url = base_url + event_api + urllib.parse.urlencode(params)
     data = utils.fetch_url(url, cookies, response_type="json")
-    log.info(f"data: {data}")
 
     if data is None or data == {}:
         log.error("symbol is wrong or unable to access API")
@@ -108,10 +107,10 @@ def get_option_chain_expdate(symbol: str) -> list:
     url = base_url + event_api + urllib.parse.urlencode(params)
     data = utils.fetch_url(url, cookies, response_type="json")
     ret = []
-    expiryDates = data.get("records").get("expiryDates")
-    if expiryDates is None:
-        log.error("expiryDates is None, symbol is wrong or unable to access API")
+    expiry_dates = data.get("records").get("expiryDates")
+    if expiry_dates is None:
+        log.error("expiry_dates is None, symbol is wrong or unable to access API")
         return []
-    for expiry_date in expiryDates:
+    for expiry_date in expiry_dates:
         ret.append(datetime.strptime(expiry_date, "%d-%b-%Y").strftime("%d-%m-%Y"))
     return ret
