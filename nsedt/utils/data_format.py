@@ -9,6 +9,7 @@ def price(result):
     """
     Args:
         result (Pandas DataFrame): result
+
     Returns:
         Pandas DataFrame: df containing data in specific format
     """

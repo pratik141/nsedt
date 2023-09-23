@@ -1,6 +1,7 @@
 """
 Constants
 """
+from .index_symbol import SYMBOL_MAP
 
 WINDOW_SIZE = 50
 MAX_WORKERS = 10
@@ -8,7 +9,7 @@ LOG_FORMAT = """{
     "time": "%(asctime)s",
     "lineno": "%(lineno)d",
     "name": "[%(name)s]",
-    "levelname": "%(levelname)s",
+    "loglevel": "%(levelname)s",
     "process": "%(process)s",
     "filename": "%(filename)s",
     "funcName": "%(funcName)s",

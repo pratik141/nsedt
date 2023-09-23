@@ -33,6 +33,7 @@ def get_future_price(
     cookies = utils.get_cookies()
     base_url = cns.BASE_URL
     event_api = cns.FUTURES_PRICE
+    symbol = utils.get_symbol(symbol=symbol, get_key="derivatives")
     params = {
         "symbol": symbol,
         "from": start_date,
