@@ -17,25 +17,32 @@ log = logging.getLogger("root")
 
 
 def get_price(
-    start_date,
-    end_date,
-    symbol,
-    response_type="panda_df",
+    start_date: datetime,
+    end_date: datetime,
+    symbol: str,
+    response_type: str = "panda_df",
     columns_drop_list: list = None,
     columns_rename_map: map = None,
 ):
-    """_summary_
+    """
+        Get price of index
 
     Args:
-        start_date (_type_): _description_
-        end_date (_type_): _description_
-        symbol (_type_): _description_
-        response_type (str, optional): _description_. Defaults to "panda_df".
+
+        start_date (datetime): start date
+        end_date (datetime): end date
+        symbol (str): symbol name or index name
+        response_type (str, optional):  Define return type: panda_df or json.
+                                        Defaults to "panda_df".
+        columns_drop_list (list,optional): define columns drop list, Defaults to None
+        columns_rename_map (map, optional): define columns rename map, Defaults to None
 
     Raises:
-        exc: _description_
+
+        exc: general Exception
 
     Returns:
+
             Pandas DataFrame: df containing company info
         or
             Json: json containing company info

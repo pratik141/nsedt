@@ -7,20 +7,19 @@ from setuptools import find_packages, setup
 with open("README.md", "r", encoding="utf-8") as file:
     long_description = file.read()
 
+with open("requirements.txt", "r", encoding="utf-8") as file:
+    requirements = file.read().split("\n")
+
 setup(
     name="nsedt",
-    version="0.0.10",
+    version="0.0.11",
     author="Pratik Anand",
     long_description=long_description,
     long_description_content_type="text/markdown",
     description="Library to collect NSE data in pandas dataframe",
     packages=find_packages(),
     url="https://github.com/pratik141/nsedt",
-    install_requires=[
-        "requests",
-        "numpy",
-        "pandas",
-    ],
+    install_requires=requirements,
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
