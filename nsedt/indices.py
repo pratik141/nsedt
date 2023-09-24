@@ -21,6 +21,8 @@ def get_price(
     end_date,
     symbol,
     response_type="panda_df",
+    columns_drop_list: list = None,
+    columns_rename_map: map = None,
 ):
     """_summary_
 
@@ -78,7 +80,11 @@ def get_price(
         for future in concurrent.futures.as_completed(future_to_url):
             url = future_to_url[future]
             try:
-                dataframe = data_format.indices(future.result())
+                dataframe = data_format.indices(
+                    future.result(),
+                    columns_drop_list,
+                    columns_rename_map,
+                )
                 result = pd.concat([result, dataframe])
             except Exception as exc:
                 log.error("%s got exception: %s. Please try again later.", url, exc)
