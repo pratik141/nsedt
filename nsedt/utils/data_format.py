@@ -9,6 +9,7 @@ def price(result):
     """
     Args:
         result (Pandas DataFrame): result
+
     Returns:
         Pandas DataFrame: df containing data in specific format
     """
@@ -59,25 +60,36 @@ def price(result):
     return result
 
 
-def indices(data_json):
+def indices(
+    data_json,
+    columns_drop_list: list = None,
+    columns_rename_map: map = None,
+):
     """
     Args:
         data_json (json):  data in json format
     Returns:
         Pandas DataFrame: df with indexCloseOnlineRecords and indexTurnoverRecords
     """
+    if columns_drop_list:
+        columns_list = columns_drop_list
+    else:
+        columns_list = ["_id", "EOD_INDEX_NAME", "TIMESTAMP"]
+
+    if columns_rename_map:
+        columns_rename = columns_rename_map
+    else:
+        columns_rename = {
+            "EOD_OPEN_INDEX_VAL": "Open Price",
+            "EOD_HIGH_INDEX_VAL": "High Price",
+            "EOD_CLOSE_INDEX_VAL": "Close Price",
+            "EOD_LOW_INDEX_VAL": "Low Price",
+            "EOD_TIMESTAMP": "Date",
+        }
     data_close_df = (
         pd.DataFrame(data_json["data"]["indexCloseOnlineRecords"])
-        .drop(columns=["_id", "EOD_INDEX_NAME", "TIMESTAMP"])
-        .rename(
-            columns={
-                "EOD_OPEN_INDEX_VAL": "Open Price",
-                "EOD_HIGH_INDEX_VAL": "High Price",
-                "EOD_CLOSE_INDEX_VAL": "Close Price",
-                "EOD_LOW_INDEX_VAL": "Low Price",
-                "EOD_TIMESTAMP": "Date",
-            }
-        )
+        .drop(columns=columns_list)
+        .rename(columns=columns_rename)
     )
 
     ## Mismatch values
@@ -209,9 +221,9 @@ def derivatives_futures(
         columns_drop_list (list, optional): custom columns drop list. Defaults to None.
 
     Returns:
-        json: formate data in json
-      or
-        dataframe: formate data in panda df
+            json: formate data in json
+        or
+            dataframe: formate data in panda df
     """
     if columns_drop_list:
         columns_list = columns_drop_list

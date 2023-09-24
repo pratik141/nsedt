@@ -12,8 +12,10 @@ from nsedt.resources import constants as cns
 def get_headers():
     """
     Args:
-       ---
+        ---
+
     Returns:
+
         Json: json containing nse header
     """
 
@@ -32,8 +34,10 @@ def get_headers():
 def get_cookies():
     """
     Args:
-       ---
+        ---
+
     Returns:
+
         Json: json containing nse cookies
     """
 
@@ -46,10 +50,13 @@ def get_cookies():
 def fetch_url(url, cookies, key=None, response_type="panda_df"):
     """
     Args:
-       url (str): URL to fetch
-       cookies (str): NSE cokies
-       key (str, Optional):
+
+        url (str): URL to fetch
+        cookies (str): NSE cookies
+        key (str, Optional):
+
     Returns:
+
         Pandas DataFrame: df containing url data
 
     """
@@ -72,3 +79,24 @@ def fetch_url(url, cookies, key=None, response_type="panda_df"):
         return pd.DataFrame.from_dict(json_response[key])
 
     raise ValueError("Please try again in a minute.")
+
+
+def get_symbol(symbol: str, get_key: str) -> str:
+    """_summary_
+
+    Args:
+        symbol (str): _description_
+        get_key (str): _description_
+
+    Returns:
+        str: _description_
+    """
+
+    symbol_map = cns.SYMBOL_MAP
+    val = None
+    for item in symbol_map:
+        key_list = item["keys"]
+        if symbol in key_list:
+            val = item[get_key]
+
+    return val if val else symbol

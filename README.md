@@ -31,7 +31,7 @@ Thank you for using Nsedt. Please feel free to send pull requests, comments, and
 from nsedt import equity as eq
 from datetime import date
 
-start_date = date(2022, 1, 1)
+start_date = date(2023, 1, 1)
 end_date = date(2023, 1, 10)
 print(eq.get_price(start_date, end_date, symbol="TCS"))
 start_date = "01-05-2023"
@@ -58,9 +58,10 @@ print(eq.get_symbols_list()) #print the list of symbols used by NSE for equities
 from nsedt import indices as ind
 from datetime import date
 
-start_date = date(2022, 1, 1)
+start_date = date(2023, 1, 1)
 end_date = date(2023, 1, 10)
 print(ind.get_price(start_date=start_date, end_date=end_date, symbol="NIFTY 50"))
+print(ind.get_price(start_date=start_date, end_date=end_date, symbol="NIFTY"))
 ```
 
 ## Derivatives
@@ -81,7 +82,7 @@ start_date = "01-09-2023"
 end_date = "03-09-2023"
 # date format "%d-%m-%Y"
 print(de.get_vix(start_date, end_date))
-print(de.get_option_chain(symbol="TCS", strikePrice=3300, expiryDate="expiryDate"))
 print(de.get_option_chain_expdate(symbol="TCS"))
+print(de.get_option_chain(symbol="TCS", strike_price=3300, expiry_date="expiryDate"))
 print(de.get_future_price(symbol="TCS", start_date=start_date, end_date=end_date))
 print(de.get_future_expdate(symbol="TCS"))

@@ -21,22 +21,24 @@ def get_option_chain(
     """Get option data of stock and indices
 
     Args:
-        symbol (str): _description_
-        strikePrice (str, optional): _description_. Defaults to None.
-        expiryDate (str, optional): _description_. Defaults to None.
-        response_type (str, optional): _description_. Defaults to "panda_df".
+        symbol (str): symbol name
+        strike_price (str, optional): strike price to apply filter on price. Defaults to None.
+        expiry_date (str, optional): expiry date to apply filter on date. Defaults to None.
+        response_type (str, optional): response_type panda_df or json . Defaults to "panda_df".
+
     Returns:
         Pandas DataFrame: df containing option data
-      or
+    or
         Json: json containing option data
 
     """
     params = {}
     cookies = utils.get_cookies()
     base_url = cns.BASE_URL
+    symbol = utils.get_symbol(symbol=symbol, get_key="derivatives")
 
     if symbol in cns.INDICES:
-        event_api = cns.OPTIONS_PRICE_EQUITIES
+        event_api = cns.OPTIONS_PRICE_INDICES
     else:
         event_api = cns.OPTIONS_PRICE_EQUITIES
 
@@ -44,6 +46,10 @@ def get_option_chain(
 
     url = base_url + event_api + urllib.parse.urlencode(params)
     data = utils.fetch_url(url, cookies, response_type="json")
+
+    if data is None or data == {}:
+        log.error("symbol is wrong or unable to access API")
+        raise ValueError
 
     # filtering data
 
@@ -85,14 +91,14 @@ def get_option_chain_expdate(symbol: str) -> list:
         symbol (str): symbol name
 
     Returns:
-        list: expiry date in list(in "%d-%m-%Y" format)
+        list: expiry date in list("%d-%m-%Y" format)
     """
     params = {}
     cookies = utils.get_cookies()
     base_url = cns.BASE_URL
 
     if symbol in cns.INDICES:
-        event_api = cns.OPTIONS_PRICE_EQUITIES
+        event_api = cns.OPTIONS_PRICE_INDICES
     else:
         event_api = cns.OPTIONS_PRICE_EQUITIES
 
@@ -101,6 +107,10 @@ def get_option_chain_expdate(symbol: str) -> list:
     url = base_url + event_api + urllib.parse.urlencode(params)
     data = utils.fetch_url(url, cookies, response_type="json")
     ret = []
-    for expiry_date in data["records"]["expiryDates"]:
+    expiry_dates = data.get("records").get("expiryDates")
+    if expiry_dates is None:
+        log.error("expiry_dates is None, symbol is wrong or unable to access API")
+        return []
+    for expiry_date in expiry_dates:
         ret.append(datetime.strptime(expiry_date, "%d-%b-%Y").strftime("%d-%m-%Y"))
     return ret

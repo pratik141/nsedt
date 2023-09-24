@@ -29,15 +29,15 @@ def get_vix(
         start_date (str): start date in "%d-%m-%Y" format
         end_date (str): end_date in "%d-%m-%Y" format
         response_type (str, optional): response_type. Defaults to "panda_df".
-        columns_drop_list (list, optional): _description_. Defaults to None.
+        columns_drop_list (list, optional): provide custom columns drop list. Defaults to None.
 
     Raises:
-        exc: genral Exception
+        exc: general Exception
 
     Returns:
-        Pandas DataFrame: df containing option data
-      or
-        Json: json containing option data
+            Pandas DataFrame: df containing option data
+        or
+            Json: json containing option data
 
     """
     cookies = utils.get_cookies()

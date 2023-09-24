@@ -21,6 +21,8 @@ def get_price(
     end_date,
     symbol,
     response_type="panda_df",
+    columns_drop_list: list = None,
+    columns_rename_map: map = None,
 ):
     """_summary_
 
@@ -34,15 +36,16 @@ def get_price(
         exc: _description_
 
     Returns:
-        Pandas DataFrame: df containing company info
-      or
-        Json: json containing company info
+            Pandas DataFrame: df containing company info
+        or
+            Json: json containing company info
 
     """
     params = {}
     cookies = utils.get_cookies()
     base_url = cns.BASE_URL
     event_api = cns.INDEX_PRICE_HISTORY
+    symbol = utils.get_symbol(symbol=symbol, get_key="indices")
 
     url_list = []
 
@@ -77,7 +80,15 @@ def get_price(
         for future in concurrent.futures.as_completed(future_to_url):
             url = future_to_url[future]
             try:
-                dataframe = data_format.indices(future.result())
+                data = future.result()
+                if (
+                    data.get("data").get("indexCloseOnlineRecords") == []
+                    or data.get("data").get("indexTurnoverRecords") == []
+                ):
+                    continue
+                dataframe = data_format.indices(
+                    data, columns_drop_list, columns_rename_map
+                )
                 result = pd.concat([result, dataframe])
             except Exception as exc:
                 log.error("%s got exception: %s. Please try again later.", url, exc)
