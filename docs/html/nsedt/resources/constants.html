@@ -37,6 +37,9 @@
                     <a class="variable" href="#MAX_WORKERS">MAX_WORKERS</a>
             </li>
             <li>
+                    <a class="variable" href="#SYMBOL_MAP">SYMBOL_MAP</a>
+            </li>
+            <li>
                     <a class="variable" href="#LOG_FORMAT">LOG_FORMAT</a>
             </li>
             <li>
@@ -107,40 +110,42 @@
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="sd">Constants</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="n">WINDOW_SIZE</span> <span class="o">=</span> <span class="mi">50</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="n">MAX_WORKERS</span> <span class="o">=</span> <span class="mi">10</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="n">LOG_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;{</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="s2">    &quot;time&quot;: &quot;</span><span class="si">%(asctime)s</span><span class="s2">&quot;,</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="s2">    &quot;lineno&quot;: &quot;</span><span class="si">%(lineno)d</span><span class="s2">&quot;,</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="s2">    &quot;name&quot;: &quot;[</span><span class="si">%(name)s</span><span class="s2">]&quot;,</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="s2">    &quot;levelname&quot;: &quot;</span><span class="si">%(levelname)s</span><span class="s2">&quot;,</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="s2">    &quot;process&quot;: &quot;</span><span class="si">%(process)s</span><span class="s2">&quot;,</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="s2">    &quot;filename&quot;: &quot;</span><span class="si">%(filename)s</span><span class="s2">&quot;,</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="s2">    &quot;funcName&quot;: &quot;</span><span class="si">%(funcName)s</span><span class="s2">&quot;,</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="s2">    &quot;logmessage&quot;: &quot;</span><span class="si">%(message)s</span><span class="s2">&quot;,</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="s2">}&quot;&quot;&quot;</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="n">BASE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://www.nseindia.com/&quot;</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span> <span class="nn">.index_symbol</span> <span class="kn">import</span> <span class="n">symbol_map</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="n">WINDOW_SIZE</span> <span class="o">=</span> <span class="mi">50</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="n">MAX_WORKERS</span> <span class="o">=</span> <span class="mi">10</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="n">SYMBOL_MAP</span> <span class="o">=</span> <span class="n">symbol_map</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="n">LOG_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;{</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="s2">    &quot;time&quot;: &quot;</span><span class="si">%(asctime)s</span><span class="s2">&quot;,</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="s2">    &quot;lineno&quot;: &quot;</span><span class="si">%(lineno)d</span><span class="s2">&quot;,</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="s2">    &quot;name&quot;: &quot;[</span><span class="si">%(name)s</span><span class="s2">]&quot;,</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="s2">    &quot;loglevel&quot;: &quot;</span><span class="si">%(levelname)s</span><span class="s2">&quot;,</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="s2">    &quot;process&quot;: &quot;</span><span class="si">%(process)s</span><span class="s2">&quot;,</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="s2">    &quot;filename&quot;: &quot;</span><span class="si">%(filename)s</span><span class="s2">&quot;,</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="s2">    &quot;funcName&quot;: &quot;</span><span class="si">%(funcName)s</span><span class="s2">&quot;,</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="s2">    &quot;logmessage&quot;: &quot;</span><span class="si">%(message)s</span><span class="s2">&quot;,</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="s2">}&quot;&quot;&quot;</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="c1">### EQUITY</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="n">EQUITY_PRICE_HISTORY</span> <span class="o">=</span> <span class="s2">&quot;api/historical/securityArchives?&quot;</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="n">EQUITY_CORPINFO</span> <span class="o">=</span> <span class="s2">&quot;api/corporates-corporateActions?&quot;</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="n">MARKETSTATUS</span> <span class="o">=</span> <span class="s2">&quot;api/marketStatus&quot;</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="n">EQUITY_EVENT</span> <span class="o">=</span> <span class="s2">&quot;api/event-calendar?&quot;</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="n">EQUITY_CHART</span> <span class="o">=</span> <span class="s2">&quot;api/chart-databyindex?&quot;</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="n">EQUITY_INFO</span> <span class="o">=</span> <span class="s2">&quot;api/quote-equity?&quot;</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="n">EQUITY_LIST</span> <span class="o">=</span> <span class="s2">&quot;api/market-data-pre-open?key=ALL&quot;</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="c1">### Index</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="n">INDEX_PRICE_HISTORY</span> <span class="o">=</span> <span class="s2">&quot;api/historical/indicesHistory?&quot;</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="c1">### DERIVATIVES</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="n">OPTIONS_PRICE_EQUITIES</span> <span class="o">=</span> <span class="s2">&quot;api/option-chain-equities?&quot;</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="n">OPTIONS_PRICE_INDICES</span> <span class="o">=</span> <span class="s2">&quot;api/option-chain-indices?&quot;</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="n">INDICES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;NIFTY&quot;</span><span class="p">,</span> <span class="s2">&quot;FINNIFTY&quot;</span><span class="p">,</span> <span class="s2">&quot;BANKNIFTY&quot;</span><span class="p">]</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="n">VIX_HISTORY</span> <span class="o">=</span> <span class="s2">&quot;api/historical/vixhistory?&quot;</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="n">FUTURES_PRICE</span> <span class="o">=</span> <span class="s2">&quot;api/historical/foCPV?&quot;</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="n">BASE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://www.nseindia.com/&quot;</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="c1">### EQUITY</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="n">EQUITY_PRICE_HISTORY</span> <span class="o">=</span> <span class="s2">&quot;api/historical/securityArchives?&quot;</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="n">EQUITY_CORPINFO</span> <span class="o">=</span> <span class="s2">&quot;api/corporates-corporateActions?&quot;</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="n">MARKETSTATUS</span> <span class="o">=</span> <span class="s2">&quot;api/marketStatus&quot;</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="n">EQUITY_EVENT</span> <span class="o">=</span> <span class="s2">&quot;api/event-calendar?&quot;</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="n">EQUITY_CHART</span> <span class="o">=</span> <span class="s2">&quot;api/chart-databyindex?&quot;</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="n">EQUITY_INFO</span> <span class="o">=</span> <span class="s2">&quot;api/quote-equity?&quot;</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="n">EQUITY_LIST</span> <span class="o">=</span> <span class="s2">&quot;api/market-data-pre-open?key=ALL&quot;</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="c1">### Index</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="n">INDEX_PRICE_HISTORY</span> <span class="o">=</span> <span class="s2">&quot;api/historical/indicesHistory?&quot;</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="c1">### DERIVATIVES</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="n">OPTIONS_PRICE_EQUITIES</span> <span class="o">=</span> <span class="s2">&quot;api/option-chain-equities?&quot;</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="n">OPTIONS_PRICE_INDICES</span> <span class="o">=</span> <span class="s2">&quot;api/option-chain-indices?&quot;</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="n">INDICES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;NIFTY&quot;</span><span class="p">,</span> <span class="s2">&quot;FINNIFTY&quot;</span><span class="p">,</span> <span class="s2">&quot;BANKNIFTY&quot;</span><span class="p">]</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="n">VIX_HISTORY</span> <span class="o">=</span> <span class="s2">&quot;api/historical/vixhistory?&quot;</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="n">FUTURES_PRICE</span> <span class="o">=</span> <span class="s2">&quot;api/historical/foCPV?&quot;</span>
 </span></pre></div>
 
 
@@ -169,11 +174,24 @@
     
 
                 </section>
+                <section id="SYMBOL_MAP">
+                    <div class="attr variable">
+            <span class="name">SYMBOL_MAP</span>        =
+<input id="SYMBOL_MAP-view-value" class="view-value-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+            <label class="view-value-button pdoc-button" for="SYMBOL_MAP-view-value"></label><span class="default_value">[{&#39;keys&#39;: [&#39;NIFTY 50&#39;, &#39;NIFTY50&#39;, &#39;NIFTY&#39;], &#39;indices&#39;: &#39;NIFTY 50&#39;, &#39;derivatives&#39;: &#39;NIFTY&#39;}, {&#39;keys&#39;: [&#39;NIFTY BANK&#39;, &#39;NIFTYBANK&#39;, &#39;BANKNIFTY&#39;], &#39;derivatives&#39;: &#39;BANKNIFTY&#39;, &#39;indices&#39;: &#39;NIFTY BANK&#39;}, {&#39;keys&#39;: [&#39;NIFTY FINANCIAL SERVICES&#39;, &#39;FINNIFTY&#39;, &#39;NIFTY FIN SERVICE&#39;], &#39;derivatives&#39;: &#39;FINNIFTY&#39;, &#39;indices&#39;: &#39;NIFTY FINANCIAL SERVICES&#39;}, {&#39;keys&#39;: [&#39;NIFTY NEXT 50&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY NEXT 50&#39;}, {&#39;keys&#39;: [&#39;NIFTY MIDCAP 50&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY MIDCAP 50&#39;}, {&#39;keys&#39;: [&#39;NIFTY MIDCAP 100&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY MIDCAP 100&#39;}, {&#39;keys&#39;: [&#39;NIFTY MIDCAP 150&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY MIDCAP 150&#39;}, {&#39;keys&#39;: [&#39;NIFTY SMALLCAP 50&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY SMALLCAP 50&#39;}, {&#39;keys&#39;: [&#39;NIFTY SMALLCAP 100&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY SMALLCAP 100&#39;}, {&#39;keys&#39;: [&#39;NIFTY SMALLCAP 250&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY SMALLCAP 250&#39;}, {&#39;keys&#39;: [&#39;NIFTY MIDSMALLCAP 400&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY MIDSMALLCAP 400&#39;}, {&#39;keys&#39;: [&#39;NIFTY 100&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY 100&#39;}, {&#39;keys&#39;: [&#39;NIFTY 200&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY 200&#39;}, {&#39;keys&#39;: [&#39;NIFTY500 MULTICAP 50:25:25&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY500 MULTICAP 50:25:25&#39;}, {&#39;keys&#39;: [&#39;NIFTY LARGEMIDCAP 250&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY LARGEMIDCAP 250&#39;}, {&#39;keys&#39;: [&#39;NIFTY MIDCAP SELECT&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY MIDCAP SELECT&#39;}, {&#39;keys&#39;: [&#39;NIFTY TOTAL MARKET&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY TOTAL MARKET&#39;}, {&#39;keys&#39;: [&#39;NIFTY MICROCAP 250&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY MICROCAP 250&#39;}, {&#39;keys&#39;: [&#39;NIFTY AUTO&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY AUTO&#39;}, {&#39;keys&#39;: [&#39;NIFTY ENERGY&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY ENERGY&#39;}, {&#39;keys&#39;: [&#39;NIFTY FINANCIAL SERVICES 25/50&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY FINANCIAL SERVICES 25/50&#39;}, {&#39;keys&#39;: [&#39;NIFTY FMCG&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY FMCG&#39;}, {&#39;keys&#39;: [&#39;NIFTY IT&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY IT&#39;}, {&#39;keys&#39;: [&#39;NIFTY MEDIA&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY MEDIA&#39;}, {&#39;keys&#39;: [&#39;NIFTY METAL&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY METAL&#39;}, {&#39;keys&#39;: [&#39;NIFTY PHARMA&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY PHARMA&#39;}, {&#39;keys&#39;: [&#39;NIFTY PSU BANK&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY PSU BANK&#39;}, {&#39;keys&#39;: [&#39;NIFTY REALTY&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY REALTY&#39;}, {&#39;keys&#39;: [&#39;NIFTY PRIVATE BANK&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY PRIVATE BANK&#39;}, {&#39;keys&#39;: [&#39;NIFTY HEALTHCARE INDEX&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY HEALTHCARE INDEX&#39;}, {&#39;keys&#39;: [&#39;NIFTY CONSUMER DURABLES&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY CONSUMER DURABLES&#39;}, {&#39;keys&#39;: [&#39;NIFTY OIL &amp;amp; GAS&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY OIL &amp;amp; GAS&#39;}, {&#39;keys&#39;: [&#39;NIFTY DIVIDEND OPPORTUNITIES 50&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY DIVIDEND OPPORTUNITIES 50&#39;}, {&#39;keys&#39;: [&#39;NIFTY50 VALUE 20&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY50 VALUE 20&#39;}, {&#39;keys&#39;: [&#39;NIFTY100 QUALITY 30&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY100 QUALITY 30&#39;}, {&#39;keys&#39;: [&#39;NIFTY50 EQUAL WEIGHT&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY50 EQUAL WEIGHT&#39;}, {&#39;keys&#39;: [&#39;NIFTY100 EQUAL WEIGHT&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY100 EQUAL WEIGHT&#39;}, {&#39;keys&#39;: [&#39;NIFTY100 LOW VOLATILITY 30&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY100 LOW VOLATILITY 30&#39;}, {&#39;keys&#39;: [&#39;NIFTY ALPHA 50&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY ALPHA 50&#39;}, {&#39;keys&#39;: [&#39;NIFTY200 QUALITY 30&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY200 QUALITY 30&#39;}, {&#39;keys&#39;: [&#39;NIFTY ALPHA LOW-VOLATILITY 30&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY ALPHA LOW-VOLATILITY 30&#39;}, {&#39;keys&#39;: [&#39;NIFTY200 MOMENTUM 30&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY200 MOMENTUM 30&#39;}, {&#39;keys&#39;: [&#39;NIFTY MIDCAP150 QUALITY 50&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY MIDCAP150 QUALITY 50&#39;}, {&#39;keys&#39;: [&#39;NIFTY COMMODITIES&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY COMMODITIES&#39;}, {&#39;keys&#39;: [&#39;NIFTY INDIA CONSUMPTION&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY INDIA CONSUMPTION&#39;}, {&#39;keys&#39;: [&#39;NIFTY CPSE&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY CPSE&#39;}, {&#39;keys&#39;: [&#39;NIFTY INFRASTRUCTURE&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY INFRASTRUCTURE&#39;}, {&#39;keys&#39;: [&#39;NIFTY MNC&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY MNC&#39;}, {&#39;keys&#39;: [&#39;NIFTY GROWTH SECTORS 15&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY GROWTH SECTORS 15&#39;}, {&#39;keys&#39;: [&#39;NIFTY PSE&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY PSE&#39;}, {&#39;keys&#39;: [&#39;NIFTY SERVICES SECTOR&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY SERVICES SECTOR&#39;}, {&#39;keys&#39;: [&#39;NIFTY100 LIQUID 15&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY100 LIQUID 15&#39;}, {&#39;keys&#39;: [&#39;NIFTY MIDCAP LIQUID 15&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY MIDCAP LIQUID 15&#39;}, {&#39;keys&#39;: [&#39;NIFTY INDIA DIGITAL&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY INDIA DIGITAL&#39;}, {&#39;keys&#39;: [&#39;NIFTY100 ESG&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY100 ESG&#39;}, {&#39;keys&#39;: [&#39;NIFTY INDIA MANUFACTURING&#39;], &#39;derivatives&#39;: &#39;&#39;, &#39;indices&#39;: &#39;NIFTY INDIA MANUFACTURING&#39;}]</span>
+
+        
+    </div>
+    <a class="headerlink" href="#SYMBOL_MAP"></a>
+    
+    
+
+                </section>
                 <section id="LOG_FORMAT">
                     <div class="attr variable">
             <span class="name">LOG_FORMAT</span>        =
 <input id="LOG_FORMAT-view-value" class="view-value-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-            <label class="view-value-button pdoc-button" for="LOG_FORMAT-view-value"></label><span class="default_value">&#39;{\n    &#34;time&#34;: &#34;%(asctime)s&#34;,\n    &#34;lineno&#34;: &#34;%(lineno)d&#34;,\n    &#34;name&#34;: &#34;[%(name)s]&#34;,\n    &#34;levelname&#34;: &#34;%(levelname)s&#34;,\n    &#34;process&#34;: &#34;%(process)s&#34;,\n    &#34;filename&#34;: &#34;%(filename)s&#34;,\n    &#34;funcName&#34;: &#34;%(funcName)s&#34;,\n    &#34;logmessage&#34;: &#34;%(message)s&#34;,\n}&#39;</span>
+            <label class="view-value-button pdoc-button" for="LOG_FORMAT-view-value"></label><span class="default_value">&#39;{\n    &#34;time&#34;: &#34;%(asctime)s&#34;,\n    &#34;lineno&#34;: &#34;%(lineno)d&#34;,\n    &#34;name&#34;: &#34;[%(name)s]&#34;,\n    &#34;loglevel&#34;: &#34;%(levelname)s&#34;,\n    &#34;process&#34;: &#34;%(process)s&#34;,\n    &#34;filename&#34;: &#34;%(filename)s&#34;,\n    &#34;funcName&#34;: &#34;%(funcName)s&#34;,\n    &#34;logmessage&#34;: &#34;%(message)s&#34;,\n}&#39;</span>
 
         
     </div>
