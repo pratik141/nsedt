@@ -28,6 +28,7 @@ Thank you for using Nsedt. Please feel free to send pull requests, comments, and
 | symbols_list | get_symbols_list | symbols_list | -- | json |
 | asm_list | get_asm_list | symbols_list | asm_type | json |
 
+Now get_price work with start_date, end_date without datetime format it support `%d-%m-%Y`
 
 ### step to run  
 ```py

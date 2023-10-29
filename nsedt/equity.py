@@ -102,6 +102,8 @@ def get_price(
     # set the window size to one year
     window_size = datetime.timedelta(days=cns.WINDOW_SIZE)
 
+    start_date, end_date = utils.check_nd_convert(start_date, end_date)
+
     current_window_start = start_date
     while current_window_start < end_date:
         current_window_end = current_window_start + window_size

@@ -3,10 +3,13 @@ utils for nsedt
 """
 
 import json
+import deprecated
 
 import pandas as pd
 import requests
 from nsedt.resources import constants as cns
+import datetime
+from warnings import warn
 
 
 def get_headers():
@@ -100,3 +103,35 @@ def get_symbol(symbol: str, get_key: str) -> str:
             val = item[get_key]
 
     return val if val else symbol
+
+
+def check_nd_convert(start_date: str, end_date: str) -> datetime:
+    """
+    The function `check_nd_convert` takes two date strings in the format "%d-%m-%Y" and converts them to
+    datetime objects if they are not already in that format.
+
+    :param start_date: The `start_date` parameter is the starting date of a period, specified as a
+    string in the format "%d-%m-%Y"
+    :type start_date: str
+    :param end_date: The `end_date` parameter is a string representing the end date in the format
+    "%d-%m-%Y"
+    :type end_date: str
+    :return: the start_date and end_date as datetime objects.
+    """
+
+    if isinstance(start_date, datetime.date) and isinstance(end_date, datetime.date):
+        warn(
+            """Passing start_date, end_date in date is deprecated
+now pass in str '%d-%m-%Y' format""",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
+    elif isinstance(start_date, str) and isinstance(end_date, str):
+        start_date = datetime.datetime.strptime(start_date, "%d-%m-%Y")
+        end_date = datetime.datetime.strptime(end_date, "%d-%m-%Y")
+
+    else:
+        raise ("Input is of an unknown type")
+
+    return start_date, end_date
