@@ -5,6 +5,7 @@ This library serves as an api to fetch data from the NSE about stocks and indice
 
 Thank you for using Nsedt. Please feel free to send pull requests, comments, and suggestions, as well as get in touch with me if you require any additional help. I sincerely hope you will find this library useful.
 
+#### For detailed doc please refer [nse-doc](https://pratikanand.co.in/nsedt/html)
 ## How to start
 1. clone the repository
 `git clone https://github.com/pratik141/nsedt`
@@ -25,6 +26,8 @@ Thank you for using Nsedt. Please feel free to send pull requests, comments, and
 | event | get_event | event | start_date, end_date |  panda df |
 | chartdata | get_chartdata | chartdata | symbol | panda df |
 | symbols_list | get_symbols_list | symbols_list | -- | json |
+| asm_list | get_asm_list | symbols_list | asm_type | json |
+
 
 ### step to run  
 ```py
@@ -45,6 +48,7 @@ print(eq.get_companyinfo(symbol="TCS"))
 print(eq.get_companyinfo(symbol="TCS", response_type="json"))
 print(eq.get_chartdata(symbol="TCS"))
 print(eq.get_symbols_list()) #print the list of symbols used by NSE for equities
+print(eq.get_asm_list(asm_type = "shortterm"))
 ```
 
 ## Indices
@@ -61,7 +65,9 @@ from datetime import date
 start_date = date(2023, 1, 1)
 end_date = date(2023, 1, 10)
 print(ind.get_price(start_date=start_date, end_date=end_date, symbol="NIFTY 50"))
-print(ind.get_price(start_date=start_date, end_date=end_date, symbol="NIFTY"))
+data = ind.get_price(start_date=start_date, end_date=end_date, symbol="NIFTY")
+# To change date format from '%d-%b-%Y' to '%Y-%m-%d'
+data["Date"] = pd.to_datetime(data["Date"],format='%d-%b-%Y')
 ```
 
 ## Derivatives

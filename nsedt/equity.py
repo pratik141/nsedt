@@ -281,3 +281,28 @@ def get_symbols_list():
         eq_list.append(f_dict["data"][i]["metadata"]["symbol"])
 
     return eq_list
+
+
+def get_asm_list(asm_type="both") -> list:
+    """
+        Args:
+            asm_type (str): ASM type, possible values: both,longterm,shortterm
+        Returns:
+            List of Stocks Under ASM
+    """
+    cookies = utils.get_cookies()
+    base_url = cns.BASE_URL
+    event_api = cns.ASM_LIST
+
+    url = base_url + event_api
+    data = utils.fetch_url(url, cookies)
+    _data = data.to_dict()
+
+    if asm_type ==  "both":
+        return _data
+    elif asm_type == "longterm":
+        return _data.get("longterm").get("data")
+    elif asm_type == "shortterm":
+        return _data.get("shortterm").get("data")
+    else:
+        return ["possible values are both,longterm,shortterm"]
