@@ -22,14 +22,13 @@ def get_companyinfo(
 ):
     """_summary_
 
-    Args:
-        symbol (str): stock name
-        response_type (str, Optional): define the response type panda_df | json. Default panda_df
-
-    Returns:
-        Pandas DataFrame: df containing company info
-      or
-        Json: json containing company info
+    Args:\n
+        symbol (str): stock name\n
+        response_type (str, Optional): define the response type panda_df | json. Default panda_df\n
+    Returns:\n
+        Pandas DataFrame: df containing company info\n
+      or\n
+        Json: json containing company info\n
     """
 
     params = {}
@@ -54,12 +53,11 @@ def get_marketstatus(
     response_type: str = "panda_df",
 ):
     """
-    Args:
-        response_type (str, Optional): define the response type panda_df | json. Default panda_df
-    Returns:
-        Pandas DataFrame: df containing market status
-        Json : Json containing market status
-
+    Args:\n
+        response_type (str, Optional): define the response type panda_df | json. Default panda_df\n
+    Returns:\n
+        Pandas DataFrame: df containing market status\n
+        Json : Json containing market status\n
     """
 
     cookies = utils.get_cookies()
@@ -85,14 +83,14 @@ def get_price(
     series="EQ",
 ):
     """
-    Create threads for different requests, parses data, combines them and returns dataframe
-    Args:
-        start_date (datetime.datetime): start date
-        end_date (datetime.datetime): end date
-        input_type (str): Either 'stock' or 'index'
-        symbol (str, optional): stock symbol. Defaults to None. TODO: implement for index`
-    Returns:
-        Pandas DataFrame: df containing data for symbol of provided date range
+    Create threads for different requests, parses data, combines them and returns dataframe\n
+    Args:\n
+        start_date (datetime.datetime): start date\n
+        end_date (datetime.datetime): end date\n
+        input_type (str): Either 'stock' or 'index'\n
+        symbol (str, optional): stock symbol. Defaults to None. TODO: implement for index`\n
+    Returns:\n
+        Pandas DataFrame: df containing data for symbol of provided date range\n
     """
     cookies = utils.get_cookies()
     base_url = cns.BASE_URL
@@ -150,15 +148,15 @@ def get_corpinfo(
     response_type="panda_df",
 ):
     """
-    Create threads for different requests, parses data, combines them and returns dataframe
-    Args:
-        start_date (datetime.datetime): start date
-        end_date (datetime.datetime): end date
-        symbol (str, optional): stock symbol. Defaults to None.
-    Returns:
-        Pandas DataFrame: df containing data for symbol of provided date range
-      or
-        Json: json containing data for symbol of provided date range
+    Create threads for different requests, parses data, combines them and returns dataframe\n
+    Args:\n
+        start_date (datetime.datetime): start date\n
+        end_date (datetime.datetime): end date\n
+        symbol (str, optional): stock symbol. Defaults to None.\n
+    Returns:\n
+        Pandas DataFrame: df containing data for symbol of provided date range\n
+      or\n
+        Json: json containing data for symbol of provided date range\n
     """
     cookies = utils.get_cookies()
     params = {
@@ -187,12 +185,11 @@ def get_event(
     index="equities",
 ):
     """
-    Args:
-        start_date (datetime.datetime,optional): start date
-        end_date (datetime.datetime,optional): end date
-    Returns:
-        Pandas DataFrame: df containing event of provided date range
-
+    Args:\n
+        start_date (datetime.datetime,optional): start date\n
+        end_date (datetime.datetime,optional): end date\n
+    Returns:\n
+        Pandas DataFrame: df containing event of provided date range\n
     """
     params = {}
     cookies = utils.get_cookies()
@@ -215,11 +212,10 @@ def get_chartdata(
     response_type="panda_df",
 ):
     """
-    Args:
-        symbol (str): stock symbol.
-    Returns:
-        Pandas DataFrame: df containing chart data of provided date
-
+    Args:\n
+        symbol (str): stock symbol.\n
+    Returns:\n
+        Pandas DataFrame: df containing chart data of provided date\n
     """
     params = {}
     cookies = utils.get_cookies()
@@ -264,12 +260,10 @@ def get_chartdata(
 
 def get_symbols_list():
     """
-    Args:
-        No arguments needed
-
-    Returns:
-        List of stock or equity symbols
-
+    Args:\n
+        No arguments needed\n
+    Returns:\n
+        List of stock or equity symbols\n
     """
     cookies = utils.get_cookies()
     base_url = cns.BASE_URL
@@ -287,10 +281,10 @@ def get_symbols_list():
 
 def get_asm_list(asm_type="both") -> list:
     """
-        Args:
-            asm_type (str): ASM type, possible values: both,longterm,shortterm
-        Returns:
-            List of Stocks Under ASM
+        Args:\n
+            asm_type (str): ASM type, possible values: both,longterm,shortterm\n
+        Returns:\n
+            List of stocks under ASM\n
     """
     cookies = utils.get_cookies()
     base_url = cns.BASE_URL
