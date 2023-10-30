@@ -54,6 +54,9 @@
             <li>
                     <a class="function" href="#get_symbols_list">get_symbols_list</a>
             </li>
+            <li>
+                    <a class="function" href="#get_asm_list">get_asm_list</a>
+            </li>
     </ul>
 
 
@@ -181,185 +184,212 @@
 </span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>    <span class="c1"># set the window size to one year</span>
 </span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>    <span class="n">window_size</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">cns</span><span class="o">.</span><span class="n">WINDOW_SIZE</span><span class="p">)</span>
 </span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>
-</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>    <span class="n">current_window_start</span> <span class="o">=</span> <span class="n">start_date</span>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>    <span class="k">while</span> <span class="n">current_window_start</span> <span class="o">&lt;</span> <span class="n">end_date</span><span class="p">:</span>
-</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>        <span class="n">current_window_end</span> <span class="o">=</span> <span class="n">current_window_start</span> <span class="o">+</span> <span class="n">window_size</span>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>
-</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>        <span class="c1"># check if the current window extends beyond the end_date</span>
-</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>        <span class="n">current_window_end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">current_window_end</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span>
-</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>
-</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>        <span class="k">if</span> <span class="n">input_type</span> <span class="o">==</span> <span class="s2">&quot;stock&quot;</span><span class="p">:</span>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>            <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>                <span class="s2">&quot;symbol&quot;</span><span class="p">:</span> <span class="n">symbol</span><span class="p">,</span>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>                <span class="s2">&quot;from&quot;</span><span class="p">:</span> <span class="n">current_window_start</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%m-%Y&quot;</span><span class="p">),</span>
-</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>                <span class="s2">&quot;to&quot;</span><span class="p">:</span> <span class="n">current_window_end</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%m-%Y&quot;</span><span class="p">),</span>
-</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>                <span class="s2">&quot;dataType&quot;</span><span class="p">:</span> <span class="s2">&quot;priceVolumeDeliverable&quot;</span><span class="p">,</span>
-</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>                <span class="s2">&quot;series&quot;</span><span class="p">:</span> <span class="n">series</span><span class="p">,</span>
-</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>            <span class="p">}</span>
-</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>            <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">price_api</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
-</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>            <span class="n">url_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>
-</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>        <span class="c1"># move the window start to the next day after the current window end</span>
-</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>        <span class="n">current_window_start</span> <span class="o">=</span> <span class="n">current_window_end</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>
-</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
-</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>    <span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">cns</span><span class="o">.</span><span class="n">MAX_WORKERS</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
-</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>        <span class="n">future_to_url</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>            <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">fetch_url</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">cookies</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">):</span> <span class="n">url</span>
-</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>            <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">url_list</span>
-</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>        <span class="p">}</span>
-</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>        <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">future_to_url</span><span class="p">,</span> <span class="n">return_when</span><span class="o">=</span><span class="n">ALL_COMPLETED</span><span class="p">)</span>
-</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>        <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">future_to_url</span><span class="p">):</span>
-</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>            <span class="n">url</span> <span class="o">=</span> <span class="n">future_to_url</span><span class="p">[</span><span class="n">future</span><span class="p">]</span>
-</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>            <span class="k">try</span><span class="p">:</span>
-</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>                <span class="n">dataframe</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
-</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>                <span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">result</span><span class="p">,</span> <span class="n">dataframe</span><span class="p">])</span>
-</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> got exception: </span><span class="si">%s</span><span class="s2">. Please try again later.&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
-</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a>                <span class="k">raise</span> <span class="n">exc</span>
-</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>    <span class="k">return</span> <span class="n">data_format</span><span class="o">.</span><span class="n">price</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>
-</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>
-</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="k">def</span> <span class="nf">get_corpinfo</span><span class="p">(</span>
-</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>    <span class="n">start_date</span><span class="p">,</span>
-</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>    <span class="n">end_date</span><span class="p">,</span>
-</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>    <span class="n">symbol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>    <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;panda_df&quot;</span><span class="p">,</span>
-</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a><span class="p">):</span>
-</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="sd">    Create threads for different requests, parses data, combines them and returns dataframe</span>
-</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a><span class="sd">    Args:</span>
-</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">        start_date (datetime.datetime): start date</span>
-</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a><span class="sd">        end_date (datetime.datetime): end date</span>
-</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a><span class="sd">        symbol (str, optional): stock symbol. Defaults to None.</span>
-</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a><span class="sd">    Returns:</span>
-</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a><span class="sd">        Pandas DataFrame: df containing data for symbol of provided date range</span>
-</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="sd">      or</span>
-</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a><span class="sd">        Json: json containing data for symbol of provided date range</span>
-</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>    <span class="n">cookies</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_cookies</span><span class="p">()</span>
-</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>        <span class="s2">&quot;symbol&quot;</span><span class="p">:</span> <span class="n">symbol</span><span class="p">,</span>
-</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>        <span class="s2">&quot;from_date&quot;</span><span class="p">:</span> <span class="n">start_date</span><span class="p">,</span>
-</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>        <span class="s2">&quot;to_date&quot;</span><span class="p">:</span> <span class="n">end_date</span><span class="p">,</span>
-</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>        <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="s2">&quot;equities&quot;</span><span class="p">,</span>
-</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>    <span class="p">}</span>
-</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>    <span class="n">base_url</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">BASE_URL</span>
-</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>    <span class="n">price_api</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">EQUITY_CORPINFO</span>
-</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>    <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">price_api</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
-</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a>
-</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">fetch_url</span><span class="p">(</span>
-</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a>        <span class="n">url</span><span class="p">,</span>
-</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a>        <span class="n">cookies</span><span class="p">,</span>
-</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a>        <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-</span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a>        <span class="n">response_type</span><span class="o">=</span><span class="n">response_type</span><span class="p">,</span>
-</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a>    <span class="p">)</span>
-</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a>
-</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>    <span class="k">return</span> <span class="n">data</span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>    <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">check_nd_convert</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>    <span class="n">current_window_start</span> <span class="o">=</span> <span class="n">start_date</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>    <span class="k">while</span> <span class="n">current_window_start</span> <span class="o">&lt;</span> <span class="n">end_date</span><span class="p">:</span>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>        <span class="n">current_window_end</span> <span class="o">=</span> <span class="n">current_window_start</span> <span class="o">+</span> <span class="n">window_size</span>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>
+</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>        <span class="c1"># check if the current window extends beyond the end_date</span>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>        <span class="n">current_window_end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">current_window_end</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>        <span class="k">if</span> <span class="n">input_type</span> <span class="o">==</span> <span class="s2">&quot;stock&quot;</span><span class="p">:</span>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>            <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>                <span class="s2">&quot;symbol&quot;</span><span class="p">:</span> <span class="n">symbol</span><span class="p">,</span>
+</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>                <span class="s2">&quot;from&quot;</span><span class="p">:</span> <span class="n">current_window_start</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%m-%Y&quot;</span><span class="p">),</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>                <span class="s2">&quot;to&quot;</span><span class="p">:</span> <span class="n">current_window_end</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%m-%Y&quot;</span><span class="p">),</span>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>                <span class="s2">&quot;dataType&quot;</span><span class="p">:</span> <span class="s2">&quot;priceVolumeDeliverable&quot;</span><span class="p">,</span>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>                <span class="s2">&quot;series&quot;</span><span class="p">:</span> <span class="n">series</span><span class="p">,</span>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>            <span class="p">}</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>            <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">price_api</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>            <span class="n">url_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>        <span class="c1"># move the window start to the next day after the current window end</span>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>        <span class="n">current_window_start</span> <span class="o">=</span> <span class="n">current_window_end</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>    <span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">cns</span><span class="o">.</span><span class="n">MAX_WORKERS</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>        <span class="n">future_to_url</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>            <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">fetch_url</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">cookies</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">):</span> <span class="n">url</span>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>            <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">url_list</span>
+</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>        <span class="p">}</span>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>        <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">future_to_url</span><span class="p">,</span> <span class="n">return_when</span><span class="o">=</span><span class="n">ALL_COMPLETED</span><span class="p">)</span>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>        <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">future_to_url</span><span class="p">):</span>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>            <span class="n">url</span> <span class="o">=</span> <span class="n">future_to_url</span><span class="p">[</span><span class="n">future</span><span class="p">]</span>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>            <span class="k">try</span><span class="p">:</span>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>                <span class="n">dataframe</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>                <span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">result</span><span class="p">,</span> <span class="n">dataframe</span><span class="p">])</span>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a>            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> got exception: </span><span class="si">%s</span><span class="s2">. Please try again later.&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>                <span class="k">raise</span> <span class="n">exc</span>
+</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>    <span class="k">return</span> <span class="n">data_format</span><span class="o">.</span><span class="n">price</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>
+</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="k">def</span> <span class="nf">get_corpinfo</span><span class="p">(</span>
+</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>    <span class="n">start_date</span><span class="p">,</span>
+</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>    <span class="n">end_date</span><span class="p">,</span>
+</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>    <span class="n">symbol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>    <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;panda_df&quot;</span><span class="p">,</span>
+</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="p">):</span>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">    Create threads for different requests, parses data, combines them and returns dataframe</span>
+</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a><span class="sd">    Args:</span>
+</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a><span class="sd">        start_date (datetime.datetime): start date</span>
+</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a><span class="sd">        end_date (datetime.datetime): end date</span>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a><span class="sd">        symbol (str, optional): stock symbol. Defaults to None.</span>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="sd">    Returns:</span>
+</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a><span class="sd">        Pandas DataFrame: df containing data for symbol of provided date range</span>
+</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a><span class="sd">      or</span>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a><span class="sd">        Json: json containing data for symbol of provided date range</span>
+</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>    <span class="n">cookies</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_cookies</span><span class="p">()</span>
+</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>        <span class="s2">&quot;symbol&quot;</span><span class="p">:</span> <span class="n">symbol</span><span class="p">,</span>
+</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>        <span class="s2">&quot;from_date&quot;</span><span class="p">:</span> <span class="n">start_date</span><span class="p">,</span>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>        <span class="s2">&quot;to_date&quot;</span><span class="p">:</span> <span class="n">end_date</span><span class="p">,</span>
+</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>        <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="s2">&quot;equities&quot;</span><span class="p">,</span>
+</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>    <span class="p">}</span>
+</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>    <span class="n">base_url</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">BASE_URL</span>
+</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a>    <span class="n">price_api</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">EQUITY_CORPINFO</span>
+</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a>    <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">price_api</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a>
+</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">fetch_url</span><span class="p">(</span>
+</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a>        <span class="n">url</span><span class="p">,</span>
+</span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a>        <span class="n">cookies</span><span class="p">,</span>
+</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a>        <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a>        <span class="n">response_type</span><span class="o">=</span><span class="n">response_type</span><span class="p">,</span>
+</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>    <span class="p">)</span>
 </span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a>
-</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>
-</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a><span class="k">def</span> <span class="nf">get_event</span><span class="p">(</span>
-</span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a>    <span class="n">start_date</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-</span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a>    <span class="n">end_date</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-</span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a>    <span class="n">index</span><span class="o">=</span><span class="s2">&quot;equities&quot;</span><span class="p">,</span>
-</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a><span class="p">):</span>
-</span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a><span class="sd">    Args:</span>
-</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a><span class="sd">        start_date (datetime.datetime,optional): start date</span>
-</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a><span class="sd">        end_date (datetime.datetime,optional): end date</span>
-</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a><span class="sd">    Returns:</span>
-</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a><span class="sd">        Pandas DataFrame: df containing event of provided date range</span>
-</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>
-</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>    <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>    <span class="n">cookies</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_cookies</span><span class="p">()</span>
-</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>    <span class="n">base_url</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">BASE_URL</span>
-</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>    <span class="n">event_api</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">EQUITY_EVENT</span>
-</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>
-</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>    <span class="n">params</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
-</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>    <span class="k">if</span> <span class="n">start_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;from_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start_date</span>
-</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a>    <span class="k">if</span> <span class="n">end_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;to_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">end_date</span>
-</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>
-</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a>    <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">event_api</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
-</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a>    <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">fetch_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">cookies</span><span class="p">)</span>
-</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a>
-</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a>
-</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a><span class="k">def</span> <span class="nf">get_chartdata</span><span class="p">(</span>
-</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>    <span class="n">symbol</span><span class="p">,</span>
-</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a>    <span class="n">preopen</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a>    <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;panda_df&quot;</span><span class="p">,</span>
-</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a><span class="p">):</span>
-</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a><span class="sd">    Args:</span>
-</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a><span class="sd">        symbol (str): stock symbol.</span>
-</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a><span class="sd">    Returns:</span>
-</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a><span class="sd">        Pandas DataFrame: df containing chart data of provided date</span>
-</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a>
-</span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a>    <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a>    <span class="n">cookies</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_cookies</span><span class="p">()</span>
-</span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a>    <span class="n">base_url</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">BASE_URL</span>
-</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a>    <span class="n">event_api</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">EQUITY_CHART</span>
-</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a>    <span class="k">try</span><span class="p">:</span>
-</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>        <span class="n">identifier</span> <span class="o">=</span> <span class="n">get_companyinfo</span><span class="p">(</span>
-</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>            <span class="n">symbol</span><span class="p">,</span>
-</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>            <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;json&quot;</span><span class="p">,</span>
-</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a>        <span class="p">)[</span>
-</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>            <span class="s2">&quot;info&quot;</span>
-</span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a>        <span class="p">][</span><span class="s2">&quot;identifier&quot;</span><span class="p">]</span>
-</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a>
-</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Invalid symbol name: </span><span class="si">{</span><span class="n">symbol</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>
-</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>    <span class="n">params</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">identifier</span>
-</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>    <span class="k">if</span> <span class="n">preopen</span><span class="p">:</span>
-</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;preopen&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;true&quot;</span>
-</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>
-</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>    <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">event_api</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>    <span class="k">return</span> <span class="n">data</span>
+</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a>
+</span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a>
+</span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a><span class="k">def</span> <span class="nf">get_event</span><span class="p">(</span>
+</span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a>    <span class="n">start_date</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a>    <span class="n">end_date</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a>    <span class="n">index</span><span class="o">=</span><span class="s2">&quot;equities&quot;</span><span class="p">,</span>
+</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a><span class="p">):</span>
+</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a><span class="sd">    Args:</span>
+</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a><span class="sd">        start_date (datetime.datetime,optional): start date</span>
+</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a><span class="sd">        end_date (datetime.datetime,optional): end date</span>
+</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a><span class="sd">    Returns:</span>
+</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a><span class="sd">        Pandas DataFrame: df containing event of provided date range</span>
+</span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>
+</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>    <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>    <span class="n">cookies</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_cookies</span><span class="p">()</span>
+</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>    <span class="n">base_url</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">BASE_URL</span>
+</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>    <span class="n">event_api</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">EQUITY_EVENT</span>
+</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>
+</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>    <span class="n">params</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
+</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a>    <span class="k">if</span> <span class="n">start_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;from_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start_date</span>
+</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>    <span class="k">if</span> <span class="n">end_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a>        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;to_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">end_date</span>
+</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a>
+</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a>    <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">event_api</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a>    <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">fetch_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">cookies</span><span class="p">)</span>
+</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a>
+</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>
+</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a><span class="k">def</span> <span class="nf">get_chartdata</span><span class="p">(</span>
+</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a>    <span class="n">symbol</span><span class="p">,</span>
+</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a>    <span class="n">preopen</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>    <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;panda_df&quot;</span><span class="p">,</span>
+</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a><span class="p">):</span>
+</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a><span class="sd">    Args:</span>
+</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a><span class="sd">        symbol (str): stock symbol.</span>
+</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a><span class="sd">    Returns:</span>
+</span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a><span class="sd">        Pandas DataFrame: df containing chart data of provided date</span>
+</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a>
+</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a>    <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a>    <span class="n">cookies</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_cookies</span><span class="p">()</span>
+</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a>    <span class="n">base_url</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">BASE_URL</span>
+</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>    <span class="n">event_api</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">EQUITY_CHART</span>
+</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>    <span class="k">try</span><span class="p">:</span>
+</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>        <span class="n">identifier</span> <span class="o">=</span> <span class="n">get_companyinfo</span><span class="p">(</span>
+</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a>            <span class="n">symbol</span><span class="p">,</span>
+</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>            <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;json&quot;</span><span class="p">,</span>
+</span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a>        <span class="p">)[</span>
+</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a>            <span class="s2">&quot;info&quot;</span>
+</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>        <span class="p">][</span><span class="s2">&quot;identifier&quot;</span><span class="p">]</span>
+</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a>
+</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Invalid symbol name: </span><span class="si">{</span><span class="n">symbol</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>
+</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>    <span class="n">params</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">identifier</span>
+</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>    <span class="k">if</span> <span class="n">preopen</span><span class="p">:</span>
+</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;preopen&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;true&quot;</span>
 </span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>
-</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">fetch_url</span><span class="p">(</span>
-</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>        <span class="n">url</span><span class="p">,</span>
-</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a>        <span class="n">cookies</span><span class="p">,</span>
-</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>        <span class="n">key</span><span class="o">=</span><span class="s2">&quot;grapthData&quot;</span><span class="p">,</span>
-</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>        <span class="n">response_type</span><span class="o">=</span><span class="n">response_type</span><span class="p">,</span>
-</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a>    <span class="p">)</span>
-</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a>    <span class="k">if</span> <span class="n">response_type</span> <span class="o">==</span> <span class="s2">&quot;panda_df&quot;</span><span class="p">:</span>
-</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>        <span class="n">data_frame</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
-</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a>            <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
-</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a>                <span class="mi">0</span><span class="p">:</span> <span class="s2">&quot;timestamp_milliseconds&quot;</span><span class="p">,</span>
-</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a>                <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;price&quot;</span><span class="p">,</span>
-</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>            <span class="p">}</span>
-</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>        <span class="p">)</span>
-</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>        <span class="n">data_frame</span><span class="p">[</span><span class="s2">&quot;datetime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span>
-</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a>            <span class="n">data_frame</span><span class="p">[</span><span class="s2">&quot;timestamp_milliseconds&quot;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;ms&quot;</span>
-</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>        <span class="p">)</span>
-</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a>        <span class="k">return</span> <span class="n">data_frame</span>
-</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a>    <span class="k">return</span> <span class="n">data</span>
-</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a>
-</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>
-</span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a><span class="k">def</span> <span class="nf">get_symbols_list</span><span class="p">():</span>
-</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a><span class="sd">    Args:</span>
-</span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a><span class="sd">        No arguments needed</span>
-</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a>
-</span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a><span class="sd">    Returns:</span>
-</span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a><span class="sd">        List of stock or equity symbols</span>
-</span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a>
-</span><span id="L-271"><a href="#L-271"><span class="linenos">271</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a>    <span class="n">cookies</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_cookies</span><span class="p">()</span>
-</span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a>    <span class="n">base_url</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">BASE_URL</span>
-</span><span id="L-274"><a href="#L-274"><span class="linenos">274</span></a>    <span class="n">event_api</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">EQUITY_LIST</span>
-</span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a>
-</span><span id="L-276"><a href="#L-276"><span class="linenos">276</span></a>    <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">event_api</span>
-</span><span id="L-277"><a href="#L-277"><span class="linenos">277</span></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">fetch_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">cookies</span><span class="p">)</span>
-</span><span id="L-278"><a href="#L-278"><span class="linenos">278</span></a>    <span class="n">f_dict</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
-</span><span id="L-279"><a href="#L-279"><span class="linenos">279</span></a>    <span class="n">eq_list</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="L-280"><a href="#L-280"><span class="linenos">280</span></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">f_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])):</span>
-</span><span id="L-281"><a href="#L-281"><span class="linenos">281</span></a>        <span class="n">eq_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="s2">&quot;symbol&quot;</span><span class="p">])</span>
-</span><span id="L-282"><a href="#L-282"><span class="linenos">282</span></a>
-</span><span id="L-283"><a href="#L-283"><span class="linenos">283</span></a>    <span class="k">return</span> <span class="n">eq_list</span>
+</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>    <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">event_api</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>
+</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">fetch_url</span><span class="p">(</span>
+</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>        <span class="n">url</span><span class="p">,</span>
+</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>        <span class="n">cookies</span><span class="p">,</span>
+</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a>        <span class="n">key</span><span class="o">=</span><span class="s2">&quot;grapthData&quot;</span><span class="p">,</span>
+</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a>        <span class="n">response_type</span><span class="o">=</span><span class="n">response_type</span><span class="p">,</span>
+</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>    <span class="p">)</span>
+</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a>    <span class="k">if</span> <span class="n">response_type</span> <span class="o">==</span> <span class="s2">&quot;panda_df&quot;</span><span class="p">:</span>
+</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a>        <span class="n">data_frame</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a>            <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>                <span class="mi">0</span><span class="p">:</span> <span class="s2">&quot;timestamp_milliseconds&quot;</span><span class="p">,</span>
+</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>                <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;price&quot;</span><span class="p">,</span>
+</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>            <span class="p">}</span>
+</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a>        <span class="p">)</span>
+</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>        <span class="n">data_frame</span><span class="p">[</span><span class="s2">&quot;datetime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span>
+</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a>            <span class="n">data_frame</span><span class="p">[</span><span class="s2">&quot;timestamp_milliseconds&quot;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;ms&quot;</span>
+</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a>        <span class="p">)</span>
+</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a>        <span class="k">return</span> <span class="n">data_frame</span>
+</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>    <span class="k">return</span> <span class="n">data</span>
+</span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a>
+</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>
+</span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a><span class="k">def</span> <span class="nf">get_symbols_list</span><span class="p">():</span>
+</span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a><span class="sd">    Args:</span>
+</span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a><span class="sd">        No arguments needed</span>
+</span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a>
+</span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a><span class="sd">    Returns:</span>
+</span><span id="L-271"><a href="#L-271"><span class="linenos">271</span></a><span class="sd">        List of stock or equity symbols</span>
+</span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a>
+</span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-274"><a href="#L-274"><span class="linenos">274</span></a>    <span class="n">cookies</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_cookies</span><span class="p">()</span>
+</span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a>    <span class="n">base_url</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">BASE_URL</span>
+</span><span id="L-276"><a href="#L-276"><span class="linenos">276</span></a>    <span class="n">event_api</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">EQUITY_LIST</span>
+</span><span id="L-277"><a href="#L-277"><span class="linenos">277</span></a>
+</span><span id="L-278"><a href="#L-278"><span class="linenos">278</span></a>    <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">event_api</span>
+</span><span id="L-279"><a href="#L-279"><span class="linenos">279</span></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">fetch_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">cookies</span><span class="p">)</span>
+</span><span id="L-280"><a href="#L-280"><span class="linenos">280</span></a>    <span class="n">f_dict</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+</span><span id="L-281"><a href="#L-281"><span class="linenos">281</span></a>    <span class="n">eq_list</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="L-282"><a href="#L-282"><span class="linenos">282</span></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">f_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])):</span>
+</span><span id="L-283"><a href="#L-283"><span class="linenos">283</span></a>        <span class="n">eq_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="s2">&quot;symbol&quot;</span><span class="p">])</span>
+</span><span id="L-284"><a href="#L-284"><span class="linenos">284</span></a>
+</span><span id="L-285"><a href="#L-285"><span class="linenos">285</span></a>    <span class="k">return</span> <span class="n">eq_list</span>
+</span><span id="L-286"><a href="#L-286"><span class="linenos">286</span></a>
+</span><span id="L-287"><a href="#L-287"><span class="linenos">287</span></a>
+</span><span id="L-288"><a href="#L-288"><span class="linenos">288</span></a><span class="k">def</span> <span class="nf">get_asm_list</span><span class="p">(</span><span class="n">asm_type</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+</span><span id="L-289"><a href="#L-289"><span class="linenos">289</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-290"><a href="#L-290"><span class="linenos">290</span></a><span class="sd">        Args:</span>
+</span><span id="L-291"><a href="#L-291"><span class="linenos">291</span></a><span class="sd">            asm_type (str): ASM type, possible values: both,longterm,shortterm</span>
+</span><span id="L-292"><a href="#L-292"><span class="linenos">292</span></a><span class="sd">        Returns:</span>
+</span><span id="L-293"><a href="#L-293"><span class="linenos">293</span></a><span class="sd">            List of Stocks Under ASM</span>
+</span><span id="L-294"><a href="#L-294"><span class="linenos">294</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-295"><a href="#L-295"><span class="linenos">295</span></a>    <span class="n">cookies</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_cookies</span><span class="p">()</span>
+</span><span id="L-296"><a href="#L-296"><span class="linenos">296</span></a>    <span class="n">base_url</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">BASE_URL</span>
+</span><span id="L-297"><a href="#L-297"><span class="linenos">297</span></a>    <span class="n">event_api</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">ASM_LIST</span>
+</span><span id="L-298"><a href="#L-298"><span class="linenos">298</span></a>
+</span><span id="L-299"><a href="#L-299"><span class="linenos">299</span></a>    <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">event_api</span>
+</span><span id="L-300"><a href="#L-300"><span class="linenos">300</span></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">fetch_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">cookies</span><span class="p">)</span>
+</span><span id="L-301"><a href="#L-301"><span class="linenos">301</span></a>    <span class="n">_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+</span><span id="L-302"><a href="#L-302"><span class="linenos">302</span></a>
+</span><span id="L-303"><a href="#L-303"><span class="linenos">303</span></a>    <span class="k">if</span> <span class="n">asm_type</span> <span class="o">==</span>  <span class="s2">&quot;both&quot;</span><span class="p">:</span>
+</span><span id="L-304"><a href="#L-304"><span class="linenos">304</span></a>        <span class="k">return</span> <span class="n">_data</span>
+</span><span id="L-305"><a href="#L-305"><span class="linenos">305</span></a>    <span class="k">elif</span> <span class="n">asm_type</span> <span class="o">==</span> <span class="s2">&quot;longterm&quot;</span><span class="p">:</span>
+</span><span id="L-306"><a href="#L-306"><span class="linenos">306</span></a>        <span class="k">return</span> <span class="n">_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;longterm&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+</span><span id="L-307"><a href="#L-307"><span class="linenos">307</span></a>    <span class="k">elif</span> <span class="n">asm_type</span> <span class="o">==</span> <span class="s2">&quot;shortterm&quot;</span><span class="p">:</span>
+</span><span id="L-308"><a href="#L-308"><span class="linenos">308</span></a>        <span class="k">return</span> <span class="n">_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;shortterm&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+</span><span id="L-309"><a href="#L-309"><span class="linenos">309</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="L-310"><a href="#L-310"><span class="linenos">310</span></a>        <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;possible values are both,longterm,shortterm&quot;</span><span class="p">]</span>
 </span></pre></div>
 
 
@@ -520,43 +550,45 @@ Returns:
 </span><span id="get_price-103"><a href="#get_price-103"><span class="linenos">103</span></a>    <span class="c1"># set the window size to one year</span>
 </span><span id="get_price-104"><a href="#get_price-104"><span class="linenos">104</span></a>    <span class="n">window_size</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">cns</span><span class="o">.</span><span class="n">WINDOW_SIZE</span><span class="p">)</span>
 </span><span id="get_price-105"><a href="#get_price-105"><span class="linenos">105</span></a>
-</span><span id="get_price-106"><a href="#get_price-106"><span class="linenos">106</span></a>    <span class="n">current_window_start</span> <span class="o">=</span> <span class="n">start_date</span>
-</span><span id="get_price-107"><a href="#get_price-107"><span class="linenos">107</span></a>    <span class="k">while</span> <span class="n">current_window_start</span> <span class="o">&lt;</span> <span class="n">end_date</span><span class="p">:</span>
-</span><span id="get_price-108"><a href="#get_price-108"><span class="linenos">108</span></a>        <span class="n">current_window_end</span> <span class="o">=</span> <span class="n">current_window_start</span> <span class="o">+</span> <span class="n">window_size</span>
-</span><span id="get_price-109"><a href="#get_price-109"><span class="linenos">109</span></a>
-</span><span id="get_price-110"><a href="#get_price-110"><span class="linenos">110</span></a>        <span class="c1"># check if the current window extends beyond the end_date</span>
-</span><span id="get_price-111"><a href="#get_price-111"><span class="linenos">111</span></a>        <span class="n">current_window_end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">current_window_end</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span>
-</span><span id="get_price-112"><a href="#get_price-112"><span class="linenos">112</span></a>
-</span><span id="get_price-113"><a href="#get_price-113"><span class="linenos">113</span></a>        <span class="k">if</span> <span class="n">input_type</span> <span class="o">==</span> <span class="s2">&quot;stock&quot;</span><span class="p">:</span>
-</span><span id="get_price-114"><a href="#get_price-114"><span class="linenos">114</span></a>            <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="get_price-115"><a href="#get_price-115"><span class="linenos">115</span></a>                <span class="s2">&quot;symbol&quot;</span><span class="p">:</span> <span class="n">symbol</span><span class="p">,</span>
-</span><span id="get_price-116"><a href="#get_price-116"><span class="linenos">116</span></a>                <span class="s2">&quot;from&quot;</span><span class="p">:</span> <span class="n">current_window_start</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%m-%Y&quot;</span><span class="p">),</span>
-</span><span id="get_price-117"><a href="#get_price-117"><span class="linenos">117</span></a>                <span class="s2">&quot;to&quot;</span><span class="p">:</span> <span class="n">current_window_end</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%m-%Y&quot;</span><span class="p">),</span>
-</span><span id="get_price-118"><a href="#get_price-118"><span class="linenos">118</span></a>                <span class="s2">&quot;dataType&quot;</span><span class="p">:</span> <span class="s2">&quot;priceVolumeDeliverable&quot;</span><span class="p">,</span>
-</span><span id="get_price-119"><a href="#get_price-119"><span class="linenos">119</span></a>                <span class="s2">&quot;series&quot;</span><span class="p">:</span> <span class="n">series</span><span class="p">,</span>
-</span><span id="get_price-120"><a href="#get_price-120"><span class="linenos">120</span></a>            <span class="p">}</span>
-</span><span id="get_price-121"><a href="#get_price-121"><span class="linenos">121</span></a>            <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">price_api</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
-</span><span id="get_price-122"><a href="#get_price-122"><span class="linenos">122</span></a>            <span class="n">url_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-</span><span id="get_price-123"><a href="#get_price-123"><span class="linenos">123</span></a>
-</span><span id="get_price-124"><a href="#get_price-124"><span class="linenos">124</span></a>        <span class="c1"># move the window start to the next day after the current window end</span>
-</span><span id="get_price-125"><a href="#get_price-125"><span class="linenos">125</span></a>        <span class="n">current_window_start</span> <span class="o">=</span> <span class="n">current_window_end</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span id="get_price-126"><a href="#get_price-126"><span class="linenos">126</span></a>
-</span><span id="get_price-127"><a href="#get_price-127"><span class="linenos">127</span></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
-</span><span id="get_price-128"><a href="#get_price-128"><span class="linenos">128</span></a>    <span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">cns</span><span class="o">.</span><span class="n">MAX_WORKERS</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
-</span><span id="get_price-129"><a href="#get_price-129"><span class="linenos">129</span></a>        <span class="n">future_to_url</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="get_price-130"><a href="#get_price-130"><span class="linenos">130</span></a>            <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">fetch_url</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">cookies</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">):</span> <span class="n">url</span>
-</span><span id="get_price-131"><a href="#get_price-131"><span class="linenos">131</span></a>            <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">url_list</span>
-</span><span id="get_price-132"><a href="#get_price-132"><span class="linenos">132</span></a>        <span class="p">}</span>
-</span><span id="get_price-133"><a href="#get_price-133"><span class="linenos">133</span></a>        <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">future_to_url</span><span class="p">,</span> <span class="n">return_when</span><span class="o">=</span><span class="n">ALL_COMPLETED</span><span class="p">)</span>
-</span><span id="get_price-134"><a href="#get_price-134"><span class="linenos">134</span></a>        <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">future_to_url</span><span class="p">):</span>
-</span><span id="get_price-135"><a href="#get_price-135"><span class="linenos">135</span></a>            <span class="n">url</span> <span class="o">=</span> <span class="n">future_to_url</span><span class="p">[</span><span class="n">future</span><span class="p">]</span>
-</span><span id="get_price-136"><a href="#get_price-136"><span class="linenos">136</span></a>            <span class="k">try</span><span class="p">:</span>
-</span><span id="get_price-137"><a href="#get_price-137"><span class="linenos">137</span></a>                <span class="n">dataframe</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
-</span><span id="get_price-138"><a href="#get_price-138"><span class="linenos">138</span></a>                <span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">result</span><span class="p">,</span> <span class="n">dataframe</span><span class="p">])</span>
-</span><span id="get_price-139"><a href="#get_price-139"><span class="linenos">139</span></a>            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-</span><span id="get_price-140"><a href="#get_price-140"><span class="linenos">140</span></a>                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> got exception: </span><span class="si">%s</span><span class="s2">. Please try again later.&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
-</span><span id="get_price-141"><a href="#get_price-141"><span class="linenos">141</span></a>                <span class="k">raise</span> <span class="n">exc</span>
-</span><span id="get_price-142"><a href="#get_price-142"><span class="linenos">142</span></a>    <span class="k">return</span> <span class="n">data_format</span><span class="o">.</span><span class="n">price</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</span><span id="get_price-106"><a href="#get_price-106"><span class="linenos">106</span></a>    <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">check_nd_convert</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span>
+</span><span id="get_price-107"><a href="#get_price-107"><span class="linenos">107</span></a>
+</span><span id="get_price-108"><a href="#get_price-108"><span class="linenos">108</span></a>    <span class="n">current_window_start</span> <span class="o">=</span> <span class="n">start_date</span>
+</span><span id="get_price-109"><a href="#get_price-109"><span class="linenos">109</span></a>    <span class="k">while</span> <span class="n">current_window_start</span> <span class="o">&lt;</span> <span class="n">end_date</span><span class="p">:</span>
+</span><span id="get_price-110"><a href="#get_price-110"><span class="linenos">110</span></a>        <span class="n">current_window_end</span> <span class="o">=</span> <span class="n">current_window_start</span> <span class="o">+</span> <span class="n">window_size</span>
+</span><span id="get_price-111"><a href="#get_price-111"><span class="linenos">111</span></a>
+</span><span id="get_price-112"><a href="#get_price-112"><span class="linenos">112</span></a>        <span class="c1"># check if the current window extends beyond the end_date</span>
+</span><span id="get_price-113"><a href="#get_price-113"><span class="linenos">113</span></a>        <span class="n">current_window_end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">current_window_end</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span>
+</span><span id="get_price-114"><a href="#get_price-114"><span class="linenos">114</span></a>
+</span><span id="get_price-115"><a href="#get_price-115"><span class="linenos">115</span></a>        <span class="k">if</span> <span class="n">input_type</span> <span class="o">==</span> <span class="s2">&quot;stock&quot;</span><span class="p">:</span>
+</span><span id="get_price-116"><a href="#get_price-116"><span class="linenos">116</span></a>            <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="get_price-117"><a href="#get_price-117"><span class="linenos">117</span></a>                <span class="s2">&quot;symbol&quot;</span><span class="p">:</span> <span class="n">symbol</span><span class="p">,</span>
+</span><span id="get_price-118"><a href="#get_price-118"><span class="linenos">118</span></a>                <span class="s2">&quot;from&quot;</span><span class="p">:</span> <span class="n">current_window_start</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%m-%Y&quot;</span><span class="p">),</span>
+</span><span id="get_price-119"><a href="#get_price-119"><span class="linenos">119</span></a>                <span class="s2">&quot;to&quot;</span><span class="p">:</span> <span class="n">current_window_end</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%m-%Y&quot;</span><span class="p">),</span>
+</span><span id="get_price-120"><a href="#get_price-120"><span class="linenos">120</span></a>                <span class="s2">&quot;dataType&quot;</span><span class="p">:</span> <span class="s2">&quot;priceVolumeDeliverable&quot;</span><span class="p">,</span>
+</span><span id="get_price-121"><a href="#get_price-121"><span class="linenos">121</span></a>                <span class="s2">&quot;series&quot;</span><span class="p">:</span> <span class="n">series</span><span class="p">,</span>
+</span><span id="get_price-122"><a href="#get_price-122"><span class="linenos">122</span></a>            <span class="p">}</span>
+</span><span id="get_price-123"><a href="#get_price-123"><span class="linenos">123</span></a>            <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">price_api</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</span><span id="get_price-124"><a href="#get_price-124"><span class="linenos">124</span></a>            <span class="n">url_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</span><span id="get_price-125"><a href="#get_price-125"><span class="linenos">125</span></a>
+</span><span id="get_price-126"><a href="#get_price-126"><span class="linenos">126</span></a>        <span class="c1"># move the window start to the next day after the current window end</span>
+</span><span id="get_price-127"><a href="#get_price-127"><span class="linenos">127</span></a>        <span class="n">current_window_start</span> <span class="o">=</span> <span class="n">current_window_end</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="get_price-128"><a href="#get_price-128"><span class="linenos">128</span></a>
+</span><span id="get_price-129"><a href="#get_price-129"><span class="linenos">129</span></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+</span><span id="get_price-130"><a href="#get_price-130"><span class="linenos">130</span></a>    <span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">cns</span><span class="o">.</span><span class="n">MAX_WORKERS</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+</span><span id="get_price-131"><a href="#get_price-131"><span class="linenos">131</span></a>        <span class="n">future_to_url</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="get_price-132"><a href="#get_price-132"><span class="linenos">132</span></a>            <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">fetch_url</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">cookies</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">):</span> <span class="n">url</span>
+</span><span id="get_price-133"><a href="#get_price-133"><span class="linenos">133</span></a>            <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">url_list</span>
+</span><span id="get_price-134"><a href="#get_price-134"><span class="linenos">134</span></a>        <span class="p">}</span>
+</span><span id="get_price-135"><a href="#get_price-135"><span class="linenos">135</span></a>        <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">future_to_url</span><span class="p">,</span> <span class="n">return_when</span><span class="o">=</span><span class="n">ALL_COMPLETED</span><span class="p">)</span>
+</span><span id="get_price-136"><a href="#get_price-136"><span class="linenos">136</span></a>        <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">future_to_url</span><span class="p">):</span>
+</span><span id="get_price-137"><a href="#get_price-137"><span class="linenos">137</span></a>            <span class="n">url</span> <span class="o">=</span> <span class="n">future_to_url</span><span class="p">[</span><span class="n">future</span><span class="p">]</span>
+</span><span id="get_price-138"><a href="#get_price-138"><span class="linenos">138</span></a>            <span class="k">try</span><span class="p">:</span>
+</span><span id="get_price-139"><a href="#get_price-139"><span class="linenos">139</span></a>                <span class="n">dataframe</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+</span><span id="get_price-140"><a href="#get_price-140"><span class="linenos">140</span></a>                <span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">result</span><span class="p">,</span> <span class="n">dataframe</span><span class="p">])</span>
+</span><span id="get_price-141"><a href="#get_price-141"><span class="linenos">141</span></a>            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+</span><span id="get_price-142"><a href="#get_price-142"><span class="linenos">142</span></a>                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> got exception: </span><span class="si">%s</span><span class="s2">. Please try again later.&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
+</span><span id="get_price-143"><a href="#get_price-143"><span class="linenos">143</span></a>                <span class="k">raise</span> <span class="n">exc</span>
+</span><span id="get_price-144"><a href="#get_price-144"><span class="linenos">144</span></a>    <span class="k">return</span> <span class="n">data_format</span><span class="o">.</span><span class="n">price</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -583,42 +615,42 @@ Returns:
 
     </div>
     <a class="headerlink" href="#get_corpinfo"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="get_corpinfo-145"><a href="#get_corpinfo-145"><span class="linenos">145</span></a><span class="k">def</span> <span class="nf">get_corpinfo</span><span class="p">(</span>
-</span><span id="get_corpinfo-146"><a href="#get_corpinfo-146"><span class="linenos">146</span></a>    <span class="n">start_date</span><span class="p">,</span>
-</span><span id="get_corpinfo-147"><a href="#get_corpinfo-147"><span class="linenos">147</span></a>    <span class="n">end_date</span><span class="p">,</span>
-</span><span id="get_corpinfo-148"><a href="#get_corpinfo-148"><span class="linenos">148</span></a>    <span class="n">symbol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-</span><span id="get_corpinfo-149"><a href="#get_corpinfo-149"><span class="linenos">149</span></a>    <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;panda_df&quot;</span><span class="p">,</span>
-</span><span id="get_corpinfo-150"><a href="#get_corpinfo-150"><span class="linenos">150</span></a><span class="p">):</span>
-</span><span id="get_corpinfo-151"><a href="#get_corpinfo-151"><span class="linenos">151</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="get_corpinfo-152"><a href="#get_corpinfo-152"><span class="linenos">152</span></a><span class="sd">    Create threads for different requests, parses data, combines them and returns dataframe</span>
-</span><span id="get_corpinfo-153"><a href="#get_corpinfo-153"><span class="linenos">153</span></a><span class="sd">    Args:</span>
-</span><span id="get_corpinfo-154"><a href="#get_corpinfo-154"><span class="linenos">154</span></a><span class="sd">        start_date (datetime.datetime): start date</span>
-</span><span id="get_corpinfo-155"><a href="#get_corpinfo-155"><span class="linenos">155</span></a><span class="sd">        end_date (datetime.datetime): end date</span>
-</span><span id="get_corpinfo-156"><a href="#get_corpinfo-156"><span class="linenos">156</span></a><span class="sd">        symbol (str, optional): stock symbol. Defaults to None.</span>
-</span><span id="get_corpinfo-157"><a href="#get_corpinfo-157"><span class="linenos">157</span></a><span class="sd">    Returns:</span>
-</span><span id="get_corpinfo-158"><a href="#get_corpinfo-158"><span class="linenos">158</span></a><span class="sd">        Pandas DataFrame: df containing data for symbol of provided date range</span>
-</span><span id="get_corpinfo-159"><a href="#get_corpinfo-159"><span class="linenos">159</span></a><span class="sd">      or</span>
-</span><span id="get_corpinfo-160"><a href="#get_corpinfo-160"><span class="linenos">160</span></a><span class="sd">        Json: json containing data for symbol of provided date range</span>
-</span><span id="get_corpinfo-161"><a href="#get_corpinfo-161"><span class="linenos">161</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="get_corpinfo-162"><a href="#get_corpinfo-162"><span class="linenos">162</span></a>    <span class="n">cookies</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_cookies</span><span class="p">()</span>
-</span><span id="get_corpinfo-163"><a href="#get_corpinfo-163"><span class="linenos">163</span></a>    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="get_corpinfo-164"><a href="#get_corpinfo-164"><span class="linenos">164</span></a>        <span class="s2">&quot;symbol&quot;</span><span class="p">:</span> <span class="n">symbol</span><span class="p">,</span>
-</span><span id="get_corpinfo-165"><a href="#get_corpinfo-165"><span class="linenos">165</span></a>        <span class="s2">&quot;from_date&quot;</span><span class="p">:</span> <span class="n">start_date</span><span class="p">,</span>
-</span><span id="get_corpinfo-166"><a href="#get_corpinfo-166"><span class="linenos">166</span></a>        <span class="s2">&quot;to_date&quot;</span><span class="p">:</span> <span class="n">end_date</span><span class="p">,</span>
-</span><span id="get_corpinfo-167"><a href="#get_corpinfo-167"><span class="linenos">167</span></a>        <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="s2">&quot;equities&quot;</span><span class="p">,</span>
-</span><span id="get_corpinfo-168"><a href="#get_corpinfo-168"><span class="linenos">168</span></a>    <span class="p">}</span>
-</span><span id="get_corpinfo-169"><a href="#get_corpinfo-169"><span class="linenos">169</span></a>    <span class="n">base_url</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">BASE_URL</span>
-</span><span id="get_corpinfo-170"><a href="#get_corpinfo-170"><span class="linenos">170</span></a>    <span class="n">price_api</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">EQUITY_CORPINFO</span>
-</span><span id="get_corpinfo-171"><a href="#get_corpinfo-171"><span class="linenos">171</span></a>    <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">price_api</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
-</span><span id="get_corpinfo-172"><a href="#get_corpinfo-172"><span class="linenos">172</span></a>
-</span><span id="get_corpinfo-173"><a href="#get_corpinfo-173"><span class="linenos">173</span></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">fetch_url</span><span class="p">(</span>
-</span><span id="get_corpinfo-174"><a href="#get_corpinfo-174"><span class="linenos">174</span></a>        <span class="n">url</span><span class="p">,</span>
-</span><span id="get_corpinfo-175"><a href="#get_corpinfo-175"><span class="linenos">175</span></a>        <span class="n">cookies</span><span class="p">,</span>
-</span><span id="get_corpinfo-176"><a href="#get_corpinfo-176"><span class="linenos">176</span></a>        <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-</span><span id="get_corpinfo-177"><a href="#get_corpinfo-177"><span class="linenos">177</span></a>        <span class="n">response_type</span><span class="o">=</span><span class="n">response_type</span><span class="p">,</span>
-</span><span id="get_corpinfo-178"><a href="#get_corpinfo-178"><span class="linenos">178</span></a>    <span class="p">)</span>
-</span><span id="get_corpinfo-179"><a href="#get_corpinfo-179"><span class="linenos">179</span></a>
-</span><span id="get_corpinfo-180"><a href="#get_corpinfo-180"><span class="linenos">180</span></a>    <span class="k">return</span> <span class="n">data</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_corpinfo-147"><a href="#get_corpinfo-147"><span class="linenos">147</span></a><span class="k">def</span> <span class="nf">get_corpinfo</span><span class="p">(</span>
+</span><span id="get_corpinfo-148"><a href="#get_corpinfo-148"><span class="linenos">148</span></a>    <span class="n">start_date</span><span class="p">,</span>
+</span><span id="get_corpinfo-149"><a href="#get_corpinfo-149"><span class="linenos">149</span></a>    <span class="n">end_date</span><span class="p">,</span>
+</span><span id="get_corpinfo-150"><a href="#get_corpinfo-150"><span class="linenos">150</span></a>    <span class="n">symbol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span id="get_corpinfo-151"><a href="#get_corpinfo-151"><span class="linenos">151</span></a>    <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;panda_df&quot;</span><span class="p">,</span>
+</span><span id="get_corpinfo-152"><a href="#get_corpinfo-152"><span class="linenos">152</span></a><span class="p">):</span>
+</span><span id="get_corpinfo-153"><a href="#get_corpinfo-153"><span class="linenos">153</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="get_corpinfo-154"><a href="#get_corpinfo-154"><span class="linenos">154</span></a><span class="sd">    Create threads for different requests, parses data, combines them and returns dataframe</span>
+</span><span id="get_corpinfo-155"><a href="#get_corpinfo-155"><span class="linenos">155</span></a><span class="sd">    Args:</span>
+</span><span id="get_corpinfo-156"><a href="#get_corpinfo-156"><span class="linenos">156</span></a><span class="sd">        start_date (datetime.datetime): start date</span>
+</span><span id="get_corpinfo-157"><a href="#get_corpinfo-157"><span class="linenos">157</span></a><span class="sd">        end_date (datetime.datetime): end date</span>
+</span><span id="get_corpinfo-158"><a href="#get_corpinfo-158"><span class="linenos">158</span></a><span class="sd">        symbol (str, optional): stock symbol. Defaults to None.</span>
+</span><span id="get_corpinfo-159"><a href="#get_corpinfo-159"><span class="linenos">159</span></a><span class="sd">    Returns:</span>
+</span><span id="get_corpinfo-160"><a href="#get_corpinfo-160"><span class="linenos">160</span></a><span class="sd">        Pandas DataFrame: df containing data for symbol of provided date range</span>
+</span><span id="get_corpinfo-161"><a href="#get_corpinfo-161"><span class="linenos">161</span></a><span class="sd">      or</span>
+</span><span id="get_corpinfo-162"><a href="#get_corpinfo-162"><span class="linenos">162</span></a><span class="sd">        Json: json containing data for symbol of provided date range</span>
+</span><span id="get_corpinfo-163"><a href="#get_corpinfo-163"><span class="linenos">163</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="get_corpinfo-164"><a href="#get_corpinfo-164"><span class="linenos">164</span></a>    <span class="n">cookies</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_cookies</span><span class="p">()</span>
+</span><span id="get_corpinfo-165"><a href="#get_corpinfo-165"><span class="linenos">165</span></a>    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="get_corpinfo-166"><a href="#get_corpinfo-166"><span class="linenos">166</span></a>        <span class="s2">&quot;symbol&quot;</span><span class="p">:</span> <span class="n">symbol</span><span class="p">,</span>
+</span><span id="get_corpinfo-167"><a href="#get_corpinfo-167"><span class="linenos">167</span></a>        <span class="s2">&quot;from_date&quot;</span><span class="p">:</span> <span class="n">start_date</span><span class="p">,</span>
+</span><span id="get_corpinfo-168"><a href="#get_corpinfo-168"><span class="linenos">168</span></a>        <span class="s2">&quot;to_date&quot;</span><span class="p">:</span> <span class="n">end_date</span><span class="p">,</span>
+</span><span id="get_corpinfo-169"><a href="#get_corpinfo-169"><span class="linenos">169</span></a>        <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="s2">&quot;equities&quot;</span><span class="p">,</span>
+</span><span id="get_corpinfo-170"><a href="#get_corpinfo-170"><span class="linenos">170</span></a>    <span class="p">}</span>
+</span><span id="get_corpinfo-171"><a href="#get_corpinfo-171"><span class="linenos">171</span></a>    <span class="n">base_url</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">BASE_URL</span>
+</span><span id="get_corpinfo-172"><a href="#get_corpinfo-172"><span class="linenos">172</span></a>    <span class="n">price_api</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">EQUITY_CORPINFO</span>
+</span><span id="get_corpinfo-173"><a href="#get_corpinfo-173"><span class="linenos">173</span></a>    <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">price_api</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</span><span id="get_corpinfo-174"><a href="#get_corpinfo-174"><span class="linenos">174</span></a>
+</span><span id="get_corpinfo-175"><a href="#get_corpinfo-175"><span class="linenos">175</span></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">fetch_url</span><span class="p">(</span>
+</span><span id="get_corpinfo-176"><a href="#get_corpinfo-176"><span class="linenos">176</span></a>        <span class="n">url</span><span class="p">,</span>
+</span><span id="get_corpinfo-177"><a href="#get_corpinfo-177"><span class="linenos">177</span></a>        <span class="n">cookies</span><span class="p">,</span>
+</span><span id="get_corpinfo-178"><a href="#get_corpinfo-178"><span class="linenos">178</span></a>        <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span id="get_corpinfo-179"><a href="#get_corpinfo-179"><span class="linenos">179</span></a>        <span class="n">response_type</span><span class="o">=</span><span class="n">response_type</span><span class="p">,</span>
+</span><span id="get_corpinfo-180"><a href="#get_corpinfo-180"><span class="linenos">180</span></a>    <span class="p">)</span>
+</span><span id="get_corpinfo-181"><a href="#get_corpinfo-181"><span class="linenos">181</span></a>
+</span><span id="get_corpinfo-182"><a href="#get_corpinfo-182"><span class="linenos">182</span></a>    <span class="k">return</span> <span class="n">data</span>
 </span></pre></div>
 
 
@@ -646,32 +678,32 @@ Returns:
 
     </div>
     <a class="headerlink" href="#get_event"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="get_event-183"><a href="#get_event-183"><span class="linenos">183</span></a><span class="k">def</span> <span class="nf">get_event</span><span class="p">(</span>
-</span><span id="get_event-184"><a href="#get_event-184"><span class="linenos">184</span></a>    <span class="n">start_date</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-</span><span id="get_event-185"><a href="#get_event-185"><span class="linenos">185</span></a>    <span class="n">end_date</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-</span><span id="get_event-186"><a href="#get_event-186"><span class="linenos">186</span></a>    <span class="n">index</span><span class="o">=</span><span class="s2">&quot;equities&quot;</span><span class="p">,</span>
-</span><span id="get_event-187"><a href="#get_event-187"><span class="linenos">187</span></a><span class="p">):</span>
-</span><span id="get_event-188"><a href="#get_event-188"><span class="linenos">188</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="get_event-189"><a href="#get_event-189"><span class="linenos">189</span></a><span class="sd">    Args:</span>
-</span><span id="get_event-190"><a href="#get_event-190"><span class="linenos">190</span></a><span class="sd">        start_date (datetime.datetime,optional): start date</span>
-</span><span id="get_event-191"><a href="#get_event-191"><span class="linenos">191</span></a><span class="sd">        end_date (datetime.datetime,optional): end date</span>
-</span><span id="get_event-192"><a href="#get_event-192"><span class="linenos">192</span></a><span class="sd">    Returns:</span>
-</span><span id="get_event-193"><a href="#get_event-193"><span class="linenos">193</span></a><span class="sd">        Pandas DataFrame: df containing event of provided date range</span>
-</span><span id="get_event-194"><a href="#get_event-194"><span class="linenos">194</span></a>
-</span><span id="get_event-195"><a href="#get_event-195"><span class="linenos">195</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="get_event-196"><a href="#get_event-196"><span class="linenos">196</span></a>    <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span id="get_event-197"><a href="#get_event-197"><span class="linenos">197</span></a>    <span class="n">cookies</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_cookies</span><span class="p">()</span>
-</span><span id="get_event-198"><a href="#get_event-198"><span class="linenos">198</span></a>    <span class="n">base_url</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">BASE_URL</span>
-</span><span id="get_event-199"><a href="#get_event-199"><span class="linenos">199</span></a>    <span class="n">event_api</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">EQUITY_EVENT</span>
-</span><span id="get_event-200"><a href="#get_event-200"><span class="linenos">200</span></a>
-</span><span id="get_event-201"><a href="#get_event-201"><span class="linenos">201</span></a>    <span class="n">params</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
-</span><span id="get_event-202"><a href="#get_event-202"><span class="linenos">202</span></a>    <span class="k">if</span> <span class="n">start_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="get_event-203"><a href="#get_event-203"><span class="linenos">203</span></a>        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;from_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start_date</span>
-</span><span id="get_event-204"><a href="#get_event-204"><span class="linenos">204</span></a>    <span class="k">if</span> <span class="n">end_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="get_event-205"><a href="#get_event-205"><span class="linenos">205</span></a>        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;to_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">end_date</span>
-</span><span id="get_event-206"><a href="#get_event-206"><span class="linenos">206</span></a>
-</span><span id="get_event-207"><a href="#get_event-207"><span class="linenos">207</span></a>    <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">event_api</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
-</span><span id="get_event-208"><a href="#get_event-208"><span class="linenos">208</span></a>    <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">fetch_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">cookies</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_event-185"><a href="#get_event-185"><span class="linenos">185</span></a><span class="k">def</span> <span class="nf">get_event</span><span class="p">(</span>
+</span><span id="get_event-186"><a href="#get_event-186"><span class="linenos">186</span></a>    <span class="n">start_date</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span id="get_event-187"><a href="#get_event-187"><span class="linenos">187</span></a>    <span class="n">end_date</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span id="get_event-188"><a href="#get_event-188"><span class="linenos">188</span></a>    <span class="n">index</span><span class="o">=</span><span class="s2">&quot;equities&quot;</span><span class="p">,</span>
+</span><span id="get_event-189"><a href="#get_event-189"><span class="linenos">189</span></a><span class="p">):</span>
+</span><span id="get_event-190"><a href="#get_event-190"><span class="linenos">190</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="get_event-191"><a href="#get_event-191"><span class="linenos">191</span></a><span class="sd">    Args:</span>
+</span><span id="get_event-192"><a href="#get_event-192"><span class="linenos">192</span></a><span class="sd">        start_date (datetime.datetime,optional): start date</span>
+</span><span id="get_event-193"><a href="#get_event-193"><span class="linenos">193</span></a><span class="sd">        end_date (datetime.datetime,optional): end date</span>
+</span><span id="get_event-194"><a href="#get_event-194"><span class="linenos">194</span></a><span class="sd">    Returns:</span>
+</span><span id="get_event-195"><a href="#get_event-195"><span class="linenos">195</span></a><span class="sd">        Pandas DataFrame: df containing event of provided date range</span>
+</span><span id="get_event-196"><a href="#get_event-196"><span class="linenos">196</span></a>
+</span><span id="get_event-197"><a href="#get_event-197"><span class="linenos">197</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="get_event-198"><a href="#get_event-198"><span class="linenos">198</span></a>    <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span id="get_event-199"><a href="#get_event-199"><span class="linenos">199</span></a>    <span class="n">cookies</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_cookies</span><span class="p">()</span>
+</span><span id="get_event-200"><a href="#get_event-200"><span class="linenos">200</span></a>    <span class="n">base_url</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">BASE_URL</span>
+</span><span id="get_event-201"><a href="#get_event-201"><span class="linenos">201</span></a>    <span class="n">event_api</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">EQUITY_EVENT</span>
+</span><span id="get_event-202"><a href="#get_event-202"><span class="linenos">202</span></a>
+</span><span id="get_event-203"><a href="#get_event-203"><span class="linenos">203</span></a>    <span class="n">params</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
+</span><span id="get_event-204"><a href="#get_event-204"><span class="linenos">204</span></a>    <span class="k">if</span> <span class="n">start_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="get_event-205"><a href="#get_event-205"><span class="linenos">205</span></a>        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;from_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start_date</span>
+</span><span id="get_event-206"><a href="#get_event-206"><span class="linenos">206</span></a>    <span class="k">if</span> <span class="n">end_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="get_event-207"><a href="#get_event-207"><span class="linenos">207</span></a>        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;to_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">end_date</span>
+</span><span id="get_event-208"><a href="#get_event-208"><span class="linenos">208</span></a>
+</span><span id="get_event-209"><a href="#get_event-209"><span class="linenos">209</span></a>    <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">event_api</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</span><span id="get_event-210"><a href="#get_event-210"><span class="linenos">210</span></a>    <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">fetch_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">cookies</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -695,57 +727,57 @@ Returns:
 
     </div>
     <a class="headerlink" href="#get_chartdata"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="get_chartdata-211"><a href="#get_chartdata-211"><span class="linenos">211</span></a><span class="k">def</span> <span class="nf">get_chartdata</span><span class="p">(</span>
-</span><span id="get_chartdata-212"><a href="#get_chartdata-212"><span class="linenos">212</span></a>    <span class="n">symbol</span><span class="p">,</span>
-</span><span id="get_chartdata-213"><a href="#get_chartdata-213"><span class="linenos">213</span></a>    <span class="n">preopen</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-</span><span id="get_chartdata-214"><a href="#get_chartdata-214"><span class="linenos">214</span></a>    <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;panda_df&quot;</span><span class="p">,</span>
-</span><span id="get_chartdata-215"><a href="#get_chartdata-215"><span class="linenos">215</span></a><span class="p">):</span>
-</span><span id="get_chartdata-216"><a href="#get_chartdata-216"><span class="linenos">216</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="get_chartdata-217"><a href="#get_chartdata-217"><span class="linenos">217</span></a><span class="sd">    Args:</span>
-</span><span id="get_chartdata-218"><a href="#get_chartdata-218"><span class="linenos">218</span></a><span class="sd">        symbol (str): stock symbol.</span>
-</span><span id="get_chartdata-219"><a href="#get_chartdata-219"><span class="linenos">219</span></a><span class="sd">    Returns:</span>
-</span><span id="get_chartdata-220"><a href="#get_chartdata-220"><span class="linenos">220</span></a><span class="sd">        Pandas DataFrame: df containing chart data of provided date</span>
-</span><span id="get_chartdata-221"><a href="#get_chartdata-221"><span class="linenos">221</span></a>
-</span><span id="get_chartdata-222"><a href="#get_chartdata-222"><span class="linenos">222</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="get_chartdata-223"><a href="#get_chartdata-223"><span class="linenos">223</span></a>    <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span id="get_chartdata-224"><a href="#get_chartdata-224"><span class="linenos">224</span></a>    <span class="n">cookies</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_cookies</span><span class="p">()</span>
-</span><span id="get_chartdata-225"><a href="#get_chartdata-225"><span class="linenos">225</span></a>    <span class="n">base_url</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">BASE_URL</span>
-</span><span id="get_chartdata-226"><a href="#get_chartdata-226"><span class="linenos">226</span></a>    <span class="n">event_api</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">EQUITY_CHART</span>
-</span><span id="get_chartdata-227"><a href="#get_chartdata-227"><span class="linenos">227</span></a>    <span class="k">try</span><span class="p">:</span>
-</span><span id="get_chartdata-228"><a href="#get_chartdata-228"><span class="linenos">228</span></a>        <span class="n">identifier</span> <span class="o">=</span> <span class="n">get_companyinfo</span><span class="p">(</span>
-</span><span id="get_chartdata-229"><a href="#get_chartdata-229"><span class="linenos">229</span></a>            <span class="n">symbol</span><span class="p">,</span>
-</span><span id="get_chartdata-230"><a href="#get_chartdata-230"><span class="linenos">230</span></a>            <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;json&quot;</span><span class="p">,</span>
-</span><span id="get_chartdata-231"><a href="#get_chartdata-231"><span class="linenos">231</span></a>        <span class="p">)[</span>
-</span><span id="get_chartdata-232"><a href="#get_chartdata-232"><span class="linenos">232</span></a>            <span class="s2">&quot;info&quot;</span>
-</span><span id="get_chartdata-233"><a href="#get_chartdata-233"><span class="linenos">233</span></a>        <span class="p">][</span><span class="s2">&quot;identifier&quot;</span><span class="p">]</span>
-</span><span id="get_chartdata-234"><a href="#get_chartdata-234"><span class="linenos">234</span></a>
-</span><span id="get_chartdata-235"><a href="#get_chartdata-235"><span class="linenos">235</span></a>    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-</span><span id="get_chartdata-236"><a href="#get_chartdata-236"><span class="linenos">236</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Invalid symbol name: </span><span class="si">{</span><span class="n">symbol</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span id="get_chartdata-237"><a href="#get_chartdata-237"><span class="linenos">237</span></a>
-</span><span id="get_chartdata-238"><a href="#get_chartdata-238"><span class="linenos">238</span></a>    <span class="n">params</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">identifier</span>
-</span><span id="get_chartdata-239"><a href="#get_chartdata-239"><span class="linenos">239</span></a>    <span class="k">if</span> <span class="n">preopen</span><span class="p">:</span>
-</span><span id="get_chartdata-240"><a href="#get_chartdata-240"><span class="linenos">240</span></a>        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;preopen&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;true&quot;</span>
-</span><span id="get_chartdata-241"><a href="#get_chartdata-241"><span class="linenos">241</span></a>
-</span><span id="get_chartdata-242"><a href="#get_chartdata-242"><span class="linenos">242</span></a>    <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">event_api</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_chartdata-213"><a href="#get_chartdata-213"><span class="linenos">213</span></a><span class="k">def</span> <span class="nf">get_chartdata</span><span class="p">(</span>
+</span><span id="get_chartdata-214"><a href="#get_chartdata-214"><span class="linenos">214</span></a>    <span class="n">symbol</span><span class="p">,</span>
+</span><span id="get_chartdata-215"><a href="#get_chartdata-215"><span class="linenos">215</span></a>    <span class="n">preopen</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+</span><span id="get_chartdata-216"><a href="#get_chartdata-216"><span class="linenos">216</span></a>    <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;panda_df&quot;</span><span class="p">,</span>
+</span><span id="get_chartdata-217"><a href="#get_chartdata-217"><span class="linenos">217</span></a><span class="p">):</span>
+</span><span id="get_chartdata-218"><a href="#get_chartdata-218"><span class="linenos">218</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="get_chartdata-219"><a href="#get_chartdata-219"><span class="linenos">219</span></a><span class="sd">    Args:</span>
+</span><span id="get_chartdata-220"><a href="#get_chartdata-220"><span class="linenos">220</span></a><span class="sd">        symbol (str): stock symbol.</span>
+</span><span id="get_chartdata-221"><a href="#get_chartdata-221"><span class="linenos">221</span></a><span class="sd">    Returns:</span>
+</span><span id="get_chartdata-222"><a href="#get_chartdata-222"><span class="linenos">222</span></a><span class="sd">        Pandas DataFrame: df containing chart data of provided date</span>
+</span><span id="get_chartdata-223"><a href="#get_chartdata-223"><span class="linenos">223</span></a>
+</span><span id="get_chartdata-224"><a href="#get_chartdata-224"><span class="linenos">224</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="get_chartdata-225"><a href="#get_chartdata-225"><span class="linenos">225</span></a>    <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span id="get_chartdata-226"><a href="#get_chartdata-226"><span class="linenos">226</span></a>    <span class="n">cookies</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_cookies</span><span class="p">()</span>
+</span><span id="get_chartdata-227"><a href="#get_chartdata-227"><span class="linenos">227</span></a>    <span class="n">base_url</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">BASE_URL</span>
+</span><span id="get_chartdata-228"><a href="#get_chartdata-228"><span class="linenos">228</span></a>    <span class="n">event_api</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">EQUITY_CHART</span>
+</span><span id="get_chartdata-229"><a href="#get_chartdata-229"><span class="linenos">229</span></a>    <span class="k">try</span><span class="p">:</span>
+</span><span id="get_chartdata-230"><a href="#get_chartdata-230"><span class="linenos">230</span></a>        <span class="n">identifier</span> <span class="o">=</span> <span class="n">get_companyinfo</span><span class="p">(</span>
+</span><span id="get_chartdata-231"><a href="#get_chartdata-231"><span class="linenos">231</span></a>            <span class="n">symbol</span><span class="p">,</span>
+</span><span id="get_chartdata-232"><a href="#get_chartdata-232"><span class="linenos">232</span></a>            <span class="n">response_type</span><span class="o">=</span><span class="s2">&quot;json&quot;</span><span class="p">,</span>
+</span><span id="get_chartdata-233"><a href="#get_chartdata-233"><span class="linenos">233</span></a>        <span class="p">)[</span>
+</span><span id="get_chartdata-234"><a href="#get_chartdata-234"><span class="linenos">234</span></a>            <span class="s2">&quot;info&quot;</span>
+</span><span id="get_chartdata-235"><a href="#get_chartdata-235"><span class="linenos">235</span></a>        <span class="p">][</span><span class="s2">&quot;identifier&quot;</span><span class="p">]</span>
+</span><span id="get_chartdata-236"><a href="#get_chartdata-236"><span class="linenos">236</span></a>
+</span><span id="get_chartdata-237"><a href="#get_chartdata-237"><span class="linenos">237</span></a>    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+</span><span id="get_chartdata-238"><a href="#get_chartdata-238"><span class="linenos">238</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Invalid symbol name: </span><span class="si">{</span><span class="n">symbol</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="get_chartdata-239"><a href="#get_chartdata-239"><span class="linenos">239</span></a>
+</span><span id="get_chartdata-240"><a href="#get_chartdata-240"><span class="linenos">240</span></a>    <span class="n">params</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">identifier</span>
+</span><span id="get_chartdata-241"><a href="#get_chartdata-241"><span class="linenos">241</span></a>    <span class="k">if</span> <span class="n">preopen</span><span class="p">:</span>
+</span><span id="get_chartdata-242"><a href="#get_chartdata-242"><span class="linenos">242</span></a>        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;preopen&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;true&quot;</span>
 </span><span id="get_chartdata-243"><a href="#get_chartdata-243"><span class="linenos">243</span></a>
-</span><span id="get_chartdata-244"><a href="#get_chartdata-244"><span class="linenos">244</span></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">fetch_url</span><span class="p">(</span>
-</span><span id="get_chartdata-245"><a href="#get_chartdata-245"><span class="linenos">245</span></a>        <span class="n">url</span><span class="p">,</span>
-</span><span id="get_chartdata-246"><a href="#get_chartdata-246"><span class="linenos">246</span></a>        <span class="n">cookies</span><span class="p">,</span>
-</span><span id="get_chartdata-247"><a href="#get_chartdata-247"><span class="linenos">247</span></a>        <span class="n">key</span><span class="o">=</span><span class="s2">&quot;grapthData&quot;</span><span class="p">,</span>
-</span><span id="get_chartdata-248"><a href="#get_chartdata-248"><span class="linenos">248</span></a>        <span class="n">response_type</span><span class="o">=</span><span class="n">response_type</span><span class="p">,</span>
-</span><span id="get_chartdata-249"><a href="#get_chartdata-249"><span class="linenos">249</span></a>    <span class="p">)</span>
-</span><span id="get_chartdata-250"><a href="#get_chartdata-250"><span class="linenos">250</span></a>    <span class="k">if</span> <span class="n">response_type</span> <span class="o">==</span> <span class="s2">&quot;panda_df&quot;</span><span class="p">:</span>
-</span><span id="get_chartdata-251"><a href="#get_chartdata-251"><span class="linenos">251</span></a>        <span class="n">data_frame</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
-</span><span id="get_chartdata-252"><a href="#get_chartdata-252"><span class="linenos">252</span></a>            <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
-</span><span id="get_chartdata-253"><a href="#get_chartdata-253"><span class="linenos">253</span></a>                <span class="mi">0</span><span class="p">:</span> <span class="s2">&quot;timestamp_milliseconds&quot;</span><span class="p">,</span>
-</span><span id="get_chartdata-254"><a href="#get_chartdata-254"><span class="linenos">254</span></a>                <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;price&quot;</span><span class="p">,</span>
-</span><span id="get_chartdata-255"><a href="#get_chartdata-255"><span class="linenos">255</span></a>            <span class="p">}</span>
-</span><span id="get_chartdata-256"><a href="#get_chartdata-256"><span class="linenos">256</span></a>        <span class="p">)</span>
-</span><span id="get_chartdata-257"><a href="#get_chartdata-257"><span class="linenos">257</span></a>        <span class="n">data_frame</span><span class="p">[</span><span class="s2">&quot;datetime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span>
-</span><span id="get_chartdata-258"><a href="#get_chartdata-258"><span class="linenos">258</span></a>            <span class="n">data_frame</span><span class="p">[</span><span class="s2">&quot;timestamp_milliseconds&quot;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;ms&quot;</span>
-</span><span id="get_chartdata-259"><a href="#get_chartdata-259"><span class="linenos">259</span></a>        <span class="p">)</span>
-</span><span id="get_chartdata-260"><a href="#get_chartdata-260"><span class="linenos">260</span></a>        <span class="k">return</span> <span class="n">data_frame</span>
-</span><span id="get_chartdata-261"><a href="#get_chartdata-261"><span class="linenos">261</span></a>    <span class="k">return</span> <span class="n">data</span>
+</span><span id="get_chartdata-244"><a href="#get_chartdata-244"><span class="linenos">244</span></a>    <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">event_api</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</span><span id="get_chartdata-245"><a href="#get_chartdata-245"><span class="linenos">245</span></a>
+</span><span id="get_chartdata-246"><a href="#get_chartdata-246"><span class="linenos">246</span></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">fetch_url</span><span class="p">(</span>
+</span><span id="get_chartdata-247"><a href="#get_chartdata-247"><span class="linenos">247</span></a>        <span class="n">url</span><span class="p">,</span>
+</span><span id="get_chartdata-248"><a href="#get_chartdata-248"><span class="linenos">248</span></a>        <span class="n">cookies</span><span class="p">,</span>
+</span><span id="get_chartdata-249"><a href="#get_chartdata-249"><span class="linenos">249</span></a>        <span class="n">key</span><span class="o">=</span><span class="s2">&quot;grapthData&quot;</span><span class="p">,</span>
+</span><span id="get_chartdata-250"><a href="#get_chartdata-250"><span class="linenos">250</span></a>        <span class="n">response_type</span><span class="o">=</span><span class="n">response_type</span><span class="p">,</span>
+</span><span id="get_chartdata-251"><a href="#get_chartdata-251"><span class="linenos">251</span></a>    <span class="p">)</span>
+</span><span id="get_chartdata-252"><a href="#get_chartdata-252"><span class="linenos">252</span></a>    <span class="k">if</span> <span class="n">response_type</span> <span class="o">==</span> <span class="s2">&quot;panda_df&quot;</span><span class="p">:</span>
+</span><span id="get_chartdata-253"><a href="#get_chartdata-253"><span class="linenos">253</span></a>        <span class="n">data_frame</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+</span><span id="get_chartdata-254"><a href="#get_chartdata-254"><span class="linenos">254</span></a>            <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+</span><span id="get_chartdata-255"><a href="#get_chartdata-255"><span class="linenos">255</span></a>                <span class="mi">0</span><span class="p">:</span> <span class="s2">&quot;timestamp_milliseconds&quot;</span><span class="p">,</span>
+</span><span id="get_chartdata-256"><a href="#get_chartdata-256"><span class="linenos">256</span></a>                <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;price&quot;</span><span class="p">,</span>
+</span><span id="get_chartdata-257"><a href="#get_chartdata-257"><span class="linenos">257</span></a>            <span class="p">}</span>
+</span><span id="get_chartdata-258"><a href="#get_chartdata-258"><span class="linenos">258</span></a>        <span class="p">)</span>
+</span><span id="get_chartdata-259"><a href="#get_chartdata-259"><span class="linenos">259</span></a>        <span class="n">data_frame</span><span class="p">[</span><span class="s2">&quot;datetime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span>
+</span><span id="get_chartdata-260"><a href="#get_chartdata-260"><span class="linenos">260</span></a>            <span class="n">data_frame</span><span class="p">[</span><span class="s2">&quot;timestamp_milliseconds&quot;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;ms&quot;</span>
+</span><span id="get_chartdata-261"><a href="#get_chartdata-261"><span class="linenos">261</span></a>        <span class="p">)</span>
+</span><span id="get_chartdata-262"><a href="#get_chartdata-262"><span class="linenos">262</span></a>        <span class="k">return</span> <span class="n">data_frame</span>
+</span><span id="get_chartdata-263"><a href="#get_chartdata-263"><span class="linenos">263</span></a>    <span class="k">return</span> <span class="n">data</span>
 </span></pre></div>
 
 
@@ -768,27 +800,27 @@ Returns:
 
     </div>
     <a class="headerlink" href="#get_symbols_list"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="get_symbols_list-264"><a href="#get_symbols_list-264"><span class="linenos">264</span></a><span class="k">def</span> <span class="nf">get_symbols_list</span><span class="p">():</span>
-</span><span id="get_symbols_list-265"><a href="#get_symbols_list-265"><span class="linenos">265</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="get_symbols_list-266"><a href="#get_symbols_list-266"><span class="linenos">266</span></a><span class="sd">    Args:</span>
-</span><span id="get_symbols_list-267"><a href="#get_symbols_list-267"><span class="linenos">267</span></a><span class="sd">        No arguments needed</span>
-</span><span id="get_symbols_list-268"><a href="#get_symbols_list-268"><span class="linenos">268</span></a>
-</span><span id="get_symbols_list-269"><a href="#get_symbols_list-269"><span class="linenos">269</span></a><span class="sd">    Returns:</span>
-</span><span id="get_symbols_list-270"><a href="#get_symbols_list-270"><span class="linenos">270</span></a><span class="sd">        List of stock or equity symbols</span>
-</span><span id="get_symbols_list-271"><a href="#get_symbols_list-271"><span class="linenos">271</span></a>
-</span><span id="get_symbols_list-272"><a href="#get_symbols_list-272"><span class="linenos">272</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="get_symbols_list-273"><a href="#get_symbols_list-273"><span class="linenos">273</span></a>    <span class="n">cookies</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_cookies</span><span class="p">()</span>
-</span><span id="get_symbols_list-274"><a href="#get_symbols_list-274"><span class="linenos">274</span></a>    <span class="n">base_url</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">BASE_URL</span>
-</span><span id="get_symbols_list-275"><a href="#get_symbols_list-275"><span class="linenos">275</span></a>    <span class="n">event_api</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">EQUITY_LIST</span>
-</span><span id="get_symbols_list-276"><a href="#get_symbols_list-276"><span class="linenos">276</span></a>
-</span><span id="get_symbols_list-277"><a href="#get_symbols_list-277"><span class="linenos">277</span></a>    <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">event_api</span>
-</span><span id="get_symbols_list-278"><a href="#get_symbols_list-278"><span class="linenos">278</span></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">fetch_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">cookies</span><span class="p">)</span>
-</span><span id="get_symbols_list-279"><a href="#get_symbols_list-279"><span class="linenos">279</span></a>    <span class="n">f_dict</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
-</span><span id="get_symbols_list-280"><a href="#get_symbols_list-280"><span class="linenos">280</span></a>    <span class="n">eq_list</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="get_symbols_list-281"><a href="#get_symbols_list-281"><span class="linenos">281</span></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">f_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])):</span>
-</span><span id="get_symbols_list-282"><a href="#get_symbols_list-282"><span class="linenos">282</span></a>        <span class="n">eq_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="s2">&quot;symbol&quot;</span><span class="p">])</span>
-</span><span id="get_symbols_list-283"><a href="#get_symbols_list-283"><span class="linenos">283</span></a>
-</span><span id="get_symbols_list-284"><a href="#get_symbols_list-284"><span class="linenos">284</span></a>    <span class="k">return</span> <span class="n">eq_list</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_symbols_list-266"><a href="#get_symbols_list-266"><span class="linenos">266</span></a><span class="k">def</span> <span class="nf">get_symbols_list</span><span class="p">():</span>
+</span><span id="get_symbols_list-267"><a href="#get_symbols_list-267"><span class="linenos">267</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="get_symbols_list-268"><a href="#get_symbols_list-268"><span class="linenos">268</span></a><span class="sd">    Args:</span>
+</span><span id="get_symbols_list-269"><a href="#get_symbols_list-269"><span class="linenos">269</span></a><span class="sd">        No arguments needed</span>
+</span><span id="get_symbols_list-270"><a href="#get_symbols_list-270"><span class="linenos">270</span></a>
+</span><span id="get_symbols_list-271"><a href="#get_symbols_list-271"><span class="linenos">271</span></a><span class="sd">    Returns:</span>
+</span><span id="get_symbols_list-272"><a href="#get_symbols_list-272"><span class="linenos">272</span></a><span class="sd">        List of stock or equity symbols</span>
+</span><span id="get_symbols_list-273"><a href="#get_symbols_list-273"><span class="linenos">273</span></a>
+</span><span id="get_symbols_list-274"><a href="#get_symbols_list-274"><span class="linenos">274</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="get_symbols_list-275"><a href="#get_symbols_list-275"><span class="linenos">275</span></a>    <span class="n">cookies</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_cookies</span><span class="p">()</span>
+</span><span id="get_symbols_list-276"><a href="#get_symbols_list-276"><span class="linenos">276</span></a>    <span class="n">base_url</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">BASE_URL</span>
+</span><span id="get_symbols_list-277"><a href="#get_symbols_list-277"><span class="linenos">277</span></a>    <span class="n">event_api</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">EQUITY_LIST</span>
+</span><span id="get_symbols_list-278"><a href="#get_symbols_list-278"><span class="linenos">278</span></a>
+</span><span id="get_symbols_list-279"><a href="#get_symbols_list-279"><span class="linenos">279</span></a>    <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">event_api</span>
+</span><span id="get_symbols_list-280"><a href="#get_symbols_list-280"><span class="linenos">280</span></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">fetch_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">cookies</span><span class="p">)</span>
+</span><span id="get_symbols_list-281"><a href="#get_symbols_list-281"><span class="linenos">281</span></a>    <span class="n">f_dict</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+</span><span id="get_symbols_list-282"><a href="#get_symbols_list-282"><span class="linenos">282</span></a>    <span class="n">eq_list</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="get_symbols_list-283"><a href="#get_symbols_list-283"><span class="linenos">283</span></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">f_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])):</span>
+</span><span id="get_symbols_list-284"><a href="#get_symbols_list-284"><span class="linenos">284</span></a>        <span class="n">eq_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="s2">&quot;symbol&quot;</span><span class="p">])</span>
+</span><span id="get_symbols_list-285"><a href="#get_symbols_list-285"><span class="linenos">285</span></a>
+</span><span id="get_symbols_list-286"><a href="#get_symbols_list-286"><span class="linenos">286</span></a>    <span class="k">return</span> <span class="n">eq_list</span>
 </span></pre></div>
 
 
@@ -797,6 +829,51 @@ Returns:
 
 <p>Returns:
     List of stock or equity symbols</p>
+</div>
+
+
+                </section>
+                <section id="get_asm_list">
+                            <input id="get_asm_list-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">get_asm_list</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">asm_type</span><span class="o">=</span><span class="s1">&#39;both&#39;</span></span><span class="return-annotation">) -> <span class="nb">list</span>:</span></span>
+
+                <label class="view-source-button" for="get_asm_list-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#get_asm_list"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_asm_list-289"><a href="#get_asm_list-289"><span class="linenos">289</span></a><span class="k">def</span> <span class="nf">get_asm_list</span><span class="p">(</span><span class="n">asm_type</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+</span><span id="get_asm_list-290"><a href="#get_asm_list-290"><span class="linenos">290</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="get_asm_list-291"><a href="#get_asm_list-291"><span class="linenos">291</span></a><span class="sd">        Args:</span>
+</span><span id="get_asm_list-292"><a href="#get_asm_list-292"><span class="linenos">292</span></a><span class="sd">            asm_type (str): ASM type, possible values: both,longterm,shortterm</span>
+</span><span id="get_asm_list-293"><a href="#get_asm_list-293"><span class="linenos">293</span></a><span class="sd">        Returns:</span>
+</span><span id="get_asm_list-294"><a href="#get_asm_list-294"><span class="linenos">294</span></a><span class="sd">            List of Stocks Under ASM</span>
+</span><span id="get_asm_list-295"><a href="#get_asm_list-295"><span class="linenos">295</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="get_asm_list-296"><a href="#get_asm_list-296"><span class="linenos">296</span></a>    <span class="n">cookies</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_cookies</span><span class="p">()</span>
+</span><span id="get_asm_list-297"><a href="#get_asm_list-297"><span class="linenos">297</span></a>    <span class="n">base_url</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">BASE_URL</span>
+</span><span id="get_asm_list-298"><a href="#get_asm_list-298"><span class="linenos">298</span></a>    <span class="n">event_api</span> <span class="o">=</span> <span class="n">cns</span><span class="o">.</span><span class="n">ASM_LIST</span>
+</span><span id="get_asm_list-299"><a href="#get_asm_list-299"><span class="linenos">299</span></a>
+</span><span id="get_asm_list-300"><a href="#get_asm_list-300"><span class="linenos">300</span></a>    <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">event_api</span>
+</span><span id="get_asm_list-301"><a href="#get_asm_list-301"><span class="linenos">301</span></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">fetch_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">cookies</span><span class="p">)</span>
+</span><span id="get_asm_list-302"><a href="#get_asm_list-302"><span class="linenos">302</span></a>    <span class="n">_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+</span><span id="get_asm_list-303"><a href="#get_asm_list-303"><span class="linenos">303</span></a>
+</span><span id="get_asm_list-304"><a href="#get_asm_list-304"><span class="linenos">304</span></a>    <span class="k">if</span> <span class="n">asm_type</span> <span class="o">==</span>  <span class="s2">&quot;both&quot;</span><span class="p">:</span>
+</span><span id="get_asm_list-305"><a href="#get_asm_list-305"><span class="linenos">305</span></a>        <span class="k">return</span> <span class="n">_data</span>
+</span><span id="get_asm_list-306"><a href="#get_asm_list-306"><span class="linenos">306</span></a>    <span class="k">elif</span> <span class="n">asm_type</span> <span class="o">==</span> <span class="s2">&quot;longterm&quot;</span><span class="p">:</span>
+</span><span id="get_asm_list-307"><a href="#get_asm_list-307"><span class="linenos">307</span></a>        <span class="k">return</span> <span class="n">_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;longterm&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+</span><span id="get_asm_list-308"><a href="#get_asm_list-308"><span class="linenos">308</span></a>    <span class="k">elif</span> <span class="n">asm_type</span> <span class="o">==</span> <span class="s2">&quot;shortterm&quot;</span><span class="p">:</span>
+</span><span id="get_asm_list-309"><a href="#get_asm_list-309"><span class="linenos">309</span></a>        <span class="k">return</span> <span class="n">_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;shortterm&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+</span><span id="get_asm_list-310"><a href="#get_asm_list-310"><span class="linenos">310</span></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="get_asm_list-311"><a href="#get_asm_list-311"><span class="linenos">311</span></a>        <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;possible values are both,longterm,shortterm&quot;</span><span class="p">]</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Args:
+    asm_type (str): ASM type, possible values: both,longterm,shortterm
+Returns:
+    List of Stocks Under ASM</p>
 </div>
 
 
