@@ -20,7 +20,7 @@ def get_companyinfo(
     symbol: str,
     response_type: str = "panda_df",
 ):
-    """_summary_
+    """get_companyinfo
 
     Args:\n
         symbol (str): stock name\n
@@ -296,9 +296,8 @@ def get_asm_list(asm_type="both") -> list:
 
     if asm_type ==  "both":
         return _data
-    elif asm_type == "longterm":
+    if asm_type == "longterm":
         return _data.get("longterm").get("data")
-    elif asm_type == "shortterm":
+    if asm_type == "shortterm":
         return _data.get("shortterm").get("data")
-    else:
-        return ["possible values are both,longterm,shortterm"]
+    return ["possible values are both,longterm,shortterm"]
