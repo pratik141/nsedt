@@ -3,13 +3,14 @@
 Install script
 """
 from setuptools import find_packages, setup
+import os
 
 with open("README.md", "r", encoding="utf-8") as file:
     long_description = file.read()
 
 setup(
     name="nsedt",
-    version="0.0.11",
+    version=os.getenv("GITHUB_REF_NAME"),
     author="Pratik Anand",
     long_description=long_description,
     long_description_content_type="text/markdown",

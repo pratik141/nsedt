@@ -129,6 +129,6 @@ now pass in str '%d-%m-%Y' format""",
         end_date = datetime.datetime.strptime(end_date, "%d-%m-%Y")
 
     else:
-        raise ValueError("Input is of an unknown type" )
+        raise ValueError("Input is of an unknown type")
 
     return start_date, end_date
