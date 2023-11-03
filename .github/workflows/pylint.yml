@@ -1,6 +1,9 @@
 name: Pylint
 
-on: [push]
+on:
+  push:
+    paths:
+      - "nsedt/**"
 
 jobs:
   build:
