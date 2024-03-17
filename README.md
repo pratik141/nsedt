@@ -12,7 +12,7 @@ Thank you for using Nsedt. Please feel free to send pull requests, comments, and
 2. Install the requirements file after changing to cloned folder above
 `pip install -r requirements.txt`
 3. Install locally 
-`pip installl . --upgrade`
+`pip install . --upgrade`
 
 ---
 ## Equity
