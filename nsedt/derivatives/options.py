@@ -114,3 +114,53 @@ def get_option_chain_expdate(symbol: str) -> list:
     for expiry_date in expiry_dates:
         ret.append(datetime.strptime(expiry_date, "%d-%b-%Y").strftime("%d-%m-%Y"))
     return ret
+
+def get_historical_option_data(
+    symbol: str,
+    start_date: str,
+    end_date: str,
+    option_type: str,
+    strike_price: str,
+    year : str,
+    expiry_date: str,
+    response_type: str = "panda_df",
+    columns_drop_list: list = None,
+):
+    """
+    Get historical data for option chain for a given expiry
+    Args:
+        symbol (str): _description_
+        start_date (str): _description_
+        end_date (str): _description_
+        option_type (str): _description_.
+        option_type (str): _description_.
+        strike_price (str): _description_.
+        year (str): _description_.
+        expiry_date (str): _description_.
+        response_type (str, optional): _description_. Defaults to "panda_df".
+        columns_drop_list (list, optional): _description_. Defaults to None.
+
+    Returns:
+        _type_: _description_
+    """
+    cookies = utils.get_cookies()
+    base_url = cns.BASE_URL
+    event_api = cns.FUTURES_PRICE
+    symbol = utils.get_symbol(symbol=symbol, get_key="derivatives")
+    params = {
+        "symbol": symbol,
+        "from": start_date,
+        "to": end_date,
+        "instrumentType" : "OPTSTK",
+        "optionType": option_type,
+        "expiryDate": expiry_date,
+        "strikePrice": strike_price,
+        "year": year
+    }
+    url = base_url + event_api + urllib.parse.urlencode(params)
+    data = utils.fetch_url(url, cookies, response_type="json")
+    return data_format.derivaties_options(
+        data,
+        response_type=response_type,
+        columns_drop_list=columns_drop_list,
+    )

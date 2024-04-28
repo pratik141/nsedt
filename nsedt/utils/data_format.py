@@ -262,3 +262,63 @@ def derivatives_futures(
             }
         )
     )
+
+
+def derivaties_options(
+    data_json: str,
+    response_type: str = "panda_df",
+    columns_drop_list=None,
+):
+    """
+        Format futures data
+
+    Args:
+        data_json (object): data in json format.
+        response_type (str, optional): response_type. Defaults to "panda_df".
+        columns_drop_list (list, optional): custom columns drop list. Defaults to None.
+
+    Returns:
+            json: formate data in json
+        or
+            dataframe: formate data in panda df
+    """
+    if data_json:
+        data_json = data_json['data']
+    if columns_drop_list:
+        columns_list = columns_drop_list
+    else:
+        columns_list = [
+            "_id",
+            "FH_MARKET_LOT",
+            "FH_MARKET_TYPE",
+            "FH_OPTION_TYPE",
+            "FH_SYMBOL",
+            "FH_INSTRUMENT",
+            "FH_STRIKE_PRICE",
+            "FH_LAST_TRADED_PRICE",
+            "TIMESTAMP",
+        ]
+    
+    if response_type == "json":
+        data_json_ret = []
+        for record in data_json:
+            for column in columns_list:
+                record.pop(column, None)
+            data_json_ret.append(record)
+        return data_json_ret
+
+    return (
+        pd.json_normalize(data_json)
+        .drop(columns=columns_list)
+        .rename(
+            columns={
+                "FH_OPENING_PRICE": "Open Price",
+                "FH_TRADE_HIGH_PRICE": "High Price",
+                "FH_CLOSING_PRICE": "Close Price",
+                "FH_TRADE_LOW_PRICE": "Low Price",
+                "FH_CHANGE_IN_OI": "Change in OI",
+                "FH_EXPIRY_DT": "Expiry Date",
+                "FH_TIMESTAMP": "Date",
+            }
+        )
+    )
