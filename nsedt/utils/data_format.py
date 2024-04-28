@@ -221,9 +221,9 @@ def derivatives_futures(
         columns_drop_list (list, optional): custom columns drop list. Defaults to None.
 
     Returns:
-            json: formate data in json
+            json: format data in json
         or
-            dataframe: formate data in panda df
+            dataframe: format data in panda df
     """
     if columns_drop_list:
         columns_list = columns_drop_list
@@ -270,7 +270,7 @@ def derivaties_options(
     columns_drop_list=None,
 ):
     """
-        Format futures data
+        Format historical options data
 
     Args:
         data_json (object): data in json format.
@@ -278,9 +278,9 @@ def derivaties_options(
         columns_drop_list (list, optional): custom columns drop list. Defaults to None.
 
     Returns:
-            json: formate data in json
+            json: format data in json
         or
-            dataframe: formate data in panda df
+            dataframe: format data in panda df
     """
     if data_json:
         data_json = data_json['data']
