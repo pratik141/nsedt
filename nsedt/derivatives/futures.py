@@ -32,7 +32,7 @@ def get_future_price(
     """
     cookies = utils.get_cookies()
     base_url = cns.BASE_URL
-    event_api = cns.FUTURES_PRICE
+    event_api = cns.FNO_HISTORY
     symbol = utils.get_symbol(symbol=symbol, get_key="derivatives")
     params = {
         "symbol": symbol,
@@ -75,7 +75,7 @@ def get_future_expdate(symbol: str) -> list:
     """
     cookies = utils.get_cookies()
     base_url = cns.BASE_URL
-    event_api = cns.FUTURES_PRICE
+    event_api = cns.FNO_HISTORY
     params = {
         "symbol": symbol,
         "from": (datetime.now() - timedelta(days=3)).strftime("%d-%m-%Y"),

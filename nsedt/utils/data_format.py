@@ -21,6 +21,7 @@ def price(result):
         "CH_TRADE_LOW_PRICE",
         "CH_CLOSING_PRICE",
         "CH_PREVIOUS_CLS_PRICE",
+        "CH_LAST_TRADED_PRICE",
         "CH_TOT_TRADED_QTY",
         "CH_TOT_TRADED_VAL",
         "CH_52WEEK_HIGH_PRICE",
@@ -30,6 +31,7 @@ def price(result):
         "COP_DELIV_PERC",
         "CH_SERIES",
     ]
+
     try:
         result = result[columns_required]
     except:  # pylint: disable=W0702
@@ -42,6 +44,7 @@ def price(result):
             "Low Price",
             "Close Price",
             "Prev Close Price",
+            "Last Traded Price",
             "Total Traded Quantity",
             "Total Traded Value",
             "52 Week High Price",

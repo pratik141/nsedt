@@ -145,7 +145,7 @@ def get_historical_option_data(
     """
     cookies = utils.get_cookies()
     base_url = cns.BASE_URL
-    event_api = cns.FUTURES_PRICE
+    event_api = cns.FNO_HISTORY
     symbol = utils.get_symbol(symbol=symbol, get_key="derivatives")
     params = {
         "symbol": symbol,
