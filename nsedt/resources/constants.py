@@ -37,4 +37,4 @@ OPTIONS_PRICE_EQUITIES = "api/option-chain-equities?"
 OPTIONS_PRICE_INDICES = "api/option-chain-indices?"
 INDICES = ["NIFTY", "FINNIFTY", "BANKNIFTY"]
 VIX_HISTORY = "api/historical/vixhistory?"
-FUTURES_PRICE = "api/historical/foCPV?"
+FNO_HISTORY = "api/historical/foCPV?"

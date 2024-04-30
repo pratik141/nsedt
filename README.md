@@ -6,31 +6,36 @@ This library serves as an api to fetch data from the NSE about stocks and indice
 Thank you for using Nsedt. Please feel free to send pull requests, comments, and suggestions, as well as get in touch with me if you require any additional help. I sincerely hope you will find this library useful.
 
 #### For detailed doc please refer [nse-doc](https://pratikanand.co.in/nsedt/html)
-## How to start
-1. clone the repository
-`git clone https://github.com/pratik141/nsedt`
-2. Install the requirements file after changing to cloned folder above
-`pip install -r requirements.txt`
-3. Install locally 
-`pip install . --upgrade`
 
+## How to start
+
+1. clone the repository
+   `git clone https://github.com/pratik141/nsedt`
+2. Install the requirements file after changing to cloned folder above
+   `pip install -r requirements.txt`
+3. Install locally
+   `pip install . --upgrade`
 ---
+
 ## Equity
+
 ### Details
-|  Name | Module name | Description | Argument | Response|
-| ----- | ----------- | ----------- | -------- | ------- |
-| companyinfo | get_companyinfo | Company info | symbol , response_type | json, panda df |
-| marketstatus | get_marketstatus | marketstatus | -- | panda_df |
-| price | get_price | price | start_date, end_date, symbol, input_type | json, panda df |
-| corpinfo | get_corpinfo | corpinfo | arg | |
-| event | get_event | event | start_date, end_date |  panda df |
-| chartdata | get_chartdata | chartdata | symbol | panda df |
-| symbols_list | get_symbols_list | symbols_list | -- | json |
-| asm_list | get_asm_list | symbols_list | asm_type | json |
+
+| Name         | Module name      | Description  | Argument                                 | Response       |
+| ------------ | ---------------- | ------------ | ---------------------------------------- | -------------- |
+| companyinfo  | get_companyinfo  | Company info | symbol , response_type                   | json, panda df |
+| marketstatus | get_marketstatus | marketstatus | --                                       | panda_df       |
+| price        | get_price        | price        | start_date, end_date, symbol, input_type | json, panda df |
+| corpinfo     | get_corpinfo     | corpinfo     | arg                                      |                |
+| event        | get_event        | event        | start_date, end_date                     | panda df       |
+| chartdata    | get_chartdata    | chartdata    | symbol                                   | panda df       |
+| symbols_list | get_symbols_list | symbols_list | --                                       | json           |
+| asm_list     | get_asm_list     | symbols_list | asm_type                                 | json           |
 
 Now get_price work with start_date, end_date without datetime format it support `%d-%m-%Y`
 
-### step to run  
+### step to run
+
 ```py
 from nsedt import equity as eq
 from datetime import date
@@ -53,11 +58,15 @@ print(eq.get_asm_list(asm_type = "shortterm"))
 ```
 
 ## Indices
+
 ### Details
-|  Name | Module name | Description | Argument | Response|
-| ----- | ----------- | ----------- | -------- | ------- |
-| price | get_price | price | start_date, end_date, symbol |  panda df |
-### step to run  
+
+| Name  | Module name | Description | Argument                     | Response |
+| ----- | ----------- | ----------- | ---------------------------- | -------- |
+| price | get_price   | price       | start_date, end_date, symbol | panda df |
+
+### step to run
+
 ```py
 
 from nsedt import indices as ind
@@ -72,25 +81,28 @@ data["Date"] = pd.to_datetime(data["Date"],format='%d-%b-%Y')
 ```
 
 ## Derivatives
+
 ### Details
-|  Name | Module name | Description | Argument | Response|
-| ----- | ----------- | ----------- | -------- | ------- |
-| vix | get_vix | price | start_date, end_date,columns_drop_list |  panda df |
-| option chain | get_option_chain | get option  price | symbol,strikePrice,expiryDate |  panda df |
-| option chain expiry date | get_option_chain_expdate | option chain expiry date | symbol |  json  |
-| future price | get_future_price | get future price | symbol, start_date, end_date, expiryDate,response_type, columns_drop_list |  panda df |
-| future expiry date | get_future_expdate | future expiry date | symbol |  json  |
 
+| Name                     | Module name              | Description              | Argument                                                                  | Response |
+| ------------------------ | ------------------------ | ------------------------ | ------------------------------------------------------------------------- | -------- |
+| vix                      | get_vix                  | price                    | start_date, end_date,columns_drop_list                                    | panda df |
+| option chain             | get_option_chain         | get option price         | symbol,strikePrice,expiryDate                                             | panda df |
+| option chain expiry date | get_option_chain_expdate | option chain expiry date | symbol                                                                    | json     |
+| future price             | get_future_price         | get future price         | symbol, start_date, end_date, expiryDate,response_type, columns_drop_list | panda df |
+| future expiry date       | get_future_expdate       | future expiry date       | symbol                                                                    | json     |
 
-### step to run  
+### step to run
+
 ```py
 from nsedt import derivatives as de
-start_date = "01-09-2023"
-end_date = "03-09-2023"
+start_date = "24-04-2024"
+end_date = "25-04-2024"
 # date format "%d-%m-%Y"
 print(de.get_vix(start_date, end_date))
 print(de.get_option_chain_expdate(symbol="TCS"))
-print(de.get_option_chain(symbol="TCS", strike_price=3300, expiry_date="expiryDate"))
+print(de.get_option_chain(symbol="TCS", strike_price=3300, expiry_date="30-05-2024"))
 print(de.get_future_price(symbol="TCS", start_date=start_date, end_date=end_date))
 print(de.get_future_expdate(symbol="TCS"))
+print(de.get_historical_option_data(symbol="TATAMOTORS", start_date=start_date, end_date=end_date, option_type="CE", strike_price="1020", year="2024", expiry_date="30-May-2024"))
 ```
