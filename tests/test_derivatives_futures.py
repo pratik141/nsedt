@@ -2,7 +2,7 @@
   Test case for nsedt.indices
 """
 
-from typing import Dict, List
+from typing import List
 import pandas as pd
 
 from nsedt.derivatives import futures as fut
@@ -14,7 +14,7 @@ SYMBOL = "NIFTY"
 
 def test_get_future_price():
     """
-    Test the get_price function from nsedt.equity module.
+    Test the get_price function from nsedt.derivatives.futures module.
     """
 
     data = fut.get_future_price(
@@ -40,3 +40,14 @@ def test_get_future_price():
         "Date",
         "FH_UNDERLYING_VALUE",
     ]
+
+
+def test_get_future_expdate():
+    """
+    Test the get_future_expdate function from nsedt.derivatives.futures module.
+    """
+    data = fut.get_future_expdate(
+        symbol=SYMBOL,
+    )
+    assert isinstance(data, List)
+    assert len(data) == 3

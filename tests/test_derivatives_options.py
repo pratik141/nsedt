@@ -70,7 +70,7 @@ def test_get_option_chain_expdate():
     assert len(data) > 1
 
 
-@pytest.mark.skip("add later")
+@pytest.mark.skip("Need to Fix code")
 def test_get_historical_option_data():
     """
     Test the get_historical_option_data function from nsedt.derivatives.options module.
@@ -80,7 +80,8 @@ def test_get_historical_option_data():
         start_date=START_DATE,
         end_date=END_DATE,
         option_type="CE",
-        strike_price="3200",
+        strike_price="3300",
         year=2024,
-        expiry_date="25-04-2024",
+        expiry_date="28-03-2024",
     )
+    assert isinstance(data, pd.DataFrame)

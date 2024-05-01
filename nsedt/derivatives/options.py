@@ -7,7 +7,7 @@ import urllib
 from datetime import datetime
 from nsedt import utils
 from nsedt.resources import constants as cns
-from nsedt.utils import data_format
+from nsedt.utils import data_format, exceptions
 
 log = logging.getLogger("root")
 
@@ -151,14 +151,18 @@ def get_historical_option_data(
         "symbol": symbol,
         "from": start_date,
         "to": end_date,
-        "instrumentType" : "OPTSTK",
+        "instrumentType": "OPTSTK",
         "optionType": option_type,
-        "expiryDate": expiry_date,
+        "expiryDate": datetime.strptime(expiry_date, "%d-%m-%Y").strftime("%d-%b-%Y"),
         "strikePrice": strike_price,
-        "year": year
+        "year": year,
     }
     url = base_url + event_api + urllib.parse.urlencode(params)
     data = utils.fetch_url(url, cookies, response_type="json")
+
+    if data["data"] == []:
+        raise exceptions.DateStrikePriceOutofRange()
+
     return data_format.derivaties_options(
         data,
         response_type=response_type,
