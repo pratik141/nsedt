@@ -41,5 +41,5 @@ jobs:
             --junitxml=junit/test-results.xml \
             --cov=com --cov-report=xml --cov-report=html
 
-    - name: Smelly Python: Smell My PR
+    - name: Update PR
       uses: smelly-python/smell-my-pr@v1.0.0
