@@ -18,6 +18,7 @@ LOG_FORMAT = """{
 }"""
 
 BASE_URL = "https://www.nseindia.com/"
+REPORT_URL = "https://nsearchives.nseindia.com/"
 
 ### EQUITY
 EQUITY_PRICE_HISTORY = "api/historical/securityArchives?"
@@ -38,3 +39,7 @@ OPTIONS_PRICE_INDICES = "api/option-chain-indices?"
 INDICES = ["NIFTY", "FINNIFTY", "BANKNIFTY"]
 VIX_HISTORY = "api/historical/vixhistory?"
 FNO_HISTORY = "api/historical/foCPV?"
+
+# Reports
+MARKET_ACTIVITY_REPORT = "archives/equities/mkt/MA"
+BHAV_COPY_REPORT = "content/historical/EQUITIES/2024/APR/cm"

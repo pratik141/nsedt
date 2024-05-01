@@ -85,25 +85,48 @@ data["Date"] = pd.to_datetime(data["Date"],format='%d-%b-%Y')
 
 ### Details
 
-| Name                     | Module name              | Description              | Argument                                                                  | Response |
-| ------------------------ | ------------------------ | ------------------------ | ------------------------------------------------------------------------- | -------- |
-| vix                      | get_vix                  | price                    | start_date, end_date,columns_drop_list                                    | panda df |
-| option chain             | get_option_chain         | get option price         | symbol,strikePrice,expiryDate                                             | panda df |
-| option chain expiry date | get_option_chain_expdate | option chain expiry date | symbol                                                                    | json     |
-| future price             | get_future_price         | get future price         | symbol, start_date, end_date, expiryDate,response_type, columns_drop_list | panda df |
-| future expiry date       | get_future_expdate       | future expiry date       | symbol                                                                    | json     |
+| Name                     | Module name                | Description                                          | Argument                                                                  | Response        |
+| ------------------------ | -------------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------- | --------------- |
+| vix                      | get_vix                    | price                                                | start_date, end_date,columns_drop_list                                    | panda df        |
+| option chain             | get_option_chain           | get option price                                     | symbol,strikePrice,expiryDate                                             | panda df        |
+| option chain expiry date | get_option_chain_expdate   | option chain expiry date                             | symbol                                                                    | json            |
+| future price             | get_future_price           | get future price                                     | symbol, start_date, end_date, expiryDate,response_type, columns_drop_list | panda df        |
+| future expiry date       | get_future_expdate         | future expiry date                                   | symbol                                                                    | json            |
+| historical option chain  | get_historical_option_data | get historical option value for a given strike price | symbol, start_date,end_date,option_type,strike_price,year,expiry_date     | json, pandas df |
 
 ### step to run
 
 ```py
 from nsedt import derivatives as de
+
 start_date = "24-04-2024"
 end_date = "25-04-2024"
 # date format "%d-%m-%Y"
+
 print(de.get_vix(start_date, end_date))
 print(de.get_option_chain_expdate(symbol="TCS"))
 print(de.get_option_chain(symbol="TCS", strike_price=3300, expiry_date="30-05-2024"))
 print(de.get_future_price(symbol="TCS", start_date=start_date, end_date=end_date))
 print(de.get_future_expdate(symbol="TCS"))
 print(de.get_historical_option_data(symbol="TATAMOTORS", start_date=start_date, end_date=end_date, option_type="CE", strike_price="1020", year="2024", expiry_date="30-May-2024"))
+```
+
+# Reports
+
+### Details
+
+| Name            | Module name                | Description                            | Argument                | Response |
+| --------------- | -------------------------- | -------------------------------------- | ----------------------- | -------- |
+| market activity | get_market_activity_report | get raw text of market activity report | date                    | string   |
+| bhav copy       | get_bhav_copy_zip          | download bhav copy zip for a given day | date, file_path_to_save | bool     |
+
+### step to run
+
+```py
+from nsedt import reports as rep
+# date format "%d-%m-%Y"
+
+print(rep.get_market_activity_report(date="300424")) # format %d%m%y
+print(rep.get_bhav_copy_zip(date="30APR2024", file_path="path_where_you_want_to_save")) # format %d%b%Y
+
 ```

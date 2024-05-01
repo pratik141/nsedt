@@ -2,12 +2,34 @@
 utils for nsedt
 """
 
+import io
 import json
 import datetime
-from warnings import warn
-import pandas as pd
 import requests
+
+import pandas as pd
+
+from warnings import warn
+
 from nsedt.resources import constants as cns
+
+
+from datetime import datetime
+
+
+def validate_date_format(input_string: str, format='%d%m%y'):
+    """
+    Args:\n
+        - input_string : str date format for a format to check
+        - format : type of string to format
+    Returns:\n
+        - bool: whether a given date format matches the given format
+    """
+    try:
+        datetime.strptime(input_string, format)
+        return True
+    except ValueError:
+        return False
 
 
 
@@ -29,6 +51,7 @@ def get_headers():
         "DNT": "1",
         "Connection": "keep-alive",
     }
+
 
 
 def get_cookies():
@@ -132,3 +155,34 @@ now pass in str '%d-%m-%Y' format""",
         raise ValueError("Input is of an unknown type")
 
     return start_date, end_date
+
+
+
+def fetch_csv(url, cookies, response_type="panda_df"):
+    """
+    Args:
+
+        url (str): URL to fetch
+        cookies (str): NSE cookies
+        key (str, Optional):
+
+    Returns:
+
+        Pandas DataFrame: df generated from csv
+        OR
+        Json: json output of the csv
+        OR
+        String: raw content for files where it cannot be processed into Json or 
+                Pandas df
+
+    """
+
+    response = requests.get(
+        url=url, timeout=30, headers=get_headers(), cookies=cookies )
+    if response.status_code == 200:
+        if response_type == "raw":
+            return response.content
+        csv_content = response.content.decode('utf-8')
+        df = pd.read_csv(io.StringIO(csv_content), error_bad_lines=False)
+        return df.to_json(orient='records') if response_type == "json" else df
+    raise ValueError("Please try again in a minute.")
