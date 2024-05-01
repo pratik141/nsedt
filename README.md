@@ -15,7 +15,6 @@ Thank you for using Nsedt. Please feel free to send pull requests, comments, and
    `pip install -r requirements.txt`
 3. Install locally
    `pip install . --upgrade`
-
 ---
 
 ## Equity
