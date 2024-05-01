@@ -4,7 +4,7 @@
 from typing import Dict, List
 import pandas as pd
 
-from nsedt import equity as eq
+from nsedt.nsedt import equity as eq
 
 START_DATE = "01-01-2024"
 END_DATE = "10-01-2024"
