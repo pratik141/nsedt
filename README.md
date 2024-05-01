@@ -15,6 +15,7 @@ Thank you for using Nsedt. Please feel free to send pull requests, comments, and
    `pip install -r requirements.txt`
 3. Install locally
    `pip install . --upgrade`
+
 ---
 
 ## Equity
@@ -97,7 +98,6 @@ data["Date"] = pd.to_datetime(data["Date"],format='%d-%b-%Y')
 
 ```py
 from nsedt import derivatives as de
-
 start_date = "24-04-2024"
 end_date = "25-04-2024"
 # date format "%d-%m-%Y"
