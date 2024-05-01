@@ -35,7 +35,10 @@ jobs:
 
     - name: Lint with pylint
       run: |
-        OUTPUT=$(pylint $(git ls-files '*.py') --exit-zero)
+        STAT=$(pylint $(git ls-files '*.py') |grep -o "at.*(" | cut -d ' ' -f3)
+        echo $STAT
+        OUTPUT="Last pylint run status: ${OUTPUT}"
+        echo "## ${OUTPUT}" >> $GITHUB_STEP_SUMMARY
         echo "MESSAGE=$OUTPUT" >> $GITHUB_ENV
 
     - name: Post pylint result to PR
