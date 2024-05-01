@@ -4,7 +4,7 @@
 from typing import Dict, List
 import pandas as pd
 
-from nsedt.nsedt import equity as eq
+from nsedt import equity as eq
 
 START_DATE = "01-01-2024"
 END_DATE = "10-01-2024"
@@ -51,7 +51,7 @@ def test_get_event():
     # Assert expected data structure and content
     assert isinstance(data, pd.DataFrame)
     assert len(data) == 39
-    assert list(data.columns) == ['SYMBOL', 'company', 'purpose', 'bm_desc', 'date']
+    assert list(data.columns) == ["symbol", "company", "purpose", "bm_desc", "date"]
     assert data.loc[0, "company"] == 'Gensol Engineering Limited'
     assert data.loc[3, "date"] == '03-Jan-2024'
 
