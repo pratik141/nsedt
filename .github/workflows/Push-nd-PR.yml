@@ -48,6 +48,7 @@ jobs:
         allow-repeats: false
 
     - name: Test with pytest
+      id: pytest
       run: |
           pytest tests/ --doctest-modules \
             --junitxml=junit/test-results.xml \
@@ -55,7 +56,6 @@ jobs:
 
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action/linux@v2
-      if: always()
       with:
         files: |
           junit/test-results.xml

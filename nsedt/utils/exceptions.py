@@ -31,7 +31,7 @@ class DateStrikePriceOutofRange(BaseException):
     """
 
     def __str__(self):
-        return f""" ----[ERROR]----
+        return """ ----[ERROR]----
 =================================================================================================
 Either Date of strike Price is out of range for NSE (No data found)
 =================================================================================================
