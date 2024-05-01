@@ -35,9 +35,7 @@ jobs:
 
     - name: Lint with pylint
       run: |
-        pip install pylint
         OUTPUT=$(pylint $(git ls-files '*.py') --exit-zero)
-        #OUTPUT=$(shell command or script to extract the part your want)
         echo "MESSAGE=$OUTPUT" >> $GITHUB_ENV
 
     - name: Post pylint result to PR
