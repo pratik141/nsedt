@@ -42,4 +42,4 @@ FNO_HISTORY = "api/historical/foCPV?"
 
 # Reports
 MARKET_ACTIVITY_REPORT = "archives/equities/mkt/MA"
-BHAV_COPY_REPORT = "content/historical/EQUITIES/2024/APR/cm"
+BHAV_COPY_REPORT = "content/historical/EQUITIES/2024/"

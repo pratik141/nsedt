@@ -49,13 +49,13 @@ def get_bhav_copy_zip(date: str, file_path: str):
         raise ValueError("Please provide date format in 'ddMMMYYYY' format")
 
     cookies = get_cookies()
-    url = f"{cns.REPORT_URL}{cns.BHAV_COPY_REPORT}{date}bhav.csv.zip"
-    print(url)
+    url = f"{cns.REPORT_URL}{cns.BHAV_COPY_REPORT}{date[2:5]}/cm{date}bhav.csv.zip"
     content = fetch_csv(url, cookies, response_type="raw")
     file_path = file_path.removesuffix("/")
     try:
         with open(f"{file_path}/{date}bhav.csv.zip", 'wb') as f:
             f.write(content)
+        return True
     except Exception as e:
         raise ValueError("Unable to download the bhavcopy zip") from e
     
