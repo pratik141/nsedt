@@ -17,19 +17,18 @@ from nsedt.resources import constants as cns
 from datetime import datetime
 
 
-def validate_date_format(input_string: str, format='%d%m%y'):
+def format_date(input_string: str, format: str):
     """
     Args:\n
         - input_string : str date format for a format to check
         - format : type of string to format
     Returns:\n
-        - bool: whether a given date format matches the given format
+        - str: date format in input string
     """
     try:
-        datetime.strptime(input_string, format)
-        return True
+        return datetime.strptime(input_string, "%d-%m-%Y").strftime(format)
     except ValueError:
-        return False
+        return None
 
 
 

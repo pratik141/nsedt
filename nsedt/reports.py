@@ -4,7 +4,7 @@ function to download reports
 
 import logging
 
-from nsedt.utils import get_cookies, fetch_csv, validate_date_format
+from nsedt.utils import get_cookies, fetch_csv, format_date
 from nsedt.resources import constants as cns
 
 log = logging.getLogger("root")
@@ -24,8 +24,9 @@ def get_market_activity_report(date: str):
         date to be in format of  "ddmmYY" eg: 30/04/2024 => 300424
         all other cases will be invalidated
     """
-    if not validate_date_format(date,format='%d%m%y'):
-        raise ValueError("Please provide date format in 'ddmmYY' format")
+    date = format_date(date, format='%d%m%y')
+    if not date:
+        raise ValueError("Please provide date format in '%d-%m-%Y' format")
 
     cookies = get_cookies()
     url = f"{cns.REPORT_URL}{cns.MARKET_ACTIVITY_REPORT}{date}.csv"
@@ -45,8 +46,10 @@ def get_bhav_copy_zip(date: str, file_path: str):
         date to be in format of  "ddmmYY" eg: 30/04/2024 => 30APR2024
         all other cases will be invalidated
     """
-    if not validate_date_format(date, format='%d%b%Y'):
-        raise ValueError("Please provide date format in 'ddMMMYYYY' format")
+
+    date = format_date(date, format='%d%b%Y')
+    if not date:
+        raise ValueError("Please provide date format in '%d-%m-%Y' format")
 
     cookies = get_cookies()
     url = f"{cns.REPORT_URL}{cns.BHAV_COPY_REPORT}{date[2:5]}/cm{date}bhav.csv.zip"
