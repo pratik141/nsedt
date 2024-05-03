@@ -10,7 +10,7 @@ import requests
 import pandas as pd
 
 from warnings import warn
-
+from fake_http_header import FakeHttpHeader
 from nsedt.resources import constants as cns
 
 
@@ -40,16 +40,8 @@ def get_headers():
         Json: json containing nse header
     """
 
-    return {
-        "Host": "www.nseindia.com",
-        "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:85.0) Gecko/20100101 Firefox/85.0",
-        "Accept": "*/*",
-        "Accept-Language": "en-US,en;q=0.5",
-        "Accept-Encoding": "gzip, deflate, br",
-        "X-Requested-With": "XMLHttpRequest",
-        "DNT": "1",
-        "Connection": "keep-alive",
-    }
+    return FakeHttpHeader().as_header_dict()
+
 
 
 
