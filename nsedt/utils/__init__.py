@@ -5,8 +5,11 @@ utils for nsedt
 import io
 import json
 import datetime
+import zipfile
 
-from datetime import datetime
+from io import BytesIO
+
+from datetime import datetime, date
 from warnings import warn
 
 import requests
@@ -133,7 +136,7 @@ def check_nd_convert(start_date: str, end_date: str) -> datetime:
     :return: the start_date and end_date as datetime objects.
     """
 
-    if isinstance(start_date, datetime.date) and isinstance(end_date, datetime.date):
+    if isinstance(start_date, date) and isinstance(end_date, date):
         warn(
             """Passing start_date, end_date in date is deprecated
 now pass in str '%d-%m-%Y' format""",
@@ -142,8 +145,8 @@ now pass in str '%d-%m-%Y' format""",
         )
 
     elif isinstance(start_date, str) and isinstance(end_date, str):
-        start_date = datetime.datetime.strptime(start_date, "%d-%m-%Y")
-        end_date = datetime.datetime.strptime(end_date, "%d-%m-%Y")
+        start_date = datetime.strptime(start_date, "%d-%m-%Y")
+        end_date = datetime.strptime(end_date, "%d-%m-%Y")
 
     else:
         raise ValueError("Input is of an unknown type")
@@ -180,3 +183,40 @@ def fetch_csv(url, cookies, response_type="panda_df"):
         df = pd.read_csv(io.StringIO(csv_content), error_bad_lines=False)
         return df.to_json(orient='records') if response_type == "json" else df
     raise ValueError("Please try again in a minute.")
+
+
+def fetch_zip(url, cookies, file_name, response_type="panda_df"):
+    """
+    Args:
+
+        url (str): URL to fetch
+        cookies (str): NSE cookies
+        key (str, Optional):
+
+    Returns:
+
+        Pandas DataFrame: df generated from csv
+        OR
+        Json: json output of the csv
+        OR
+        Pandas DF:  Pandas df of the csv file
+    """
+
+    if not file_name:
+        raise ValueError("Please give file name to return")
+
+    response = requests.get(
+        url=url, timeout=30, headers=get_headers(), cookies=cookies )
+    if response.status_code == 200:
+        zip_content = BytesIO(response.content)
+        # Open the zip file in memory
+        with zipfile.ZipFile(zip_content, 'r') as zip_ref:
+            # Retrieve the list of file names in the zip file
+            try:
+                csv_content = zip_ref.read(file_name)
+            except Exception as e:
+                raise ValueError("File not found in the zip folder.") from e
+
+            df = pd.read_csv(BytesIO(csv_content))
+            return df.to_json(orient='records') if response_type == "json" else df
+    raise ValueError("File might not be available this time or check your params")

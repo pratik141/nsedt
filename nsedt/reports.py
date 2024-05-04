@@ -4,8 +4,9 @@ function to download reports
 
 import logging
 
-from nsedt.utils import get_cookies, fetch_csv, format_date
-from nsedt.resources import constants as cns
+from nsedt.utils import get_cookies, fetch_csv, format_date, fetch_zip
+from nsedt.resources.constants import (
+    REPORT_URL, MARKET_ACTIVITY_REPORT, BHAV_COPY_REPORT)
 
 log = logging.getLogger("root")
 
@@ -29,11 +30,11 @@ def get_market_activity_report(date: str):
         raise ValueError("Please provide date format in '%d-%m-%Y' format")
 
     cookies = get_cookies()
-    url = f"{cns.REPORT_URL}{cns.MARKET_ACTIVITY_REPORT}{date}.csv"
+    url = f"{REPORT_URL}{MARKET_ACTIVITY_REPORT}{date}.csv"
     return fetch_csv(url, cookies, response_type="raw")
 
 
-def get_bhav_copy_zip(date: str, file_path: str):
+def get_bhav_copy_zip(date: str, response_type: str="panda_df"):
     """
     get_market_activity_report
 
@@ -52,12 +53,6 @@ def get_bhav_copy_zip(date: str, file_path: str):
         raise ValueError("Please provide date format in '%d-%m-%Y' format")
     date = date.upper()
     cookies = get_cookies()
-    url = f"{cns.REPORT_URL}{cns.BHAV_COPY_REPORT}{date[2:5]}/cm{date}bhav.csv.zip"
-    content = fetch_csv(url, cookies, response_type="raw")
-    file_path = file_path.removesuffix("/")
-    try:
-        with open(f"{file_path}/{date}bhav.csv.zip", 'wb') as f:
-            f.write(content)
-        return True
-    except Exception as e:
-        raise ValueError("Unable to download the bhavcopy zip") from e
+    url = f"{REPORT_URL}{BHAV_COPY_REPORT}{date[2:5]}/cm{date}bhav.csv.zip"
+    file_name = url.split("/")[-1].replace(".zip", "")
+    return fetch_zip(url, cookies, file_name=file_name, response_type=response_type)

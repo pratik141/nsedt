@@ -70,7 +70,6 @@ def test_get_option_chain_expdate():
     assert len(data) > 1
 
 
-@pytest.mark.skip("Need to Fix code")
 def test_get_historical_option_data():
     """
     Test the get_historical_option_data function from nsedt.derivatives.options module.
