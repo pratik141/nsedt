@@ -3,8 +3,9 @@
 """
 
 from typing import List
+
 import pandas as pd
-import pytest
+
 from nsedt.derivatives import options as opt
 
 START_DATE = "01-01-2024"
