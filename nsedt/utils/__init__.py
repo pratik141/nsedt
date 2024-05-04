@@ -155,7 +155,7 @@ now pass in str '%d-%m-%Y' format""",
 
 
 
-def fetch_csv(url, cookies, response_type="panda_df"):
+def fetch_csv(url, cookies, response_type="panda_df", skip_rows=None):
     """
     Args:
 
@@ -180,12 +180,13 @@ def fetch_csv(url, cookies, response_type="panda_df"):
         if response_type == "raw":
             return response.content
         csv_content = response.content.decode('utf-8')
-        df = pd.read_csv(io.StringIO(csv_content), error_bad_lines=False)
+        df = pd.read_csv(io.StringIO(csv_content), skiprows=skip_rows)
+        df.columns = df.columns.str.lower().str.replace(' ','_').str.replace('\t','')
         return df.to_json(orient='records') if response_type == "json" else df
     raise ValueError("Please try again in a minute.")
 
 
-def fetch_zip(url, cookies, file_name, response_type="panda_df"):
+def fetch_zip(url, cookies, file_name, response_type="panda_df", skip_rows=None):
     """
     Args:
 
@@ -217,6 +218,7 @@ def fetch_zip(url, cookies, file_name, response_type="panda_df"):
             except Exception as e:
                 raise ValueError("File not found in the zip folder.") from e
 
-            df = pd.read_csv(BytesIO(csv_content))
+            df = pd.read_csv(BytesIO(csv_content), skiprows=skip_rows)
+            df.columns = df.columns.str.lower().str.replace(' ','_').str.replace('\t','')
             return df.to_json(orient='records') if response_type == "json" else df
     raise ValueError("File might not be available this time or check your params")

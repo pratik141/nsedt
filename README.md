@@ -114,10 +114,17 @@ print(de.get_historical_option_data(symbol="TATAMOTORS", start_date=start_date, 
 
 ### Details
 
-| Name            | Module name                | Description                            | Argument                | Response |
-| --------------- | -------------------------- | -------------------------------------- | ----------------------- | -------- |
-| market activity | get_market_activity_report | get raw text of market activity report | date                    | string   |
-| bhav copy       | get_bhav_copy_zip          | download bhav copy zip for a given day | date, file_path_to_save | bool     |
+Note: Not all reports will be available for a given date, some reports are only available for a given date
+and some for 2-3 weeks.
+
+| Name                             | Module name                          | Description                                 | Argument            | Response          |
+| -------------------------------- | ------------------------------------ | ------------------------------------------- | ------------------- | ----------------- |
+| market activity                  | get_market_activity_report           | get raw text of market activity report      | date                | string            |
+| bhav copy                        | get_bhav_copy_zip                    | download bhav copy zip for a given day      | date, response_type | json or pandas df |
+| sec full bhav copy               | get_sec_full_bhav_copy               | download full bhav copy zip for a given day | date, response_type | json or pandas df |
+| volatitly report                 | get_volatility_report                | download volatility report for a given day  | date, response_type | json or pandas df |
+| fno participant wise oi data     | get_fno_participant_wise_oi_data     | fno participant oi data for a given day     | date, response_type | json or pandas df |
+| fno participant wise volume data | get_fno_participant_wise_volume_data | fno participant volume data for a given day | date, response_type | json or pandas df |
 
 ### step to run
 
@@ -125,7 +132,11 @@ print(de.get_historical_option_data(symbol="TATAMOTORS", start_date=start_date, 
 from nsedt import reports as rep
 # date format "%d-%m-%Y"
 
-print(rep.get_market_activity_report(date="300424")) # format %d%m%y
-print(rep.get_bhav_copy_zip(date="30APR2024", file_path="path_where_you_want_to_save")) # format %d%b%Y
+print(rep.get_market_activity_report(date="30-05-2024"))
+print(rep.get_bhav_copy_zip(date="30-05-2024", response_type="json"))
+print(rep.get_sec_full_bhav_copy(date="30-05-2024", response_type="json"))
+print(rep.get_volatility_report(date="30-05-2024", response_type="json"))
+print(rep.get_fno_participant_wise_oi_data(date="30-05-2024", response_type="json"))
+print(rep.get_fno_participant_wise_volume_data(date="30-05-2024", response_type="json"))
 
 ```
