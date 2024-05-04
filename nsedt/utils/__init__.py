@@ -21,7 +21,15 @@ from nsedt.resources import constants as cns
 
 
 
-
+def format_df(df):
+    """
+    Arg:\n
+        - df: pandas df
+    Reuturn:
+        - formatted df column 
+    """
+    df.columns = df.columns.str.lower().str.replace(' ','_').str.replace('\t','')
+    return df
 
 def format_date(input_string: str, date_format: str):
     """
@@ -37,7 +45,6 @@ def format_date(input_string: str, date_format: str):
         return None
 
 
-
 def get_headers():
     """
     Args:
@@ -47,8 +54,6 @@ def get_headers():
     """
 
     return FakeHttpHeader().as_header_dict()
-
-
 
 
 def get_cookies():
@@ -154,7 +159,6 @@ now pass in str '%d-%m-%Y' format""",
     return start_date, end_date
 
 
-
 def fetch_csv(url, cookies, response_type="panda_df", skip_rows=None):
     """
     Args:
@@ -181,7 +185,7 @@ def fetch_csv(url, cookies, response_type="panda_df", skip_rows=None):
             return response.content
         csv_content = response.content.decode('utf-8')
         df = pd.read_csv(io.StringIO(csv_content), skiprows=skip_rows)
-        df.columns = df.columns.str.lower().str.replace(' ','_').str.replace('\t','')
+        df = format_df(df)
         return df.to_json(orient='records') if response_type == "json" else df
     raise ValueError("Please try again in a minute.")
 
@@ -193,7 +197,6 @@ def fetch_zip(url, cookies, file_name, response_type="panda_df", skip_rows=None)
         url (str): URL to fetch
         cookies (str): NSE cookies
         key (str, Optional):
-
     Returns:
 
         Pandas DataFrame: df generated from csv
@@ -219,6 +222,6 @@ def fetch_zip(url, cookies, file_name, response_type="panda_df", skip_rows=None)
                 raise ValueError("File not found in the zip folder.") from e
 
             df = pd.read_csv(BytesIO(csv_content), skiprows=skip_rows)
-            df.columns = df.columns.str.lower().str.replace(' ','_').str.replace('\t','')
+            df = format_df(df)
             return df.to_json(orient='records') if response_type == "json" else df
     raise ValueError("File might not be available this time or check your params")
