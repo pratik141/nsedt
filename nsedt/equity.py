@@ -11,6 +11,7 @@ import pandas as pd
 
 from nsedt import utils
 from nsedt.resources import constants as cns
+
 from nsedt.utils import data_format
 
 log = logging.getLogger("root")

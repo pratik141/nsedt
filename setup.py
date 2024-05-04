@@ -21,6 +21,7 @@ setup(
         "requests",
         "numpy",
         "pandas",
+        "fake-http-header"
     ],
     classifiers=[
         "Development Status :: 3 - Alpha",

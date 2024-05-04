@@ -129,31 +129,39 @@ def get_historical_option_data(
     """
     Get historical data for option chain for a given expiry
     Args:
-        symbol (str): _description_
-        start_date (str): _description_
-        end_date (str): _description_
-        option_type (str): _description_.
-        option_type (str): _description_.
-        strike_price (str): _description_.
-        year (str): _description_.
-        expiry_date (str): _description_.
-        response_type (str, optional): _description_. Defaults to "panda_df".
-        columns_drop_list (list, optional): _description_. Defaults to None.
+        symbol (str): valid scrip name
+        start_date (str): in %d-%m-%Y format
+        end_date (str): in %d-%m-%Y format
+        option_type (str): CE or PE.
+        strike_price (str): valid integer.
+        year (str): in %Y format eg 2024.
+        expiry_date (str): in %d-%m-%Y format
+        response_type (str, optional): either json or pand_df. Defaults to "panda_df".
+        columns_drop_list (list, optional): list of columns to skip. Defaults to None.
 
     Returns:
-        _type_: _description_
+        _type_: either json or pandas df. Defaults to pandas_df
     """
     cookies = utils.get_cookies()
     base_url = cns.BASE_URL
     event_api = cns.FNO_HISTORY
     symbol = utils.get_symbol(symbol=symbol, get_key="derivatives")
+
+    if option_type not in ["CE", "PE"]:
+        raise ValueError("Option type must be either CE or PE")
+
+    try:
+        expiry_date = datetime.strptime(expiry_date, "%d-%m-%Y").strftime("%d-%b-%Y")
+    except Exception as e:
+        raise ValueError("Please give expiry date in %d-%b-%Y format") from e
+
     params = {
         "symbol": symbol,
         "from": start_date,
         "to": end_date,
         "instrumentType": "OPTSTK",
         "optionType": option_type,
-        "expiryDate": datetime.strptime(expiry_date, "%d-%m-%Y").strftime("%d-%b-%Y"),
+        "expiryDate": expiry_date,
         "strikePrice": strike_price,
         "year": year,
     }
@@ -165,6 +173,5 @@ def get_historical_option_data(
 
     return data_format.derivaties_options(
         data,
-        response_type=response_type,
-        columns_drop_list=columns_drop_list,
+        response_type=response_type, columns_drop_list=columns_drop_list,
     )
