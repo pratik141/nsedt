@@ -35,20 +35,10 @@ jobs:
 
     - name: Lint with pylint
       run: |
-        STAT=$(pylint $(git ls-files '*.py') |grep -o "at.*(" | cut -d ' ' -f3)
-        echo $STAT
+        pylint $(git ls-files '*.py')
         OUTPUT="Last pylint run status: ${OUTPUT}"
         echo "## ${OUTPUT}" >> $GITHUB_STEP_SUMMARY
         echo "MESSAGE=$OUTPUT" >> $GITHUB_ENV
-
-    - name: Post pylint result to PR
-      if: github.event_name == 'pull_request'
-      uses: mshick/add-pr-comment@v1
-      with:
-        message: ${{ env.MESSAGE }}
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        repo-token-user-login: 'github-actions[bot]'
-        allow-repeats: false
 
     - name: Test with pytest
       id: pytest
