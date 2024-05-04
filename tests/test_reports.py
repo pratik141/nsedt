@@ -5,7 +5,8 @@
 from nsedt.reports import get_bhav_copy_zip, get_market_activity_report
 
 # modify date to the latest date
-REPORT_DATE = "02-03-2024"
+REPORT_DATE = "02-05-2024"
+FILE_PATH  = "/home/"
 
 
 
@@ -21,5 +22,5 @@ def test_get_bhav_copy_zip():
     """
     Test get bhav copy report for a given date
     """
-    data = get_bhav_copy_zip(date=REPORT_DATE, file_path="")
+    data = get_bhav_copy_zip(date=REPORT_DATE, file_path=FILE_PATH)
     assert isinstance(data, bool)

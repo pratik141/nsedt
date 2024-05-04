@@ -24,7 +24,7 @@ def get_market_activity_report(date: str):
         date to be in format of  "ddmmYY" eg: 30/04/2024 => 300424
         all other cases will be invalidated
     """
-    date = format_date(date, format='%d%m%y')
+    date = format_date(date, date_format='%d%m%y')
     if not date:
         raise ValueError("Please provide date format in '%d-%m-%Y' format")
 
@@ -47,10 +47,10 @@ def get_bhav_copy_zip(date: str, file_path: str):
         all other cases will be invalidated
     """
 
-    date = format_date(date, format='%d%b%Y')
+    date = format_date(date, date_format='%d%b%Y')
     if not date:
         raise ValueError("Please provide date format in '%d-%m-%Y' format")
-
+    date = date.upper()
     cookies = get_cookies()
     url = f"{cns.REPORT_URL}{cns.BHAV_COPY_REPORT}{date[2:5]}/cm{date}bhav.csv.zip"
     content = fetch_csv(url, cookies, response_type="raw")
@@ -61,4 +61,3 @@ def get_bhav_copy_zip(date: str, file_path: str):
         return True
     except Exception as e:
         raise ValueError("Unable to download the bhavcopy zip") from e
-    

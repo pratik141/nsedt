@@ -5,19 +5,22 @@ utils for nsedt
 import io
 import json
 import datetime
+
+from datetime import datetime
+from warnings import warn
+
 import requests
 
 import pandas as pd
 
-from warnings import warn
 from fake_http_header import FakeHttpHeader
 from nsedt.resources import constants as cns
 
 
-from datetime import datetime
 
 
-def format_date(input_string: str, format: str):
+
+def format_date(input_string: str, date_format: str):
     """
     Args:\n
         - input_string : str date format for a format to check
@@ -26,7 +29,7 @@ def format_date(input_string: str, format: str):
         - str: date format in input string
     """
     try:
-        return datetime.strptime(input_string, "%d-%m-%Y").strftime(format)
+        return datetime.strptime(input_string, "%d-%m-%Y").strftime(date_format)
     except ValueError:
         return None
 
@@ -113,7 +116,7 @@ def get_symbol(symbol: str, get_key: str) -> str:
         if symbol in key_list:
             val = item[get_key]
 
-    return val if val else symbol
+    return val or symbol
 
 
 def check_nd_convert(start_date: str, end_date: str) -> datetime:
