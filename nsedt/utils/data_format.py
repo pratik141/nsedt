@@ -301,7 +301,7 @@ def derivaties_options(
             "FH_LAST_TRADED_PRICE",
             "TIMESTAMP",
         ]
-    
+
     if response_type == "json":
         data_json_ret = []
         for record in data_json:
