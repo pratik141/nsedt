@@ -1,0 +1,5 @@
+include README.md
+include LICENSE
+recursive-include nsedt *
+include requirements.txt
+prune tests
