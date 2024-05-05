@@ -40,12 +40,10 @@ Now get_price work with start_date, end_date without datetime format it support 
 ```py
 from nsedt import equity as eq
 from datetime import date
-
-start_date = date(2023, 1, 1)
-end_date = date(2023, 1, 10)
-print(eq.get_price(start_date, end_date, symbol="TCS"))
 start_date = "01-05-2023"
 end_date = "03-05-2023"
+
+print(eq.get_price(start_date, end_date, symbol="TCS"))
 print(eq.get_corpinfo(start_date, end_date, symbol="TCS"))
 print(eq.get_event(start_date, end_date))
 print(eq.get_event())
@@ -72,9 +70,9 @@ print(eq.get_asm_list(asm_type = "shortterm"))
 
 from nsedt import indices as ind
 from datetime import date
+start_date = "01-05-2023"
+end_date = "03-05-2023"
 
-start_date = date(2023, 1, 1)
-end_date = date(2023, 1, 10)
 print(ind.get_price(start_date=start_date, end_date=end_date, symbol="NIFTY 50"))
 data = ind.get_price(start_date=start_date, end_date=end_date, symbol="NIFTY")
 # To change date format from '%d-%b-%Y' to '%Y-%m-%d'
@@ -104,7 +102,7 @@ end_date = "25-04-2024"
 
 print(de.get_vix(start_date, end_date))
 print(de.get_option_chain_expdate(symbol="TCS"))
-print(de.get_option_chain(symbol="TCS", strike_price=3300, expiry_date="30-05-2024"))
+print(de.get_option_chain(symbol="TCS", strike_price=3300, expiry_date=report_date))
 print(de.get_future_price(symbol="TCS", start_date=start_date, end_date=end_date))
 print(de.get_future_expdate(symbol="TCS"))
 print(de.get_historical_option_data(symbol="TATAMOTORS", start_date=start_date, end_date=end_date, option_type="CE", strike_price="1020", year="2024", expiry_date="30-May-2024"))
@@ -130,13 +128,13 @@ and some for 2-3 weeks.
 
 ```py
 from nsedt import reports as rep
+report_date = "02-05-2024"
 # date format "%d-%m-%Y"
 
-print(rep.get_market_activity_report(date="30-05-2024"))
-print(rep.get_bhav_copy_zip(date="30-05-2024", response_type="json"))
-print(rep.get_sec_full_bhav_copy(date="30-05-2024", response_type="json"))
-print(rep.get_volatility_report(date="30-05-2024", response_type="json"))
-print(rep.get_fno_participant_wise_oi_data(date="30-05-2024", response_type="json"))
-print(rep.get_fno_participant_wise_volume_data(date="30-05-2024", response_type="json"))
-
+print(rep.get_market_activity_report(date=report_date))
+print(rep.get_bhav_copy_zip(date=report_date, response_type="json"))
+print(rep.get_sec_full_bhav_copy(date=report_date, response_type="json"))
+print(rep.get_volatility_report(date=report_date, response_type="json"))
+print(rep.get_fno_participant_wise_oi_data(date=report_date, response_type="json"))
+print(rep.get_fno_participant_wise_volume_data(date=report_date, response_type="json"))
 ```
