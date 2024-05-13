@@ -4,13 +4,14 @@ function to download reports
 
 import logging
 
+import pandas as pd
+from io import BytesIO
+
 from nsedt.utils import get_cookies, fetch_csv, format_date, fetch_zip
 from nsedt.resources.constants import (
     REPORT_URL, MARKET_ACTIVITY_REPORT,
     BHAV_COPY_REPORT, SEC_BHAV_COPY_REPORT, NSCCL_REPORTS, NSCCL_VOLT)
 
-import pandas as pd
-from io import BytesIO
 
 log = logging.getLogger("root")
 
