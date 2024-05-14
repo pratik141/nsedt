@@ -4,8 +4,8 @@ function to download reports
 
 import logging
 
-import pandas as pd
 from io import BytesIO
+import pandas as pd
 
 from nsedt.utils import get_cookies, fetch_csv, format_date, fetch_zip
 from nsedt.resources.constants import (
