@@ -17,7 +17,7 @@ def test_get_market_activity_report():
     Test get market activity report for a given date
     """
     data = get_market_activity_report(date=REPORT_DATE)
-    assert isinstance(data, bytes)
+    assert isinstance(data, pd.DataFrame)
 
 
 def test_get_bhav_copy_zip():
