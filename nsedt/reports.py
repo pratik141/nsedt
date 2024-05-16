@@ -4,10 +4,14 @@ function to download reports
 
 import logging
 
+from io import BytesIO
+import pandas as pd
+
 from nsedt.utils import get_cookies, fetch_csv, format_date, fetch_zip
 from nsedt.resources.constants import (
     REPORT_URL, MARKET_ACTIVITY_REPORT,
     BHAV_COPY_REPORT, SEC_BHAV_COPY_REPORT, NSCCL_REPORTS, NSCCL_VOLT)
+
 
 log = logging.getLogger("root")
 
@@ -23,8 +27,8 @@ def get_market_activity_report(date: str):
     Args:\n
         date (str): date for which to download market activity report\n
     Returns:
-        string: string content of the file as right now its not possible 
-        to format the content to json or pandas df
+        df = Returns dataframe for  market activity report for sectors
+        for the given date
     Expects:
         date to be in format of  "dd-mm-yyyy" eg: 30-04-2024
         all other cases will be invalidated
@@ -35,8 +39,11 @@ def get_market_activity_report(date: str):
 
     cookies = get_cookies()
     url = f"{REPORT_URL}{MARKET_ACTIVITY_REPORT}{date}.csv"
-    return fetch_csv(url, cookies, response_type="raw")
-
+    response = fetch_csv(url, cookies, response_type="raw")
+    df = pd.read_csv(BytesIO(response), skiprows=8)
+    df.drop(columns=['Unnamed: 0'], inplace=True)
+    df = df[:77]
+    return df
 
 def get_volatility_report(date: str, response_type: str="panda_df"):
     """
