@@ -82,6 +82,7 @@ def get_price(
     symbol=None,
     input_type="stock",
     series="EQ",
+    dataType="priceVolumeDeliverable",
 ):
     """
     Create threads for different requests, parses data, combines them and returns dataframe\n
@@ -90,6 +91,7 @@ def get_price(
         end_date (datetime.datetime): end date\n
         input_type (str): Either 'stock' or 'index'\n
         symbol (str, optional): stock symbol. Defaults to None. TODO: implement for index`\n
+        dataType: (str, optional): priceVolumeDeliverable, priceVolume, price, volume, deliverable. Defaults to priceVolumeDeliverable\n
     Returns:\n
         Pandas DataFrame: df containing data for symbol of provided date range\n
     """
@@ -115,7 +117,7 @@ def get_price(
                 "symbol": symbol,
                 "from": current_window_start.strftime("%d-%m-%Y"),
                 "to": current_window_end.strftime("%d-%m-%Y"),
-                "dataType": "priceVolumeDeliverable",
+                "dataType": dataType,
                 "series": series,
             }
             url = base_url + price_api + urllib.parse.urlencode(params)
@@ -302,3 +304,106 @@ def get_asm_list(asm_type="both") -> list:
     if asm_type == "shortterm":
         return _data.get("shortterm").get("data")
     return ["possible values are both,longterm,shortterm"]
+
+
+def get_deals(
+    start_date: str,
+    end_date: str,
+    deal_type: str = "bulk_deal",
+    response_type: str = "panda_df",
+    columns_drop_list: list = None,
+    columns_rename_dict: dict = None,
+):
+    """_summary_
+
+    Args:
+        start_date (str): _description_
+        end_date (str): _description_
+        deal_type (str, optional): _description_. Defaults to "bulk_deal".
+        response_type (str, optional): _description_. Defaults to "panda_df".
+        columns_drop_list (list, optional): _description_. Defaults to None.
+        columns_rename_dict (dict, optional): _description_. Defaults to None.
+
+    Returns:
+        _type_: _description_
+    """
+    cookies = utils.get_cookies()
+    params = {
+        "from": start_date,
+        "to": end_date,
+    }
+    base_url = cns.BASE_URL
+    if deal_type == "bulk_deal":
+        price_api = cns.BULK_DEAL
+    elif deal_type == "block_deal":
+        price_api = cns.BLOCK_DEAL
+    elif deal_type == "short_selling":
+        price_api = cns.SHORT_SELLING
+    else:
+        raise ValueError(
+            "Invalid deal type valid values are bulk_deal, block_deal, short_selling"
+        )
+    url = base_url + price_api + urllib.parse.urlencode(params)
+
+    data = utils.fetch_url(
+        url,
+        cookies,
+        key="data",
+        response_type="json",
+    )
+
+    return data_format.format_dataframe(
+        data["data"],
+        mod_name=deal_type,
+        response_type=response_type,
+        columns_drop_list=columns_drop_list,
+        columns_rename_dict=columns_rename_dict,
+    )
+
+
+def get_top_active(
+    index: str = "volume",
+    limit: int = 10,
+    response_type: str = "panda_df",
+    columns_drop_list: list = None,
+    columns_rename_dict: dict = None,
+):
+    """Get top active stocks by volume or value
+
+    Args:
+        index (str, optional): provide the value to get top active by. Defaults to "volume". valid values are value, volume \n
+        limit (int, optional): limit. Defaults to 10. \n
+        response_type (str, optional): response_type. Defaults to "panda_df". \n
+        columns_drop_list (list, optional): columns_drop_list. Defaults to None. \n
+        columns_rename_dict (dict, optional): columns_rename_dict. Defaults to None. \n
+
+    Raises:
+        ValueError: enter valid index value
+
+    Returns:
+        _type_: response_type is panda_df then returns pandas dataframe else json
+    """
+    cookies = utils.get_cookies()
+    base_url = cns.BASE_URL
+    event_api = cns.TOP_ACTIVE
+    if index not in ["value", "volume"]:
+        raise ValueError("Invalid index, valid values are value, volume")
+    params = {
+        "index": index,
+        "limit": limit,
+    }
+    url = base_url + event_api + urllib.parse.urlencode(params)
+    data = utils.fetch_url(
+        url,
+        cookies,
+        key=None,
+        response_type="json",
+    )
+
+    return data_format.format_dataframe(
+        data["data"],
+        mod_name="top_active",
+        response_type=response_type,
+        columns_drop_list=columns_drop_list,
+        columns_rename_dict=columns_rename_dict,
+    )

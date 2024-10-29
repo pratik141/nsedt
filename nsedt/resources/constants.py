@@ -30,6 +30,14 @@ EQUITY_INFO = "api/quote-equity?"
 EQUITY_LIST = "api/market-data-pre-open?key=ALL"
 ASM_LIST = "api/reportASM"
 
+BULK_DEAL = "api/historical/bulk-deals?"
+BLOCK_DEAL = "api/historical/block-deals?"
+SHORT_SELLING = "api/historical/short-selling?"
+
+TOP_ACTIVE = "api/live-analysis-most-active-securities?"
+TOP_GAINERS = "/api/liveanalysis/gainers/allSec"
+TOP_GAINERS = "/api/liveanalysis/loosers/allSec"
+
 ### Index
 INDEX_PRICE_HISTORY = "api/historical/indicesHistory?"
 
