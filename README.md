@@ -106,6 +106,7 @@ print(de.get_option_chain(symbol="TCS", strike_price=3300, expiry_date=report_da
 print(de.get_future_price(symbol="TCS", start_date=start_date, end_date=end_date))
 print(de.get_future_expdate(symbol="TCS"))
 print(de.get_historical_option_data(symbol="TATAMOTORS", start_date=start_date, end_date=end_date, option_type="CE", strike_price="1020", year="2024", expiry_date="30-May-2024"))
+print(de.get_devsymbols_list())
 ```
 
 # Reports
