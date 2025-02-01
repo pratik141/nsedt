@@ -8,6 +8,8 @@ import pandas as pd
 
 from nsedt.derivatives import options as opt
 
+from nsedt import derivatives as de
+
 START_DATE = "01-01-2024"
 END_DATE = "10-01-2024"
 SYMBOL = "TCS"
@@ -85,3 +87,13 @@ def test_get_historical_option_data():
         expiry_date="28-03-2024",
     )
     assert isinstance(data, pd.DataFrame)
+
+
+
+def test_get_derivatives_symbols():
+    """
+    Test the get_derivatives_symbols function from nsedt.derivatives.options module.
+    """
+    data=de.get_derivatives_symbols()
+    symList=[i['symbol'] for i in data['UnderlyingList']]
+    assert isinstance(symList, List)
