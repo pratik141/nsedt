@@ -12,7 +12,7 @@ from nsedt.utils import data_format, exceptions
 log = logging.getLogger("root")
 
 
-def get_devsymbols_list():
+def get_derivatives_symbols():
     """
     Args:\n
         No arguments needed\n
