@@ -48,3 +48,6 @@ BHAV_COPY_REPORT = "content/historical/EQUITIES/2024/"
 SEC_BHAV_COPY_REPORT =  "products/content/"
 NSCCL_REPORTS = "content/nsccl/"
 NSCCL_VOLT = "archives/nsccl/volt/"
+
+# Historical Bhav Report
+BHAV_DERIVATIVES_REPORT = "content/historical/DERIVATIVES/"
