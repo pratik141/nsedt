@@ -106,7 +106,10 @@ print(de.get_option_chain(symbol="TCS", strike_price=3300, expiry_date=report_da
 print(de.get_future_price(symbol="TCS", start_date=start_date, end_date=end_date))
 print(de.get_future_expdate(symbol="TCS"))
 print(de.get_historical_option_data(symbol="TATAMOTORS", start_date=start_date, end_date=end_date, option_type="CE", strike_price="1020", year="2024", expiry_date="30-May-2024"))
+print(de.get_derivatives_symbols())
+
 ```
+
 
 # Reports
 
@@ -138,4 +141,5 @@ print(rep.get_volatility_report(date=report_date, response_type="json"))
 print(rep.get_fno_participant_wise_oi_data(date=report_date, response_type="json"))
 print(rep.get_fno_participant_wise_volume_data(date=report_date, response_type="json"))
 ```
+
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/pratik.anand)

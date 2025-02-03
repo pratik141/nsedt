@@ -12,7 +12,7 @@ from nsedt import utils
 from nsedt.resources import constants as cns
 from nsedt.utils import data_format
 from nsedt.derivatives.options import (
-    get_option_chain, get_option_chain_expdate, get_historical_option_data)
+    get_option_chain, get_option_chain_expdate, get_historical_option_data,get_derivatives_symbols)
 from nsedt.derivatives.futures import get_future_price, get_future_expdate
 
 log = logging.getLogger("root")

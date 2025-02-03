@@ -12,6 +12,24 @@ from nsedt.utils import data_format, exceptions
 log = logging.getLogger("root")
 
 
+def get_derivatives_symbols():
+    """
+    Args:\n
+        No arguments needed\n
+    Returns:\n
+        List of stock or equity symbols\n
+    """
+    cookies = utils.get_cookies()
+    base_url = cns.BASE_URL
+    event_api = cns.UNDERLYINF_INFO
+
+    url = base_url + event_api
+    data = utils.fetch_url(url, cookies)
+    f_dict = data.to_dict()
+
+    return f_dict["data"]
+
+
 def get_option_chain(
     symbol: str,
     strike_price: str = None,

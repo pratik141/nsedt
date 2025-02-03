@@ -39,6 +39,8 @@ OPTIONS_PRICE_INDICES = "api/option-chain-indices?"
 INDICES = ["NIFTY", "FINNIFTY", "BANKNIFTY"]
 VIX_HISTORY = "api/historical/vixhistory?"
 FNO_HISTORY = "api/historical/foCPV?"
+UNDERLYINF_INFO="/api/underlying-information"
+
 
 # Reports
 MARKET_ACTIVITY_REPORT = "archives/equities/mkt/MA"
