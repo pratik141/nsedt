@@ -3,7 +3,8 @@ return data in specific format
 """
 
 import pandas as pd
-
+from nsedt.resources import columns_details as col_det
+import logging as log
 
 def price(result):
     """
@@ -325,3 +326,55 @@ def derivaties_options(
             }
         )
     )
+
+
+def format_dataframe(
+    data_json: str,
+    mod_name: str,
+    response_type: str = "panda_df",
+    columns_drop_list: list = None,
+    columns_rename_dict: dict = None,
+):
+    """
+        Format datafram data
+
+    Args:
+        data_json (object): data in json format.
+        response_type (str, optional): response_type. Defaults to "panda_df".
+        columns_drop_list (list, optional): custom columns drop list. Defaults to None.
+        columns_rename_dict (dict, optional): custom columns rename dict. Defaults to None.
+    Returns:
+            json: format data in json
+        or
+            dataframe: format data in panda df
+    """
+    columns_detail = col_det.data_format[mod_name]
+    columns_drop_list = (
+        columns_drop_list
+        if columns_drop_list is not None
+        else columns_detail["columns_drop_list"]
+    )
+    columns_rename_dict = (
+        columns_rename_dict
+        if columns_rename_dict is not None
+        else columns_detail["columns_rename_dict"]
+    )
+    log.debug(f"columns_drop_list: {columns_drop_list}")
+    log.debug(f"columns_rename_dict: {columns_rename_dict}")
+
+    if response_type == "json":
+        data_json_ret = []
+        for record in data_json:
+            for column in columns_drop_list:
+                record.pop(column, None)
+            data_json_ret.append(record)
+        return data_json_ret
+    try:
+        return (
+            pd.json_normalize(data_json)
+            .drop(columns=columns_drop_list)
+            .rename(columns=columns_rename_dict)
+        )
+    except Exception as e:
+        log.error(f"Error in data format: {e}")
+        return data_json

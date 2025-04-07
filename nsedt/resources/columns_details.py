@@ -1,0 +1,87 @@
+data_format = {
+    "equity_price_history": {
+        "columns_drop_list": [],
+        "columns_rename_dict": {},
+    },
+    "vix_price_history": {
+        "columns_drop_list": [
+            "_id",
+            "TIMESTAMP",
+            "createdAt",
+            "updatedAt",
+            "__v",
+            "ALTERNATE_INDEX_NAME",
+            "EOD_INDEX_NAME",
+            "EOD_PREV_CLOSE",
+            "VIX_PTS_CHG",
+            "VIX_PERC_CHG",
+        ],
+        "columns_rename_dict": {
+            "EOD_OPEN_INDEX_VAL": "Open Price",
+            "EOD_HIGH_INDEX_VAL": "High Price",
+            "EOD_CLOSE_INDEX_VAL": "Close Price",
+            "EOD_LOW_INDEX_VAL": "Low Price",
+            "EOD_TIMESTAMP": "Date",
+        },
+    },
+    "bulk_deal": {
+        "columns_drop_list": [
+            "_id",
+            "TIMESTAMP",
+            "createdAt",
+            "updatedAt",
+            "__v",
+            "mTIMESTAMP",
+        ],
+        "columns_rename_dict": {
+            "BD_BUY_SELL": "buy_sell",
+            "BD_CLIENT_NAME": "quantity_traded",
+            "BD_DT_DATE": "date",
+            "BD_QTY_TRD": "quantity_traded",
+            "BD_REMARKS": "remarks",
+            "BD_SCRIP_NAME": "scrip_name",
+            "BD_SYMBOL": "symbol",
+            "BD_TP_WATP": "trade_price",
+        },
+    },
+    "block_deal": {
+        "columns_drop_list": [
+            "_id",
+            "TIMESTAMP",
+            "createdAt",
+            "updatedAt",
+            "__v",
+            "mTIMESTAMP",
+        ],
+        "columns_rename_dict": {
+            "BD_BUY_SELL": "buy_sell",
+            "BD_CLIENT_NAME": "quantity_traded",
+            "BD_DT_DATE": "date",
+            "BD_QTY_TRD": "quantity_traded",
+            "BD_REMARKS": "remarks",
+            "BD_SCRIP_NAME": "scrip_name",
+            "BD_SYMBOL": "symbol",
+            "BD_TP_WATP": "trade_price",
+        },
+    },
+    "short_selling": {
+        "columns_drop_list": [
+            "_id",
+            "TIMESTAMP",
+            "createdAt",
+            "updatedAt",
+            "__v",
+            "mTIMESTAMP",
+        ],
+        "columns_rename_dict": {
+            "SS_DATE": "date",
+            "SS_QTY": "quantity_traded",
+            "SS_NAME": "scrip_name",
+            "SS_SYMBOL": "symbol",
+        },
+    },
+    "top_active": {
+        "columns_drop_list": [],
+        "columns_rename_dict": {},
+    },
+}
