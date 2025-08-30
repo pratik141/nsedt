@@ -115,7 +115,7 @@ def get_price(
                 "symbol": symbol,
                 "from": current_window_start.strftime("%d-%m-%Y"),
                 "to": current_window_end.strftime("%d-%m-%Y"),
-                "dataType": "priceVolumeDeliverable",
+                "type": "priceVolumeDeliverable",
                 "series": series,
             }
             url = base_url + price_api + urllib.parse.urlencode(params)

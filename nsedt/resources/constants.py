@@ -18,10 +18,10 @@ LOG_FORMAT = """{
 }"""
 
 BASE_URL = "https://www.nseindia.com/"
-REPORT_URL = "https://nsearchives.nseindia.com/"
+REPORT_URL = "https://www.nseindia.com/"
 
 ### EQUITY
-EQUITY_PRICE_HISTORY = "api/historical/securityArchives?"
+EQUITY_PRICE_HISTORY = "api/historicalOR/generateSecurityWiseHistoricalData?"
 EQUITY_CORPINFO = "api/corporates-corporateActions?"
 MARKETSTATUS = "api/marketStatus"
 EQUITY_EVENT = "api/event-calendar?"
