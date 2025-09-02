@@ -24,8 +24,8 @@ def price(result):
         "CH_LAST_TRADED_PRICE",
         "CH_TOT_TRADED_QTY",
         "CH_TOT_TRADED_VAL",
-        "CH_52WEEK_HIGH_PRICE",
-        "CH_52WEEK_LOW_PRICE",
+        # "CH_52WEEK_HIGH_PRICE",
+        # "CH_52WEEK_LOW_PRICE",
         "VWAP",
         "COP_DELIV_QTY",
         "COP_DELIV_PERC",
@@ -34,7 +34,8 @@ def price(result):
 
     try:
         result = result[columns_required]
-    except:  # pylint: disable=W0702
+    except Exception as e:  # pylint: disable=W0702
+        print(f"No data found for the given input: {e}")
         return result
     result = result.set_axis(
         [
@@ -47,8 +48,8 @@ def price(result):
             "Last Traded Price",
             "Total Traded Quantity",
             "Total Traded Value",
-            "52 Week High Price",
-            "52 Week Low Price",
+            # "52 Week High Price",  # Not available in api
+            # "52 Week Low Price",  # Not available in api
             "VWAP",
             "Deliverable Volume",
             "Deliverable Percent",
