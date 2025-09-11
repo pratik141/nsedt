@@ -10,7 +10,9 @@ import pandas as pd
 from nsedt.utils import get_cookies, fetch_csv, format_date, fetch_zip
 from nsedt.resources.constants import (
     REPORT_URL, MARKET_ACTIVITY_REPORT,
-    BHAV_COPY_REPORT, SEC_BHAV_COPY_REPORT, NSCCL_REPORTS, NSCCL_VOLT)
+    BHAV_COPY_REPORT, SEC_BHAV_COPY_REPORT, NSCCL_REPORTS, NSCCL_VOLT,
+    BHAV_DERIVATIVES_REPORT
+)
 
 
 log = logging.getLogger("root")
@@ -158,3 +160,32 @@ def get_fno_participant_wise_volume_data(date: str,response_type: str="panda_df"
     cookies = get_cookies()
     url = f"{REPORT_URL}{NSCCL_REPORTS}fao_participant_vol_{date}.csv"
     return fetch_csv(url, cookies, response_type=response_type, skip_rows=1)
+
+def get_derivatives_bhav_historical_report(date: str, response_type: str="panda_df"):
+    """
+    get_derivatives_bhav_historical_report
+
+    Args:\n
+        date (str): date for which to download market activity report\n
+        response_type (str, Optional): define the response type panda_df | json . Default json\n
+    Returns:
+        string: string content of the file as right now its not possible
+        to format the content to json or pandas df
+    Expects:
+        date to be in format of  "dd-mm-yyyy" eg: 30-04-2024
+        all other cases will be invalidated
+    """
+    date = format_date(date, date_format='%d-%m-%Y')
+    if not date:
+        raise ValueError("Please provide date format in '%d-%m-%Y' format")
+
+    dd      = format_date(date, date_format="%d")
+    # mm      = format_date(date, date_format="%m")
+    month   = format_date(date, date_format="%b").upper()
+    year    = format_date(date, date_format="%Y")
+
+    cookies = get_cookies()
+    url = f"{REPORT_URL}{BHAV_DERIVATIVES_REPORT}{year}/{month}/fo{dd}{month}{year}bhav.csv.zip"
+    file_name = url.split("/")[-1].replace(".zip", "")
+
+    return fetch_zip(url, cookies, file_name=file_name, response_type=response_type)
