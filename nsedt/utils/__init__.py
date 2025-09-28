@@ -16,7 +16,7 @@ import requests
 
 import pandas as pd
 
-from fake_http_header import FakeHttpHeader
+# from fake_http_header import FakeHttpHeader
 from nsedt.resources import constants as cns
 
 
@@ -53,7 +53,12 @@ def get_headers():
         Json: json containing nse header
     """
 
-    return FakeHttpHeader().as_header_dict()
+    return {
+                "Accept": "*/*",
+                "Accept-Language": "en-US,en;q=0.5",
+                "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0",
+                "X-Requested-With": "XMLHttpRequest"
+            }
 
 
 def get_cookies():
